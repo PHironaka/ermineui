@@ -368,8 +368,8 @@ const zoom = ref('100')
 const lastMenu = ref('Nothing chosen yet')
 
 // Code block
-const installSnippet = `npx ermine-ui init
-npx ermine-ui add button dialog chart`
+const installSnippet = `npx ermineui init
+npx ermineui add button dialog chart`
 const configSnippet = `export default defineNuxtConfig({
   css: ['~/assets/css/ermine.css'],
   components: [
@@ -656,8 +656,8 @@ function undoable() {
         yours to change.
       </p>
       <ul class="steps" aria-label="Getting started">
-        <li><code>npx ermine-ui init</code></li>
-        <li><code>npx ermine-ui add button dialog</code></li>
+        <li><code>npx ermineui init</code></li>
+        <li><code>npx ermineui add button dialog</code></li>
       </ul>
     </section>
 

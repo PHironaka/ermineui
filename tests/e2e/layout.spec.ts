@@ -198,7 +198,7 @@ test.describe('code block and copy button', () => {
     const copy = card.getByRole('button', { name: 'Copy code' }).first()
     await copy.click()
     await expect(copy.getByRole('status')).toHaveText('Copied')
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('npx ermine-ui init\nnpx ermine-ui add button dialog chart')
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('npx ermineui init\nnpx ermineui add button dialog chart')
   })
 
   test('line numbers are not part of the code', async ({ page }) => {

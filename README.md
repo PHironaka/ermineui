@@ -7,7 +7,7 @@ Vue 3 components you copy into your project and own, in the spirit of shadcn/ui.
 - **Behavior written from scratch.** Positioning, focus trapping, dismissal, keyboard navigation and scroll locking live in six small helper files that are copied in alongside the components. The only dependency is Vue (3.5 or newer).
 - **Copy-in distribution.** A small command line copies component source into your project. Nothing is imported from `node_modules`, so every line is yours to edit.
 
-The npm package for the command line is `ermine-ui` (free on npm when checked on 7 October 2026, and not yet published). The project was called Sable until then; everything was renamed together, including the CSS prefix, which went from `sb-` to `er-`.
+The npm package for the command line is `ermineui` (free on npm when checked on 7 October 2026, and not yet published). The project was called Sable until then; everything was renamed together, including the CSS prefix, which went from `sb-` to `er-`.
 
 ## Components
 
@@ -99,11 +99,11 @@ Until the CLI is published, run it from this folder (or `npm link` inside `cli/`
 
 ```sh
 # from your app's folder
-node /path/to/ermine-ui/cli/bin/ermine.mjs init
-node /path/to/ermine-ui/cli/bin/ermine.mjs add button dialog select
+node /path/to/ermineui/cli/bin/ermine.mjs init
+node /path/to/ermineui/cli/bin/ermine.mjs add button dialog select
 ```
 
-Once published this becomes `npx ermine-ui init` and `npx ermine-ui add button`.
+Once published this becomes `npx ermineui init` and `npx ermineui add button`.
 
 `init` detects the framework, suggests folders, writes `ermine.json` and copies the theme stylesheet. `add` copies the components you name plus the helpers and components they depend on. Files that already exist are kept unless you pass `--overwrite`.
 

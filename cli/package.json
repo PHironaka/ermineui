@@ -1,5 +1,5 @@
 {
-  "name": "ermine-ui",
+  "name": "ermineui",
   "version": "0.1.0",
   "description": "Copy-in Vue 3 components styled with plain CSS variables. You own the code.",
   "type": "module",
@@ -21,5 +21,15 @@
     "ui",
     "css"
   ],
-  "license": "MIT"
+  "author": "Peter Hironaka",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PHironaka/ermineui.git",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/PHironaka/ermineui#readme",
+  "bugs": {
+    "url": "https://github.com/PHironaka/ermineui/issues"
+  }
 }
