@@ -61,7 +61,7 @@ const SOUNDS = {
 export type SoundName = keyof typeof SOUNDS
 export const soundNames = Object.keys(SOUNDS) as SoundName[]
 
-const STORAGE_KEY = 'sb-sound'
+const STORAGE_KEY = 'er-sound'
 
 /**
  * Whether sounds play, and how loud. Shared by the whole page and remembered between visits.

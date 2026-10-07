@@ -48,9 +48,9 @@ const slices = computed(() => {
   })
   // Many thin slices cannot be compared by eye, so the tail is folded into one grey "Other".
   const keep = rows.length > props.maxSlices ? props.maxSlices - 1 : rows.length
-  const shown = rows.slice(0, keep).map((row, index) => ({ ...row, color: `var(--sb-chart-${index + 1})` }))
+  const shown = rows.slice(0, keep).map((row, index) => ({ ...row, color: `var(--er-chart-${index + 1})` }))
   const rest = rows.slice(keep).reduce((sum, row) => sum + row.value, 0)
-  if (rest > 0) shown.push({ name: 'Other', value: rest, color: 'var(--sb-muted-foreground)' })
+  if (rest > 0) shown.push({ name: 'Other', value: rest, color: 'var(--er-muted-foreground)' })
 
   const total = shown.reduce((sum, slice) => sum + slice.value, 0)
   const radius = props.size / 2
@@ -105,9 +105,9 @@ function onKeydown(event: KeyboardEvent) {
     :announcement="announcement"
     :data-type="pie ? 'pie' : 'donut'"
   >
-    <div class="sb-chart-donut">
+    <div class="er-chart-donut">
       <div
-        class="sb-chart-plot"
+        class="er-chart-plot"
         role="img"
         aria-roledescription="chart"
         tabindex="0"
@@ -117,13 +117,13 @@ function onKeydown(event: KeyboardEvent) {
         @blur="active = null"
         @keydown="onKeydown"
       >
-        <p v-if="!slices.length" class="sb-chart-empty"><slot name="empty">No data</slot></p>
+        <p v-if="!slices.length" class="er-chart-empty"><slot name="empty">No data</slot></p>
         <svg v-else :width="size" :height="size" aria-hidden="true">
           <!-- The outline is drawn in the surface colour: it reads as a gap between slices, not a border. -->
           <path
             v-for="(slice, index) in slices"
             :key="index"
-            class="sb-chart-slice"
+            class="er-chart-slice"
             :d="slice.d"
             :fill="slice.color"
             :data-dimmed="active !== null && active !== index ? '' : undefined"
@@ -131,22 +131,22 @@ function onKeydown(event: KeyboardEvent) {
             @pointerdown="active = index"
           />
         </svg>
-        <div v-if="!pie && slices.length" class="sb-chart-donut-center">
+        <div v-if="!pie && slices.length" class="er-chart-donut-center">
           <strong>{{ formatValue(total) }}</strong>
           <span>{{ totalLabel }}</span>
         </div>
-        <div v-if="activeSlice" class="sb-chart-tooltip sb-chart-donut-tooltip" :style="{ left: `${activeSlice.x}px`, top: `${activeSlice.y}px` }">
-          <div class="sb-chart-tooltip-row">
-            <span class="sb-chart-key" :style="{ background: activeSlice.color }" />
+        <div v-if="activeSlice" class="er-chart-tooltip er-chart-donut-tooltip" :style="{ left: `${activeSlice.x}px`, top: `${activeSlice.y}px` }">
+          <div class="er-chart-tooltip-row">
+            <span class="er-chart-key" :style="{ background: activeSlice.color }" />
             <span>{{ activeSlice.name }}</span>
             <strong>{{ formatValue(activeSlice.value) }}</strong>
           </div>
-          <div class="sb-chart-tooltip-title">{{ percent.format(activeSlice.share) }} of {{ formatValue(total) }}</div>
+          <div class="er-chart-tooltip-title">{{ percent.format(activeSlice.share) }} of {{ formatValue(total) }}</div>
         </div>
       </div>
 
       <!-- Every slice is named with its value beside the chart, so nothing depends on telling colours apart. -->
-      <ul class="sb-chart-donut-legend">
+      <ul class="er-chart-donut-legend">
         <li
           v-for="(slice, index) in slices"
           :key="index"
@@ -154,7 +154,7 @@ function onKeydown(event: KeyboardEvent) {
           @pointerenter="active = index"
           @pointerleave="active = null"
         >
-          <span class="sb-chart-key" :style="{ background: slice.color }" />
+          <span class="er-chart-key" :style="{ background: slice.color }" />
           <span>{{ slice.name }}</span>
           <strong>{{ formatValue(slice.value) }}</strong>
           <span>{{ percent.format(slice.share) }}</span>
@@ -166,51 +166,51 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-chart-donut {
+  .er-chart-donut {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 2rem;
   }
 
-  .sb-chart-donut .sb-chart-plot {
+  .er-chart-donut .er-chart-plot {
     flex-shrink: 0;
     border-radius: 50%;
   }
 
-  .sb-chart-slice {
-    stroke: var(--sb-chart-surface);
+  .er-chart-slice {
+    stroke: var(--er-chart-surface);
     stroke-width: 2;
     stroke-linejoin: round;
-    transition: opacity var(--sb-duration);
+    transition: opacity var(--er-duration);
   }
 
-  .sb-chart-slice[data-dimmed] {
+  .er-chart-slice[data-dimmed] {
     opacity: 0.45;
   }
 
-  .sb-chart-donut-center {
+  .er-chart-donut-center {
     position: absolute;
     inset: 0;
     display: grid;
     place-content: center;
     justify-items: center;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     pointer-events: none;
   }
 
-  .sb-chart-donut-center strong {
-    color: var(--sb-foreground);
+  .er-chart-donut-center strong {
+    color: var(--er-foreground);
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
   }
 
-  .sb-chart-donut-tooltip {
+  .er-chart-donut-tooltip {
     transform: translate(-50%, calc(-100% - 10px));
   }
 
-  .sb-chart-donut-legend {
+  .er-chart-donut-legend {
     display: grid;
     flex: 1;
     grid-template-columns: auto 1fr auto auto;
@@ -219,31 +219,31 @@ function onKeydown(event: KeyboardEvent) {
     min-width: 12rem;
     margin: 0;
     padding: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
     list-style: none;
   }
 
-  .sb-chart-donut-legend li {
+  .er-chart-donut-legend li {
     display: grid;
     grid-column: 1 / -1;
     grid-template-columns: subgrid;
     align-items: center;
   }
 
-  .sb-chart-donut-legend li > :last-child {
+  .er-chart-donut-legend li > :last-child {
     text-align: right;
   }
 
-  .sb-chart-donut-legend strong {
-    color: var(--sb-foreground);
+  .er-chart-donut-legend strong {
+    color: var(--er-foreground);
     font-weight: 600;
     text-align: right;
   }
 
-  .sb-chart-donut-legend li[data-active] > span:nth-child(2) {
-    color: var(--sb-foreground);
+  .er-chart-donut-legend li[data-active] > span:nth-child(2) {
+    color: var(--er-foreground);
   }
 }
 </style>

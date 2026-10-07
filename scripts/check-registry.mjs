@@ -10,9 +10,9 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const cli = join(root, 'cli', 'bin', 'sable.mjs')
+const cli = join(root, 'cli', 'bin', 'ermine.mjs')
 const registry = JSON.parse(readFileSync(join(root, 'cli', 'registry.json'), 'utf8'))
-const work = mkdtempSync(join(tmpdir(), 'sable-check-'))
+const work = mkdtempSync(join(tmpdir(), 'ermine-check-'))
 const walk = (dir) =>
   readdirSync(dir).flatMap((name) => {
     const path = join(dir, name)

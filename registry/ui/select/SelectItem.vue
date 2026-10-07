@@ -41,7 +41,7 @@ function onPointerMove(event: PointerEvent) {
     ref="el"
     role="option"
     tabindex="-1"
-    class="sb-select-item"
+    class="er-select-item"
     :aria-selected="selected"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"

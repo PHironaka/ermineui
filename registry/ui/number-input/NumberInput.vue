@@ -46,7 +46,7 @@ function onBlur() {
 </script>
 
 <template>
-  <div class="sb-number-input" :data-disabled="disabled ? '' : undefined">
+  <div class="er-number-input" :data-disabled="disabled ? '' : undefined">
     <!-- The buttons are for the pointer; on the keyboard the arrow keys already do the same job. -->
     <button type="button" tabindex="-1" :aria-label="decreaseLabel" :disabled="disabled || atMin" @click="nudge(-1)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14" /></svg>
@@ -60,41 +60,41 @@ function onBlur() {
 
 <style>
 @layer components {
-  .sb-number-input {
+  .er-number-input {
     display: flex;
     width: 100%;
     height: 2.25rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    box-shadow: var(--er-shadow-xs);
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-number-input:focus-within {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-number-input:focus-within {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-number-input:has(input[aria-invalid='true']) {
-    border-color: var(--sb-destructive);
+  .er-number-input:has(input[aria-invalid='true']) {
+    border-color: var(--er-destructive);
   }
 
-  .sb-number-input[data-disabled] {
+  .er-number-input[data-disabled] {
     opacity: 0.5;
   }
 
-  .sb-number-input input {
+  .er-number-input input {
     appearance: textfield;
     flex: 1;
     min-width: 0;
     padding: 0 0.25rem;
     border: 0;
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     /* 16px stops iOS from zooming the page when the field is focused. */
     font-size: 1rem;
@@ -104,18 +104,18 @@ function onBlur() {
   }
 
   @media (min-width: 48rem) {
-    .sb-number-input input {
+    .er-number-input input {
       font-size: 0.875rem;
     }
   }
 
-  .sb-number-input input::-webkit-inner-spin-button,
-  .sb-number-input input::-webkit-outer-spin-button {
+  .er-number-input input::-webkit-inner-spin-button,
+  .er-number-input input::-webkit-outer-spin-button {
     appearance: none;
     margin: 0;
   }
 
-  .sb-number-input button {
+  .er-number-input button {
     display: grid;
     flex-shrink: 0;
     place-items: center;
@@ -123,34 +123,34 @@ function onBlur() {
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration);
   }
 
-  .sb-number-input button:first-child {
-    border-right: 1px solid var(--sb-input);
-    border-radius: calc(var(--sb-radius-md) - 1px) 0 0 calc(var(--sb-radius-md) - 1px);
+  .er-number-input button:first-child {
+    border-right: 1px solid var(--er-input);
+    border-radius: calc(var(--er-radius-md) - 1px) 0 0 calc(var(--er-radius-md) - 1px);
   }
 
-  .sb-number-input button:last-child {
-    border-left: 1px solid var(--sb-input);
-    border-radius: 0 calc(var(--sb-radius-md) - 1px) calc(var(--sb-radius-md) - 1px) 0;
+  .er-number-input button:last-child {
+    border-left: 1px solid var(--er-input);
+    border-radius: 0 calc(var(--er-radius-md) - 1px) calc(var(--er-radius-md) - 1px) 0;
   }
 
-  .sb-number-input button:hover {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-number-input button:hover {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-number-input button:disabled {
+  .er-number-input button:disabled {
     opacity: 0.4;
     pointer-events: none;
   }
 
-  .sb-number-input svg {
+  .er-number-input svg {
     width: 0.875rem;
     height: 0.875rem;
   }

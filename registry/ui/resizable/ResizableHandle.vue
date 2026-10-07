@@ -60,7 +60,7 @@ function onKeydown(event: KeyboardEvent) {
   <div
     role="separator"
     tabindex="0"
-    class="sb-resizable-handle"
+    class="er-resizable-handle"
     :aria-orientation="group.direction.value === 'horizontal' ? 'vertical' : 'horizontal'"
     :aria-label="label"
     :aria-controls="before?.id"
@@ -74,7 +74,7 @@ function onKeydown(event: KeyboardEvent) {
     @pointercancel="dragging = false"
     @keydown="onKeydown"
   >
-    <span v-if="grip" class="sb-resizable-grip" aria-hidden="true">
+    <span v-if="grip" class="er-resizable-grip" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" /><circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" /><circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" /></svg>
     </span>
   </div>

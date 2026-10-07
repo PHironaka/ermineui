@@ -113,7 +113,7 @@ test.describe('carousel', () => {
     await carousel.getByRole('button', { name: 'Go to slide 4 of 4' }).click()
     await expect(next).toBeDisabled()
     await expect(carousel.getByRole('group', { name: /Version 2.1/ })).toBeInViewport()
-    await carousel.locator('.sb-carousel-track').focus()
+    await carousel.locator('.er-carousel-track').focus()
     await page.keyboard.press('Home')
     await expect(readout(page, 'carousel')).toHaveText('slide 1 of 4')
     await expect(carousel.getByRole('group', { name: /Version 2.4/ })).toBeInViewport()
@@ -121,7 +121,7 @@ test.describe('carousel', () => {
 
   test('scrolling the slides by hand keeps the dots in step', async ({ page }) => {
     const carousel = demo(page, 'carousel').getByRole('region', { name: 'Recent releases' })
-    await carousel.locator('.sb-carousel-track').evaluate((track) => {
+    await carousel.locator('.er-carousel-track').evaluate((track) => {
       const third = track.children[2] as HTMLElement
       track.scrollTo({ left: third.offsetLeft - track.offsetLeft })
     })
@@ -163,9 +163,9 @@ test.describe('resizable panels', () => {
 
 test.describe('resizable panels: scrolling', () => {
   test('a panel whose content overflows can be focused to scroll it; one that fits cannot', async ({ page }) => {
-    const article = demo(page, 'typography').locator('.sb-resizable-panel').first()
+    const article = demo(page, 'typography').locator('.er-resizable-panel').first()
     await expect(article).toHaveAttribute('tabindex', '0')
-    await expect(demo(page, 'resizable').locator('.sb-resizable-panel').first()).not.toHaveAttribute('tabindex')
+    await expect(demo(page, 'resizable').locator('.er-resizable-panel').first()).not.toHaveAttribute('tabindex')
   })
 })
 
@@ -175,7 +175,7 @@ test.describe('sidebar, banner, empty state', () => {
     const nav = card.getByRole('navigation', { name: 'Project' })
     await expect(nav.getByRole('link', { name: 'Deployments' })).toHaveAttribute('aria-current', 'page')
     await card.getByRole('button', { name: 'Collapse sidebar' }).click()
-    await expect(card.locator('.sb-sidebar')).toHaveCSS('width', '52px')
+    await expect(card.locator('.er-sidebar')).toHaveCSS('width', '52px')
     // Still found by name: the words are hidden from sight only.
     await expect(nav.getByRole('link', { name: 'Logs' })).toHaveAttribute('title', 'Logs')
     await nav.getByRole('link', { name: 'Logs' }).click()
@@ -202,8 +202,8 @@ test.describe('code block and copy button', () => {
   })
 
   test('line numbers are not part of the code', async ({ page }) => {
-    const block = demo(page, 'code-block').locator('.sb-code-block').nth(1)
-    await expect(block.locator('.sb-code-block-line')).toHaveCount(7)
+    const block = demo(page, 'code-block').locator('.er-code-block').nth(1)
+    await expect(block.locator('.er-code-block-line')).toHaveCount(7)
     await expect(block.locator('code')).toHaveText(/^export default defineNuxtConfig\(\{/)
   })
 })

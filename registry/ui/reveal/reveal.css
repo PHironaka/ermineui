@@ -3,13 +3,13 @@
      that can run it, so without JavaScript (or on the server) everything is simply visible. */
   [data-reveal='waiting'] {
     opacity: 0;
-    transform: translateY(var(--sb-reveal-distance, 1rem));
+    transform: translateY(var(--er-reveal-distance, 1rem));
   }
 
   [data-reveal='shown'] {
     transition:
-      opacity 500ms var(--sb-ease, ease-out) var(--sb-reveal-delay, 0ms),
-      transform 500ms var(--sb-ease, ease-out) var(--sb-reveal-delay, 0ms);
+      opacity 500ms var(--er-ease, ease-out) var(--er-reveal-delay, 0ms),
+      transform 500ms var(--er-ease, ease-out) var(--er-reveal-delay, 0ms);
   }
 
   /* No movement for anyone who has asked for less of it: the content is just there. */

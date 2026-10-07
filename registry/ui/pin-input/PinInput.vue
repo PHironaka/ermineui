@@ -88,7 +88,7 @@ function onPaste(index: number, event: ClipboardEvent) {
 </script>
 
 <template>
-  <div ref="root" role="group" class="sb-pin-input" :aria-label="label" :data-disabled="disabled ? '' : undefined">
+  <div ref="root" role="group" class="er-pin-input" :aria-label="label" :data-disabled="disabled ? '' : undefined">
     <input
       v-for="(char, index) in chars"
       :key="index"
@@ -113,44 +113,44 @@ function onPaste(index: number, event: ClipboardEvent) {
 
 <style>
 @layer components {
-  .sb-pin-input {
+  .er-pin-input {
     display: inline-flex;
     gap: 0.5rem;
     max-width: 100%;
   }
 
-  .sb-pin-input input:not([type='hidden']) {
+  .er-pin-input input:not([type='hidden']) {
     width: 2.5rem;
     min-width: 0;
     height: 2.75rem;
     padding: 0;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 1.125rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     text-align: center;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     caret-color: transparent;
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-pin-input input:focus-visible {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-pin-input input:focus-visible {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-pin-input input[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-pin-input input[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 
-  .sb-pin-input[data-disabled] {
+  .er-pin-input[data-disabled] {
     opacity: 0.5;
   }
 }

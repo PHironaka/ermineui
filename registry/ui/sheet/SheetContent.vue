@@ -44,21 +44,21 @@ watch(
 
 <template>
   <Portal>
-    <Transition name="sb-sheet">
-      <div v-if="sheet.open.value" class="sb-sheet-overlay">
+    <Transition name="er-sheet">
+      <div v-if="sheet.open.value" class="er-sheet-overlay">
         <div
           ref="content"
           v-bind="$attrs"
           role="dialog"
           aria-modal="true"
           tabindex="-1"
-          class="sb-sheet-content"
+          class="er-sheet-content"
           :data-side="side"
           :aria-labelledby="sheet.titleId"
           :aria-describedby="sheet.hasDescription.value ? sheet.descriptionId : undefined"
         >
           <slot />
-          <button v-if="showClose" type="button" class="sb-sheet-x" :aria-label="closeLabel" @click="sheet.setOpen(false)">
+          <button v-if="showClose" type="button" class="er-sheet-x" :aria-label="closeLabel" @click="sheet.setOpen(false)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
@@ -71,84 +71,84 @@ watch(
 
 <style>
 @layer components {
-  .sb-sheet-overlay {
+  .er-sheet-overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--sb-z-overlay);
-    background: var(--sb-overlay);
+    z-index: var(--er-z-overlay);
+    background: var(--er-overlay);
     overflow: hidden;
   }
 
-  .sb-sheet-content {
+  .er-sheet-content {
     position: absolute;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem;
-    background: var(--sb-background);
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-lg);
+    background: var(--er-background);
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-lg);
     outline: none;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 
-  .sb-sheet-content[data-side='right'],
-  .sb-sheet-content[data-side='left'] {
+  .er-sheet-content[data-side='right'],
+  .er-sheet-content[data-side='left'] {
     top: 0;
     bottom: 0;
     width: min(24rem, calc(100% - 3rem));
   }
 
-  .sb-sheet-content[data-side='right'] {
+  .er-sheet-content[data-side='right'] {
     right: 0;
-    border-left: 1px solid var(--sb-border);
+    border-left: 1px solid var(--er-border);
   }
 
-  .sb-sheet-content[data-side='left'] {
+  .er-sheet-content[data-side='left'] {
     left: 0;
-    border-right: 1px solid var(--sb-border);
+    border-right: 1px solid var(--er-border);
   }
 
-  .sb-sheet-content[data-side='top'],
-  .sb-sheet-content[data-side='bottom'] {
+  .er-sheet-content[data-side='top'],
+  .er-sheet-content[data-side='bottom'] {
     right: 0;
     left: 0;
     max-height: calc(100% - 3rem);
   }
 
-  .sb-sheet-content[data-side='top'] {
+  .er-sheet-content[data-side='top'] {
     top: 0;
-    border-bottom: 1px solid var(--sb-border);
+    border-bottom: 1px solid var(--er-border);
   }
 
-  .sb-sheet-content[data-side='bottom'] {
+  .er-sheet-content[data-side='bottom'] {
     bottom: 0;
-    border-top: 1px solid var(--sb-border);
+    border-top: 1px solid var(--er-border);
   }
 
-  .sb-sheet-header {
+  .er-sheet-header {
     display: grid;
     gap: 0.5rem;
     padding-right: 1.5rem;
   }
 
-  .sb-sheet-title {
+  .er-sheet-title {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.2;
   }
 
-  .sb-sheet-description {
+  .er-sheet-description {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
     line-height: 1.5;
   }
 
   /* Pushed to the far end, so actions sit at the bottom of a tall side sheet. */
-  .sb-sheet-footer {
+  .er-sheet-footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -156,7 +156,7 @@ watch(
     margin-top: auto;
   }
 
-  .sb-sheet-x {
+  .er-sheet-x {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -166,58 +166,58 @@ watch(
     height: 1.5rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
-    transition: color var(--sb-duration);
+    transition: color var(--er-duration);
   }
 
-  .sb-sheet-x:hover {
-    color: var(--sb-foreground);
+  .er-sheet-x:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-sheet-x:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-sheet-x:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-sheet-x svg {
+  .er-sheet-x svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-sheet-enter-active,
-  .sb-sheet-leave-active,
-  .sb-sheet-enter-active .sb-sheet-content,
-  .sb-sheet-leave-active .sb-sheet-content {
+  .er-sheet-enter-active,
+  .er-sheet-leave-active,
+  .er-sheet-enter-active .er-sheet-content,
+  .er-sheet-leave-active .er-sheet-content {
     transition:
-      opacity calc(var(--sb-duration) * 1.5) var(--sb-ease),
-      transform calc(var(--sb-duration) * 1.5) var(--sb-ease);
+      opacity calc(var(--er-duration) * 1.5) var(--er-ease),
+      transform calc(var(--er-duration) * 1.5) var(--er-ease);
   }
 
-  .sb-sheet-enter-from,
-  .sb-sheet-leave-to {
+  .er-sheet-enter-from,
+  .er-sheet-leave-to {
     opacity: 0;
   }
 
-  .sb-sheet-enter-from .sb-sheet-content[data-side='right'],
-  .sb-sheet-leave-to .sb-sheet-content[data-side='right'] {
+  .er-sheet-enter-from .er-sheet-content[data-side='right'],
+  .er-sheet-leave-to .er-sheet-content[data-side='right'] {
     transform: translateX(100%);
   }
 
-  .sb-sheet-enter-from .sb-sheet-content[data-side='left'],
-  .sb-sheet-leave-to .sb-sheet-content[data-side='left'] {
+  .er-sheet-enter-from .er-sheet-content[data-side='left'],
+  .er-sheet-leave-to .er-sheet-content[data-side='left'] {
     transform: translateX(-100%);
   }
 
-  .sb-sheet-enter-from .sb-sheet-content[data-side='top'],
-  .sb-sheet-leave-to .sb-sheet-content[data-side='top'] {
+  .er-sheet-enter-from .er-sheet-content[data-side='top'],
+  .er-sheet-leave-to .er-sheet-content[data-side='top'] {
     transform: translateY(-100%);
   }
 
-  .sb-sheet-enter-from .sb-sheet-content[data-side='bottom'],
-  .sb-sheet-leave-to .sb-sheet-content[data-side='bottom'] {
+  .er-sheet-enter-from .er-sheet-content[data-side='bottom'],
+  .er-sheet-leave-to .er-sheet-content[data-side='bottom'] {
     transform: translateY(100%);
   }
 }

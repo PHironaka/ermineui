@@ -32,7 +32,7 @@ export function tabKey(browserName: string): string {
   return browserName === 'webkit' ? 'Alt+Tab' : 'Tab'
 }
 
-/** The playground card for one component, by the name used in `sable add <name>`. */
+/** The playground card for one component, by the name used in `ermine add <name>`. */
 export function demo(page: Page, name: string): Locator {
   return page.locator(`#${name}`)
 }

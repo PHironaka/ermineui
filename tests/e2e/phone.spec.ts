@@ -21,7 +21,7 @@ test('no demo spills out of its card', async ({ page }) => {
 
 test('the off-canvas sidebar opens as a dialog and closes again', async ({ page }) => {
   const card = demo(page, 'sidebar')
-  const sidebar = card.locator('.sb-sidebar')
+  const sidebar = card.locator('.er-sidebar')
   await expect(sidebar).toBeHidden()
   await card.getByRole('button', { name: 'Menu' }).click()
   const drawer = page.getByRole('dialog', { name: 'Project' })
@@ -36,7 +36,7 @@ test('the off-canvas sidebar opens as a dialog and closes again', async ({ page 
 
 test('the stepper keeps only the current step’s name', async ({ page }) => {
   const steps = demo(page, 'stepper').getByRole('list', { name: 'Checkout progress' })
-  const widths = await steps.locator('.sb-stepper-text').evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().width))
+  const widths = await steps.locator('.er-stepper-text').evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().width))
   expect(widths.filter((width) => width > 2)).toHaveLength(1)
 })
 

@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- Rendered only where it can work: a switch that does nothing is worse than no switch. -->
-  <button v-if="supported" type="button" class="sb-wake-lock" :aria-pressed="active" :data-state="active ? 'on' : 'off'" @click="toggle">
+  <button v-if="supported" type="button" class="er-wake-lock" :aria-pressed="active" :data-state="active ? 'on' : 'off'" @click="toggle">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2M12 20v2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M2 12h2M20 12h2M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400" />
@@ -65,41 +65,41 @@ onBeforeUnmount(() => {
 
 <style>
 @layer components {
-  .sb-wake-lock {
+  .er-wake-lock {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     height: 2.25rem;
     padding: 0 0.75rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-muted-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-muted-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration);
   }
 
-  .sb-wake-lock:hover {
-    color: var(--sb-foreground);
+  .er-wake-lock:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-wake-lock[data-state='on'] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-wake-lock[data-state='on'] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-wake-lock:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-wake-lock:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-wake-lock svg {
+  .er-wake-lock svg {
     width: 1rem;
     height: 1rem;
   }

@@ -132,12 +132,12 @@ defineExpose({ clear, toDataURL })
 </script>
 
 <template>
-  <div class="sb-signature-pad" :data-disabled="disabled ? '' : undefined">
+  <div class="er-signature-pad" :data-disabled="disabled ? '' : undefined">
     <!-- A drawn signature cannot be made by keyboard or screen reader. Always offer another way to sign
          beside it, such as typing a name: the default slot is the place for that. -->
     <canvas
       ref="canvas"
-      class="sb-signature-pad-canvas"
+      class="er-signature-pad-canvas"
       role="img"
       :aria-label="`${label}: ${strokes.length ? 'signed' : 'empty'}`"
       :style="{ height: `${height}px` }"
@@ -146,58 +146,58 @@ defineExpose({ clear, toDataURL })
       @pointerup="onPointerUp"
       @pointercancel="onPointerUp"
     />
-    <div class="sb-signature-pad-footer">
-      <span class="sb-signature-pad-hint"><slot>Sign above</slot></span>
-      <button type="button" class="sb-signature-pad-clear" :disabled="disabled || !strokes.length" @click="clear">{{ clearLabel }}</button>
+    <div class="er-signature-pad-footer">
+      <span class="er-signature-pad-hint"><slot>Sign above</slot></span>
+      <button type="button" class="er-signature-pad-clear" :disabled="disabled || !strokes.length" @click="clear">{{ clearLabel }}</button>
     </div>
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-signature-pad {
+  .er-signature-pad {
     display: grid;
     gap: 0.375rem;
     width: 100%;
     min-width: 0;
   }
 
-  .sb-signature-pad-canvas {
+  .er-signature-pad-canvas {
     display: block;
     width: 100%;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
     /* A baseline to sign on, drawn in CSS so it is never part of the exported image. */
     background:
-      linear-gradient(var(--sb-border), var(--sb-border)) left 1rem bottom 2.25rem / calc(100% - 2rem) 1px no-repeat,
-      var(--sb-input-background);
+      linear-gradient(var(--er-border), var(--er-border)) left 1rem bottom 2.25rem / calc(100% - 2rem) 1px no-repeat,
+      var(--er-input-background);
     /* The ink colour on screen. */
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     cursor: crosshair;
     /* Without this a finger drawing a stroke would scroll the page instead. */
     touch-action: none;
   }
 
-  .sb-signature-pad[data-disabled] .sb-signature-pad-canvas {
+  .er-signature-pad[data-disabled] .er-signature-pad-canvas {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-signature-pad-footer {
+  .er-signature-pad-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
   }
 
-  .sb-signature-pad-clear {
+  .er-signature-pad-clear {
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font: inherit;
     font-weight: 500;
     text-decoration: underline;
@@ -205,13 +205,13 @@ defineExpose({ clear, toDataURL })
     cursor: pointer;
   }
 
-  .sb-signature-pad-clear:disabled {
+  .er-signature-pad-clear:disabled {
     opacity: 0.5;
     cursor: default;
   }
 
-  .sb-signature-pad-clear:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-signature-pad-clear:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 }

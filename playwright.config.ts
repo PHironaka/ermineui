@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const PORT = 4173
 
-// The browser tests drive the built playground, which shows every component as `sable add` would copy it.
+// The browser tests drive the built playground, which shows every component as `ermine add` would copy it.
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,

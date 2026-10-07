@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-alert-description"><slot /></div>
+  <div class="er-alert-description"><slot /></div>
 </template>

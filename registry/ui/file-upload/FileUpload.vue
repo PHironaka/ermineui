@@ -97,10 +97,10 @@ function remove(file: File) {
 </script>
 
 <template>
-  <div class="sb-file-upload">
+  <div class="er-file-upload">
     <!-- A label around a real file input: pressing it opens the picker, and Tab, Enter and Space work as usual. -->
     <label
-      class="sb-file-upload-zone"
+      class="er-file-upload-zone"
       :data-dragging="dragging ? '' : undefined"
       :data-disabled="disabled ? '' : undefined"
       @dragenter.prevent="dragging = !disabled"
@@ -112,24 +112,24 @@ function remove(file: File) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
       </svg>
-      <span class="sb-file-upload-text">
+      <span class="er-file-upload-text">
         <slot><strong>Choose {{ multiple ? 'files' : 'a file' }}</strong> or drop {{ multiple ? 'them' : 'it' }} here</slot>
       </span>
-      <span v-if="$slots.hint" class="sb-file-upload-hint"><slot name="hint" /></span>
+      <span v-if="$slots.hint" class="er-file-upload-hint"><slot name="hint" /></span>
     </label>
 
     <!-- Always in the page, empty until a file is turned away, so the reasons are reliably announced. -->
-    <div class="sb-file-upload-problems" role="alert">
+    <div class="er-file-upload-problems" role="alert">
       <p v-for="problem in problems" :key="problem">{{ problem }}</p>
     </div>
 
-    <span class="sb-file-upload-status" role="status">{{ status }}</span>
+    <span class="er-file-upload-status" role="status">{{ status }}</span>
 
-    <ul v-if="files.length" class="sb-file-upload-list" aria-label="Chosen files">
+    <ul v-if="files.length" class="er-file-upload-list" aria-label="Chosen files">
       <li v-for="file in files" :key="`${file.name}-${file.size}`">
-        <div class="sb-file-upload-row">
-          <span class="sb-file-upload-name">{{ file.name }}</span>
-          <span class="sb-file-upload-size">{{ size(file.size) }}</span>
+        <div class="er-file-upload-row">
+          <span class="er-file-upload-name">{{ file.name }}</span>
+          <span class="er-file-upload-size">{{ size(file.size) }}</span>
           <button type="button" :aria-label="`Remove ${file.name}`" :disabled="disabled" @click="remove(file)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
           </button>
@@ -142,7 +142,7 @@ function remove(file: File) {
 
 <style>
 @layer components {
-  .sb-file-upload {
+  .er-file-upload {
     position: relative;
     display: grid;
     gap: 0.75rem;
@@ -150,41 +150,41 @@ function remove(file: File) {
     min-width: 0;
   }
 
-  .sb-file-upload-zone {
+  .er-file-upload-zone {
     position: relative;
     display: grid;
     justify-items: center;
     gap: 0.375rem;
     padding: 1.5rem 1rem;
-    border: 1px dashed var(--sb-input);
-    border-radius: var(--sb-radius-lg);
-    color: var(--sb-muted-foreground);
+    border: 1px dashed var(--er-input);
+    border-radius: var(--er-radius-lg);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
     text-align: center;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      border-color var(--sb-duration);
+      background-color var(--er-duration),
+      border-color var(--er-duration);
   }
 
-  .sb-file-upload-zone:hover,
-  .sb-file-upload-zone[data-dragging] {
-    border-color: var(--sb-ring);
-    background: color-mix(in oklab, var(--sb-accent) 60%, transparent);
+  .er-file-upload-zone:hover,
+  .er-file-upload-zone[data-dragging] {
+    border-color: var(--er-ring);
+    background: color-mix(in oklab, var(--er-accent) 60%, transparent);
   }
 
-  .sb-file-upload-zone:has(input:focus-visible) {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-file-upload-zone:has(input:focus-visible) {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
   }
 
-  .sb-file-upload-zone[data-disabled] {
+  .er-file-upload-zone[data-disabled] {
     opacity: 0.5;
     pointer-events: none;
   }
 
   /* Hidden from sight but still focusable and still the thing screen readers and forms talk to. */
-  .sb-file-upload-zone input {
+  .er-file-upload-zone input {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -192,22 +192,22 @@ function remove(file: File) {
     clip-path: inset(50%);
   }
 
-  .sb-file-upload-zone svg {
+  .er-file-upload-zone svg {
     width: 1.25rem;
     height: 1.25rem;
   }
 
-  .sb-file-upload-text strong {
-    color: var(--sb-foreground);
+  .er-file-upload-text strong {
+    color: var(--er-foreground);
     font-weight: 500;
   }
 
-  .sb-file-upload-hint {
+  .er-file-upload-hint {
     font-size: 0.8125rem;
   }
 
-  .sb-file-upload-problems,
-  .sb-file-upload-list {
+  .er-file-upload-problems,
+  .er-file-upload-list {
     display: grid;
     gap: 0.5rem;
     margin: 0;
@@ -216,16 +216,16 @@ function remove(file: File) {
     list-style: none;
   }
 
-  .sb-file-upload-problems {
+  .er-file-upload-problems {
     gap: 0.125rem;
-    color: var(--sb-destructive);
+    color: var(--er-destructive);
   }
 
-  .sb-file-upload-problems p {
+  .er-file-upload-problems p {
     margin: 0;
   }
 
-  .sb-file-upload-status {
+  .er-file-upload-status {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -234,7 +234,7 @@ function remove(file: File) {
     white-space: nowrap;
   }
 
-  .sb-file-upload-problems:empty {
+  .er-file-upload-problems:empty {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -242,22 +242,22 @@ function remove(file: File) {
     clip-path: inset(50%);
   }
 
-  .sb-file-upload-list li {
+  .er-file-upload-list li {
     display: grid;
     gap: 0.5rem;
     padding: 0.5rem 0.5rem 0.5rem 0.75rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
   }
 
-  .sb-file-upload-row {
+  .er-file-upload-row {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     min-width: 0;
   }
 
-  .sb-file-upload-name {
+  .er-file-upload-name {
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -266,13 +266,13 @@ function remove(file: File) {
     white-space: nowrap;
   }
 
-  .sb-file-upload-size {
+  .er-file-upload-size {
     flex-shrink: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-file-upload-row button {
+  .er-file-upload-row button {
     display: grid;
     flex-shrink: 0;
     place-items: center;
@@ -280,23 +280,23 @@ function remove(file: File) {
     height: 1.5rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
   }
 
-  .sb-file-upload-row button:hover {
-    background: var(--sb-accent);
-    color: var(--sb-foreground);
+  .er-file-upload-row button:hover {
+    background: var(--er-accent);
+    color: var(--er-foreground);
   }
 
-  .sb-file-upload-row button:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-file-upload-row button:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 1px;
   }
 
-  .sb-file-upload-row svg {
+  .er-file-upload-row svg {
     width: 0.875rem;
     height: 0.875rem;
   }

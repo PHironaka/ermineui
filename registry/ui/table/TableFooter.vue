@@ -1,3 +1,3 @@
 <template>
-  <tfoot class="sb-table-footer"><slot /></tfoot>
+  <tfoot class="er-table-footer"><slot /></tfoot>
 </template>

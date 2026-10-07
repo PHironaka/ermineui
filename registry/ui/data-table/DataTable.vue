@@ -120,20 +120,20 @@ const summary = computed(() => {
 </script>
 
 <template>
-  <div class="sb-data-table">
+  <div class="er-data-table">
     <Table>
-      <TableCaption v-if="label" class="sb-data-table-caption">{{ label }}</TableCaption>
+      <TableCaption v-if="label" class="er-data-table-caption">{{ label }}</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead v-if="selectable" class="sb-data-table-check">
+          <TableHead v-if="selectable" class="er-data-table-check">
             <Checkbox :model-value="allOnPage" :indeterminate="someOnPage" aria-label="Select every row on this page" @update:model-value="togglePage" />
           </TableHead>
           <TableHead v-for="column in columns" :key="column.key" :align="column.align" :aria-sort="column.sortable ? ariaSort(column.key) : undefined">
-            <button v-if="column.sortable" type="button" class="sb-data-table-sort" :data-direction="sort?.key === column.key ? sort.direction : undefined" @click="toggleSort(column.key)">
+            <button v-if="column.sortable" type="button" class="er-data-table-sort" :data-direction="sort?.key === column.key ? sort.direction : undefined" @click="toggleSort(column.key)">
               {{ column.label }}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path class="sb-data-table-up" d="m7 9 5-5 5 5" />
-                <path class="sb-data-table-down" d="m7 15 5 5 5-5" />
+                <path class="er-data-table-up" d="m7 9 5-5 5 5" />
+                <path class="er-data-table-down" d="m7 15 5 5 5-5" />
               </svg>
             </button>
             <template v-else>{{ column.label }}</template>
@@ -142,7 +142,7 @@ const summary = computed(() => {
       </TableHeader>
       <TableBody>
         <TableRow v-for="row in visible" :key="keyOf(row)" :selected="selectable && selected.includes(keyOf(row))">
-          <TableCell v-if="selectable" class="sb-data-table-check">
+          <TableCell v-if="selectable" class="er-data-table-check">
             <Checkbox :model-value="selected.includes(keyOf(row))" :aria-label="`Select row ${keyOf(row)}`" @update:model-value="toggleRow(keyOf(row))" />
           </TableCell>
           <TableCell v-for="column in columns" :key="column.key" :align="column.align">
@@ -150,17 +150,17 @@ const summary = computed(() => {
           </TableCell>
         </TableRow>
         <TableRow v-if="!visible.length">
-          <TableCell class="sb-data-table-empty" :colspan="columns.length + (selectable ? 1 : 0)">
+          <TableCell class="er-data-table-empty" :colspan="columns.length + (selectable ? 1 : 0)">
             <slot name="empty">No results.</slot>
           </TableCell>
         </TableRow>
       </TableBody>
     </Table>
 
-    <div class="sb-data-table-footer">
+    <div class="er-data-table-footer">
       <!-- Announced when it changes, so paging and ticking rows are confirmed aloud. -->
       <p role="status">{{ summary }}</p>
-      <p class="sb-data-table-caption" role="status">{{ sortMessage }}</p>
+      <p class="er-data-table-caption" role="status">{{ sortMessage }}</p>
       <Pagination v-if="pageCount > 1" v-model="page" :page-count="pageCount" :label="label ? `${label} pages` : undefined" />
     </div>
   </div>
@@ -168,20 +168,20 @@ const summary = computed(() => {
 
 <style>
 @layer components {
-  .sb-data-table {
+  .er-data-table {
     display: grid;
     gap: 0.75rem;
     width: 100%;
     min-width: 0;
   }
 
-  .sb-data-table > .sb-table-wrap {
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
+  .er-data-table > .er-table-wrap {
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
   }
 
   /* The caption is for screen readers; the page's own heading names the table for everyone else. */
-  .sb-data-table-caption {
+  .er-data-table-caption {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -189,16 +189,16 @@ const summary = computed(() => {
     clip-path: inset(50%);
   }
 
-  .sb-data-table-check {
+  .er-data-table-check {
     width: 2.25rem;
     padding-right: 0;
   }
 
-  .sb-data-table-check .sb-checkbox {
+  .er-data-table-check .er-checkbox {
     display: grid;
   }
 
-  .sb-data-table-sort {
+  .er-data-table-sort {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -206,57 +206,57 @@ const summary = computed(() => {
     margin: 0 -0.5rem;
     padding: 0 0.5rem;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
     color: inherit;
     font: inherit;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration);
   }
 
-  .sb-data-table-sort:hover,
-  .sb-data-table-sort[data-direction] {
-    color: var(--sb-foreground);
+  .er-data-table-sort:hover,
+  .er-data-table-sort[data-direction] {
+    color: var(--er-foreground);
   }
 
-  .sb-data-table-sort:hover {
-    background: var(--sb-accent);
+  .er-data-table-sort:hover {
+    background: var(--er-accent);
   }
 
-  .sb-data-table-sort:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-data-table-sort:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 1px;
   }
 
-  .sb-data-table-sort svg {
+  .er-data-table-sort svg {
     width: 0.875rem;
     height: 0.875rem;
   }
 
   /* Both arrows are faint until the column is sorted; then the one in play goes solid. */
-  .sb-data-table-sort path {
+  .er-data-table-sort path {
     opacity: 0.4;
   }
 
-  .sb-data-table-sort[data-direction='asc'] .sb-data-table-up,
-  .sb-data-table-sort[data-direction='desc'] .sb-data-table-down {
+  .er-data-table-sort[data-direction='asc'] .er-data-table-up,
+  .er-data-table-sort[data-direction='desc'] .er-data-table-down {
     opacity: 1;
   }
 
-  .sb-data-table-sort[data-direction='asc'] .sb-data-table-down,
-  .sb-data-table-sort[data-direction='desc'] .sb-data-table-up {
+  .er-data-table-sort[data-direction='asc'] .er-data-table-down,
+  .er-data-table-sort[data-direction='desc'] .er-data-table-up {
     opacity: 0.15;
   }
 
-  .sb-data-table-empty {
+  .er-data-table-empty {
     height: 6rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     text-align: center;
   }
 
-  .sb-data-table-footer {
+  .er-data-table-footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -265,9 +265,9 @@ const summary = computed(() => {
     min-height: 2rem;
   }
 
-  .sb-data-table-footer p {
+  .er-data-table-footer p {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
   }

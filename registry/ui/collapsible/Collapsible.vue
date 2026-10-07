@@ -19,7 +19,7 @@ provideCollapsible({
 </script>
 
 <template>
-  <div class="sb-collapsible" :data-state="open ? 'open' : 'closed'">
+  <div class="er-collapsible" :data-state="open ? 'open' : 'closed'">
     <slot :open="open" />
   </div>
 </template>
@@ -27,25 +27,25 @@ provideCollapsible({
 <style>
 @layer components {
   /* Animates to the content's own height: a grid row going from 0fr to 1fr needs no measuring. */
-  .sb-collapsible-content {
+  .er-collapsible-content {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows var(--sb-duration) var(--sb-ease);
+    transition: grid-template-rows var(--er-duration) var(--er-ease);
   }
 
-  .sb-collapsible-content[data-state='open'] {
+  .er-collapsible-content[data-state='open'] {
     grid-template-rows: 1fr;
   }
 
-  .sb-collapsible-content > div {
+  .er-collapsible-content > div {
     min-height: 0;
     overflow: hidden;
     /* Hidden outright once it has closed, so its text cannot be selected or found while out of sight. */
     visibility: hidden;
-    transition: visibility 0s linear var(--sb-duration);
+    transition: visibility 0s linear var(--er-duration);
   }
 
-  .sb-collapsible-content[data-state='open'] > div {
+  .er-collapsible-content[data-state='open'] > div {
     visibility: visible;
     transition-delay: 0s;
   }

@@ -49,7 +49,7 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="menu.open.value"
         :id="menu.contentId"
@@ -57,7 +57,7 @@ function onKeydown(event: KeyboardEvent) {
         v-bind="$attrs"
         role="menu"
         tabindex="-1"
-        class="sb-floating sb-menu"
+        class="er-floating er-menu"
         :aria-labelledby="menu.anchor.value?.id || undefined"
         @keydown="onKeydown"
       >
@@ -69,25 +69,25 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-menu {
+  .er-menu {
     min-width: 10rem;
-    max-height: min(24rem, var(--sb-available-size, 24rem));
+    max-height: min(24rem, var(--er-available-size, 24rem));
     padding: 0.25rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-md);
+    box-shadow: var(--er-shadow-md);
     overflow-y: auto;
   }
 
-  .sb-menu-item {
+  .er-menu-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.375rem 0.5rem;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     color: inherit;
     line-height: 1.25rem;
     text-decoration: none;
@@ -96,38 +96,38 @@ function onKeydown(event: KeyboardEvent) {
     outline: none;
   }
 
-  .sb-menu-item:focus {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-menu-item:focus {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-menu-item[data-variant='destructive'] {
-    color: var(--sb-destructive);
+  .er-menu-item[data-variant='destructive'] {
+    color: var(--er-destructive);
   }
 
-  .sb-menu-item[data-variant='destructive']:focus {
-    background: color-mix(in oklab, var(--sb-destructive) 12%, transparent);
-    color: var(--sb-destructive);
+  .er-menu-item[data-variant='destructive']:focus {
+    background: color-mix(in oklab, var(--er-destructive) 12%, transparent);
+    color: var(--er-destructive);
   }
 
-  .sb-menu-item[data-disabled] {
+  .er-menu-item[data-disabled] {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-menu-item svg {
+  .er-menu-item svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-menu-item[data-variant='destructive'] svg {
+  .er-menu-item[data-variant='destructive'] svg {
     color: inherit;
   }
 
   /* Checkbox and radio items keep a fixed slot for their mark, so labels line up whether or not it shows. */
-  .sb-menu-indicator {
+  .er-menu-indicator {
     display: inline-grid;
     flex-shrink: 0;
     place-items: center;
@@ -135,41 +135,41 @@ function onKeydown(event: KeyboardEvent) {
     height: 1rem;
   }
 
-  .sb-menu-indicator svg {
+  .er-menu-indicator svg {
     color: currentColor;
   }
 
-  .sb-menu-item[aria-checked='false'] .sb-menu-indicator svg {
+  .er-menu-item[aria-checked='false'] .er-menu-indicator svg {
     visibility: hidden;
   }
 
-  .sb-menu-item[aria-haspopup='menu'][data-state='open'] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-menu-item[aria-haspopup='menu'][data-state='open'] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-menu-chevron {
+  .er-menu-chevron {
     margin-left: auto;
   }
 
-  .sb-menu-shortcut {
+  .er-menu-shortcut {
     margin-left: auto;
     padding-left: 1.5rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
   }
 
-  .sb-menu-label {
+  .er-menu-label {
     padding: 0.375rem 0.5rem;
     font-size: 0.8125rem;
     font-weight: 600;
   }
 
-  .sb-menu-separator {
+  .er-menu-separator {
     height: 1px;
     margin: 0.25rem -0.25rem;
-    background: var(--sb-border);
+    background: var(--er-border);
   }
 }
 </style>

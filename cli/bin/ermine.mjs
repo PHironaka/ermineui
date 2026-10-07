@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Sable UI command line: copies component source into your project. No dependencies.
+// Ermine UI command line: copies component source into your project. No dependencies.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, posix, relative, resolve, sep } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 import { fileURLToPath } from 'node:url'
 
-const CONFIG_FILE = 'sable.json'
+const CONFIG_FILE = 'ermine.json'
 const BUNDLED_REGISTRY = join(dirname(fileURLToPath(import.meta.url)), '..', 'registry.json')
 
 const color = (code) => (text) => (process.stdout.isTTY ? `\u001b[${code}m${text}\u001b[0m` : text)
@@ -54,7 +54,7 @@ async function loadRegistry(source) {
 function loadConfig(cwd) {
   const path = join(cwd, CONFIG_FILE)
   if (!existsSync(path)) {
-    throw new UserError(`No ${CONFIG_FILE} found in ${cwd}. Run "sable init" first.`)
+    throw new UserError(`No ${CONFIG_FILE} found in ${cwd}. Run "ermine init" first.`)
   }
   try {
     const config = JSON.parse(readFileSync(path, 'utf8'))
@@ -76,15 +76,15 @@ function detectDefaults(cwd) {
     return {
       framework: 'Nuxt',
       components: `${base}components/ui`,
-      lib: `${base}lib/sable`,
-      styles: `${base}assets/css/sable.css`,
+      lib: `${base}lib/ermine`,
+      styles: `${base}assets/css/ermine.css`,
     }
   }
   return {
     framework: has('astro.config.mjs', 'astro.config.ts', 'astro.config.js') ? 'Astro' : 'Vue',
     components: 'src/components/ui',
-    lib: 'src/lib/sable',
-    styles: 'src/styles/sable.css',
+    lib: 'src/lib/ermine',
+    styles: 'src/styles/ermine.css',
   }
 }
 
@@ -118,7 +118,7 @@ function rewriteLibImports(content, componentDir, libDir) {
 function missingVariables(registryCss, projectCss) {
   const root = registryCss.slice(registryCss.indexOf(':root {'), registryCss.indexOf('\n}', registryCss.indexOf(':root {')))
   const missing = []
-  for (const match of root.matchAll(/^\s*(--sb-[\w-]+):\s*([^;]+);/gm)) {
+  for (const match of root.matchAll(/^\s*(--er-[\w-]+):\s*([^;]+);/gm)) {
     const [, name, value] = match
     if (!new RegExp(`${name}\\s*:`).test(projectCss)) missing.push([name, value.trim()])
   }
@@ -131,7 +131,7 @@ function addMissingVariables(cwd, path, registryCss) {
   const missing = missingVariables(registryCss, current)
   if (missing.length === 0) return 0
   const block =
-    `\n/* Added by "sable add": variables that newer components use and this file did not have yet.\n` +
+    `\n/* Added by "ermine add": variables that newer components use and this file did not have yet.\n` +
     `   Move them into your own :root block, and change the values, as you like. */\n` +
     `:root {\n${missing.map(([name, value]) => `  ${name}: ${value};`).join('\n')}\n}\n`
   writeFileSync(target, current.replace(/\n*$/, '\n') + block)
@@ -179,7 +179,7 @@ async function init({ cwd, flags }) {
 
   const config = { components: defaults.components, lib: defaults.lib, styles: defaults.styles }
   if (!flags.yes && process.stdin.isTTY) {
-    console.log(`${bold('Sable UI')} ${dim(`· ${defaults.framework} project detected`)}\n`)
+    console.log(`${bold('Ermine UI')} ${dim(`· ${defaults.framework} project detected`)}\n`)
     const prompt = createInterface({ input: process.stdin, output: process.stdout })
     const ask = async (question, fallback) =>
       (await prompt.question(`${question} ${dim(`(${fallback})`)} `)).trim() || fallback
@@ -204,7 +204,7 @@ async function init({ cwd, flags }) {
     Astro: `Import the stylesheet in your layout:  import '../${importPath}'`,
     Vue: `Import the stylesheet in your entry file:  import './${importPath}'`,
   }[defaults.framework]
-  console.log(`\n${bold('Next')}\n  1. ${next}\n  2. Add components:  sable add button dialog\n`)
+  console.log(`\n${bold('Next')}\n  1. ${next}\n  2. Add components:  ermine add button dialog\n`)
 }
 
 async function add({ cwd, flags, positional }) {
@@ -214,11 +214,11 @@ async function add({ cwd, flags, positional }) {
   const requested = flags.all ? available : positional
 
   if (requested.length === 0) {
-    throw new UserError('Name at least one component, e.g. "sable add button", or use --all.')
+    throw new UserError('Name at least one component, e.g. "ermine add button", or use --all.')
   }
   const unknown = requested.filter((name) => !registry.components[name])
   if (unknown.length > 0) {
-    throw new UserError(`Unknown component: ${unknown.join(', ')}. Run "sable list" to see what is available.`)
+    throw new UserError(`Unknown component: ${unknown.join(', ')}. Run "ermine list" to see what is available.`)
   }
 
   const needed = resolveDependencies(registry, requested)
@@ -275,13 +275,13 @@ async function list({ cwd, flags }) {
   if (config) console.log(dim(`\n  ✓ already in ${config.components}`))
 }
 
-const HELP = `${bold('sable')} — copy Sable UI components into your project
+const HELP = `${bold('ermine')} — copy Ermine UI components into your project
 
 ${bold('Usage')}
-  sable init                 Create sable.json and the theme stylesheet
-  sable add <name...>        Copy components (and what they depend on) into your project
-  sable add --all            Copy every component
-  sable list                 Show available components
+  ermine init                 Create ermine.json and the theme stylesheet
+  ermine add <name...>        Copy components (and what they depend on) into your project
+  ermine add --all            Copy every component
+  ermine list                 Show available components
 
 ${bold('Options')}
   -y, --yes                  Accept the suggested folders without asking
@@ -303,7 +303,7 @@ async function main() {
     return console.log(JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version)
   }
   if (!command || command === 'help' || command === '--help' || command === '-h') return console.log(HELP)
-  throw new UserError(`Unknown command "${command}". Run "sable help" to see what is available.`)
+  throw new UserError(`Unknown command "${command}". Run "ermine help" to see what is available.`)
 }
 
 main().catch((error) => {

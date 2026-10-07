@@ -44,7 +44,7 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- A panel that scrolls can be focused, so its content can be scrolled from the keyboard too. -->
-  <div :id="id" ref="root" class="sb-resizable-panel" :tabindex="scrollable ? 0 : undefined" :style="{ '--sb-panel-size': size }">
+  <div :id="id" ref="root" class="er-resizable-panel" :tabindex="scrollable ? 0 : undefined" :style="{ '--er-panel-size': size }">
     <slot :size="size" />
   </div>
 </template>

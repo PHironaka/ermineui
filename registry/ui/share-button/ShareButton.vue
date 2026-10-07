@@ -55,7 +55,7 @@ async function share() {
 </script>
 
 <template>
-  <Button class="sb-share-button" :variant="variant" :size="size" :data-copied="copied ? '' : undefined" @click="share">
+  <Button class="er-share-button" :variant="variant" :size="size" :data-copied="copied ? '' : undefined" @click="share">
     <svg v-if="copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M20 6 9 17l-5-5" />
     </svg>
@@ -65,13 +65,13 @@ async function share() {
     <template v-if="copied">{{ copiedLabel }}</template>
     <slot v-else>Share</slot>
     <!-- The label swap is silent to a screen reader, so the confirmation is also announced. -->
-    <span class="sb-share-button-status" role="status">{{ copied ? copiedLabel : '' }}</span>
+    <span class="er-share-button-status" role="status">{{ copied ? copiedLabel : '' }}</span>
   </Button>
 </template>
 
 <style>
 @layer components {
-  .sb-share-button-status {
+  .er-share-button-status {
     position: absolute;
     width: 1px;
     height: 1px;

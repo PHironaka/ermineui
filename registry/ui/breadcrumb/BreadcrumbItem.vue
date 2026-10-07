@@ -16,8 +16,8 @@ withDefaults(
 </script>
 
 <template>
-  <li class="sb-breadcrumb-item">
-    <span v-if="current" class="sb-breadcrumb-link" aria-current="page"><slot /></span>
-    <Primitive v-else v-bind="$attrs" :as="as" class="sb-breadcrumb-link"><slot /></Primitive>
+  <li class="er-breadcrumb-item">
+    <span v-if="current" class="er-breadcrumb-link" aria-current="page"><slot /></span>
+    <Primitive v-else v-bind="$attrs" :as="as" class="er-breadcrumb-link"><slot /></Primitive>
   </li>
 </template>

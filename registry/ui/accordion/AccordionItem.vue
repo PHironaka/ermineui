@@ -20,7 +20,7 @@ provideAccordionItem({
 </script>
 
 <template>
-  <div class="sb-accordion-item" :data-state="open ? 'open' : 'closed'">
+  <div class="er-accordion-item" :data-state="open ? 'open' : 'closed'">
     <slot :open="open" />
   </div>
 </template>

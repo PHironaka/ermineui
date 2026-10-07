@@ -49,7 +49,7 @@ function onPointerLeave(event: PointerEvent) {
     :as="as"
     role="menuitem"
     tabindex="-1"
-    class="sb-menu-item"
+    class="er-menu-item"
     :data-variant="variant"
     :data-disabled="disabled ? '' : undefined"
     :aria-disabled="disabled || undefined"

@@ -1,3 +1,3 @@
 <template>
-  <p class="sb-card-description"><slot /></p>
+  <p class="er-card-description"><slot /></p>
 </template>

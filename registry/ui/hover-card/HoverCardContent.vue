@@ -32,12 +32,12 @@ useLayer(content, card.open, {
 
 <template>
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="card.open.value"
         ref="content"
         v-bind="$attrs"
-        class="sb-floating sb-hover-card"
+        class="er-floating er-hover-card"
         @pointerenter="card.show()"
         @pointerleave="card.hide()"
         @focusin="card.show()"
@@ -51,15 +51,15 @@ useLayer(content, card.open, {
 
 <style>
 @layer components {
-  .sb-hover-card {
+  .er-hover-card {
     width: 18rem;
     padding: 1rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-md);
+    box-shadow: var(--er-shadow-md);
   }
 }
 </style>

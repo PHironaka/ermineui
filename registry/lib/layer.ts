@@ -26,7 +26,7 @@ interface Layer {
 const stack: Layer[] = []
 
 /** Put this attribute on anything that should never count as "outside" (e.g. the toaster). */
-const IGNORE_SELECTOR = '[data-sb-layer-ignore]'
+const IGNORE_SELECTOR = '[data-er-layer-ignore]'
 
 const TABBABLE_SELECTOR = [
   'a[href]',

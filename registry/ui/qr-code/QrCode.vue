@@ -43,7 +43,7 @@ const code = computed(() => {
   <!-- Always dark squares on white, whatever the theme: many scanners cannot read a light-on-dark code. -->
   <svg
     v-if="code"
-    class="sb-qr-code"
+    class="er-qr-code"
     role="img"
     :aria-label="label ?? `QR code for ${value}`"
     :width="size"
@@ -55,25 +55,25 @@ const code = computed(() => {
     <path :d="code.path" fill="#000" />
   </svg>
   <!-- Always in the page, empty while the code can be drawn, so the problem is announced when it arises. -->
-  <p class="sb-qr-code-error" role="alert"><slot v-if="!code" name="error">This is too much text for a QR code.</slot></p>
+  <p class="er-qr-code-error" role="alert"><slot v-if="!code" name="error">This is too much text for a QR code.</slot></p>
 </template>
 
 <style>
 @layer components {
-  .sb-qr-code {
+  .er-qr-code {
     display: block;
     max-width: 100%;
     height: auto;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
   }
 
-  .sb-qr-code-error {
+  .er-qr-code-error {
     margin: 0;
-    color: var(--sb-destructive);
+    color: var(--er-destructive);
     font-size: 0.875rem;
   }
 
-  .sb-qr-code-error:empty {
+  .er-qr-code-error:empty {
     /* Out of sight but still in the page for screen readers, which is what lets them announce it filling in. */
     position: absolute;
     width: 1px;

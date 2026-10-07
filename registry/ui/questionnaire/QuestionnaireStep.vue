@@ -27,10 +27,10 @@ onBeforeUnmount(unregister)
 
 <template>
   <!-- Kept in the page while hidden, so anything typed is still there when the reader comes back. -->
-  <section v-show="current" class="sb-questionnaire-step" :aria-labelledby="`${id}-title`" :data-step="id">
+  <section v-show="current" class="er-questionnaire-step" :aria-labelledby="`${id}-title`" :data-step="id">
     <!-- Focus lands here when the step appears, so screen readers announce the new question. -->
-    <h3 :id="`${id}-title`" class="sb-questionnaire-title" tabindex="-1">{{ title }}</h3>
-    <p v-if="description" class="sb-questionnaire-description">{{ description }}</p>
-    <div class="sb-questionnaire-fields"><slot /></div>
+    <h3 :id="`${id}-title`" class="er-questionnaire-title" tabindex="-1">{{ title }}</h3>
+    <p v-if="description" class="er-questionnaire-description">{{ description }}</p>
+    <div class="er-questionnaire-fields"><slot /></div>
   </section>
 </template>

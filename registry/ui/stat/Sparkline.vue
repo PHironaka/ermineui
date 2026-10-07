@@ -31,7 +31,7 @@ const last = computed(() => points.value[points.value.length - 1])
 
 <template>
   <!-- A shape, not a readout: the number beside it carries the value, so this is hidden from screen readers. -->
-  <svg class="sb-sparkline" :width="width" :height="height" aria-hidden="true">
+  <svg class="er-sparkline" :width="width" :height="height" aria-hidden="true">
     <path :d="line" />
     <circle v-if="last" :cx="last.x" :cy="last.y" r="3" />
   </svg>
@@ -39,24 +39,24 @@ const last = computed(() => points.value[points.value.length - 1])
 
 <style>
 @layer components {
-  .sb-sparkline {
+  .er-sparkline {
     display: block;
     flex-shrink: 0;
     overflow: visible;
   }
 
   /* The history stays quiet; only the latest point takes the accent colour. */
-  .sb-sparkline path {
+  .er-sparkline path {
     fill: none;
-    stroke: var(--sb-muted-foreground);
+    stroke: var(--er-muted-foreground);
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0.7;
   }
 
-  .sb-sparkline circle {
-    fill: var(--sb-chart-1, var(--sb-primary));
+  .er-sparkline circle {
+    fill: var(--er-chart-1, var(--er-primary));
   }
 }
 </style>

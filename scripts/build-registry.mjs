@@ -50,9 +50,9 @@ for (const [name, component] of Object.entries(components)) {
 
 const pkg = JSON.parse(read(join(root, 'cli', 'package.json')))
 const registry = {
-  name: 'sable',
+  name: 'ermine',
   version: pkg.version,
-  styles: { file: 'sable.css', content: read(join(registryDir, 'styles', 'sable.css')) },
+  styles: { file: 'ermine.css', content: read(join(registryDir, 'styles', 'ermine.css')) },
   lib,
   components,
 }

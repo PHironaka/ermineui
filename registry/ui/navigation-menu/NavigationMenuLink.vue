@@ -19,8 +19,8 @@ const menu = useNavigationMenu()
 </script>
 
 <template>
-  <Primitive :as="as" class="sb-navigation-menu-link" :aria-current="active ? 'page' : undefined" @click="menu.close(true)">
+  <Primitive :as="as" class="er-navigation-menu-link" :aria-current="active ? 'page' : undefined" @click="menu.close(true)">
     <span><slot /></span>
-    <span v-if="description" class="sb-navigation-menu-description">{{ description }}</span>
+    <span v-if="description" class="er-navigation-menu-description">{{ description }}</span>
   </Primitive>
 </template>

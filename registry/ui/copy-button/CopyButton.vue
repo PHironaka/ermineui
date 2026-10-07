@@ -41,7 +41,7 @@ onBeforeUnmount(() => clearTimeout(timer))
 </script>
 
 <template>
-  <Button class="sb-copy-button" :variant="variant" :size="size" :aria-label="size === 'icon' ? label : undefined" :data-copied="copied ? '' : undefined" @click="copy">
+  <Button class="er-copy-button" :variant="variant" :size="size" :aria-label="size === 'icon' ? label : undefined" :data-copied="copied ? '' : undefined" @click="copy">
     <svg v-if="copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M20 6 9 17l-5-5" />
     </svg>
@@ -51,18 +51,18 @@ onBeforeUnmount(() => clearTimeout(timer))
     </svg>
     <template v-if="size !== 'icon'">{{ copied ? copiedLabel : label }}</template>
     <!-- The icon swap is silent, so the confirmation is also said aloud. -->
-    <span class="sb-copy-button-status" role="status">{{ copied ? copiedLabel : '' }}</span>
+    <span class="er-copy-button-status" role="status">{{ copied ? copiedLabel : '' }}</span>
   </Button>
 </template>
 
 <style>
 @layer components {
-  .sb-copy-button[data-size='icon'] {
+  .er-copy-button[data-size='icon'] {
     width: 2rem;
     height: 2rem;
   }
 
-  .sb-copy-button-status {
+  .er-copy-button-status {
     position: absolute;
     width: 1px;
     height: 1px;

@@ -6,5 +6,5 @@ defineProps<{
 </script>
 
 <template>
-  <tr class="sb-table-row" :data-state="selected ? 'selected' : undefined" :aria-selected="selected || undefined"><slot /></tr>
+  <tr class="er-table-row" :data-state="selected ? 'selected' : undefined" :aria-selected="selected || undefined"><slot /></tr>
 </template>

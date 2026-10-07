@@ -31,7 +31,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="root" class="sb-search-input" @keydown="onKeydown">
+  <div ref="root" class="er-search-input" @keydown="onKeydown">
     <InputGroup>
       <template #prefix>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -41,7 +41,7 @@ function onKeydown(event: KeyboardEvent) {
       </template>
       <Input v-bind="$attrs" v-model="model" type="search" />
       <template v-if="model" #suffix>
-        <button type="button" class="sb-input-group-button" :aria-label="clearLabel" @click="clear">
+        <button type="button" class="er-input-group-button" :aria-label="clearLabel" @click="clear">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
         </button>
       </template>

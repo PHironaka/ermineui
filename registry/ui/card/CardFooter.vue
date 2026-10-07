@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-card-footer"><slot /></div>
+  <div class="er-card-footer"><slot /></div>
 </template>

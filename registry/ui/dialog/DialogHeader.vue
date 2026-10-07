@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-dialog-header"><slot /></div>
+  <div class="er-dialog-header"><slot /></div>
 </template>

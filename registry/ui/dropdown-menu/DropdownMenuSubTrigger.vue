@@ -34,7 +34,7 @@ function onBlur(event: FocusEvent) {
     :ref="(el) => (sub.anchor.value = el as HTMLElement | null)"
     role="menuitem"
     tabindex="-1"
-    class="sb-menu-item"
+    class="er-menu-item"
     aria-haspopup="menu"
     :aria-expanded="sub.open.value"
     :aria-controls="sub.open.value ? sub.contentId : undefined"
@@ -47,7 +47,7 @@ function onBlur(event: FocusEvent) {
     @blur="onBlur"
   >
     <slot />
-    <svg class="sb-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <svg class="er-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="m9 18 6-6-6-6" />
     </svg>
   </div>

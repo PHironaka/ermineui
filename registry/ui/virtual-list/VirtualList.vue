@@ -54,16 +54,16 @@ defineExpose({ scrollToIndex })
 
 <template>
   <!-- Give it a height (in CSS or a style attribute); it scrolls inside that. -->
-  <div ref="root" class="sb-virtual-list" role="list" tabindex="0" :aria-label="label" @scroll.passive="onScroll">
+  <div ref="root" class="er-virtual-list" role="list" tabindex="0" :aria-label="label" @scroll.passive="onScroll">
     <!-- One tall spacer holds the full scroll height; the few real rows are shifted into place inside it. -->
-    <div class="sb-virtual-list-spacer" :style="{ height: `${items.length * itemHeight}px` }">
+    <div class="er-virtual-list-spacer" :style="{ height: `${items.length * itemHeight}px` }">
       <div :style="{ transform: `translateY(${range.start * itemHeight}px)` }">
         <!-- Each row says where it sits in the whole list, since most of the list is not in the page. -->
         <div
           v-for="row in rows"
           :key="row.index"
           role="listitem"
-          class="sb-virtual-list-item"
+          class="er-virtual-list-item"
           :aria-setsize="items.length"
           :aria-posinset="row.index + 1"
           :style="{ height: `${itemHeight}px` }"
@@ -77,27 +77,27 @@ defineExpose({ scrollToIndex })
 
 <style>
 @layer components {
-  .sb-virtual-list {
+  .er-virtual-list {
     position: relative;
     height: 20rem;
     max-height: 100%;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    scrollbar-color: var(--sb-input) transparent;
+    scrollbar-color: var(--er-input) transparent;
   }
 
-  .sb-virtual-list:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-virtual-list:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-virtual-list-spacer {
+  .er-virtual-list-spacer {
     overflow: hidden;
   }
 
-  .sb-virtual-list-item {
+  .er-virtual-list-item {
     display: flex;
     align-items: center;
     min-width: 0;

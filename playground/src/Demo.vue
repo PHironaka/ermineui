@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  /** Registry name, as used in `sable add <name>`. */
+  /** Registry name, as used in `ermine add <name>`. */
   name: string
   title: string
   description: string
@@ -16,7 +16,7 @@ defineProps<{
         <h2>{{ title }}</h2>
         <p>{{ description }}</p>
       </div>
-      <code>sable add {{ name }}</code>
+      <code>ermine add {{ name }}</code>
     </header>
     <div class="demo-stage">
       <slot />

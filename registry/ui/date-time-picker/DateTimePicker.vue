@@ -47,7 +47,7 @@ watch(combined, (next) => {
 </script>
 
 <template>
-  <div role="group" class="sb-date-time-picker" :aria-label="props.label">
+  <div role="group" class="er-date-time-picker" :aria-label="props.label">
     <DatePicker v-bind="$attrs" v-model="date" :min="min" :max="max" :locale="locale" :disabled="disabled" />
     <TimePicker v-model="time" :step="step" :locale="locale" :disabled="disabled" aria-label="Time" />
     <input v-if="name" type="hidden" :name="name" :value="value ?? ''" :disabled="disabled" />
@@ -56,7 +56,7 @@ watch(combined, (next) => {
 
 <style>
 @layer components {
-  .sb-date-time-picker {
+  .er-date-time-picker {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     gap: 0.5rem;

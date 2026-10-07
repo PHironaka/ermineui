@@ -17,46 +17,46 @@ const lines = computed(() => props.code.replace(/\n$/, '').split('\n'))
 </script>
 
 <template>
-  <figure class="sb-code-block" :data-wrap="wrap ? '' : undefined">
-    <figcaption v-if="filename" class="sb-code-block-header">{{ filename }}</figcaption>
-    <CopyButton class="sb-code-block-copy" :value="code" label="Copy code" />
+  <figure class="er-code-block" :data-wrap="wrap ? '' : undefined">
+    <figcaption v-if="filename" class="er-code-block-header">{{ filename }}</figcaption>
+    <CopyButton class="er-code-block-copy" :value="code" label="Copy code" />
     <!-- Focusable so a long line can be scrolled with the keyboard; the role is what lets it carry a name. -->
-    <pre tabindex="0" role="group" :aria-label="filename ?? 'Code'"><code><template v-if="lineNumbers"><span v-for="(line, index) in lines" :key="index" class="sb-code-block-line">{{ line }}{{ '\n' }}</span></template><slot v-else>{{ code }}</slot></code></pre>
+    <pre tabindex="0" role="group" :aria-label="filename ?? 'Code'"><code><template v-if="lineNumbers"><span v-for="(line, index) in lines" :key="index" class="er-code-block-line">{{ line }}{{ '\n' }}</span></template><slot v-else>{{ code }}</slot></code></pre>
   </figure>
 </template>
 
 <style>
 @layer components {
-  .sb-code-block {
+  .er-code-block {
     position: relative;
     width: 100%;
     min-width: 0;
     margin: 0;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-muted);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-muted);
     overflow: hidden;
   }
 
-  .sb-code-block-header {
+  .er-code-block-header {
     padding: 0.5rem 3rem 0.5rem 1rem;
-    border-bottom: 1px solid var(--sb-border);
-    color: var(--sb-muted-foreground);
-    font-family: var(--sb-font-mono);
+    border-bottom: 1px solid var(--er-border);
+    color: var(--er-muted-foreground);
+    font-family: var(--er-font-mono);
     font-size: 0.75rem;
   }
 
-  .sb-code-block-copy {
+  .er-code-block-copy {
     position: absolute;
     top: 0.25rem;
     right: 0.375rem;
   }
 
-  .sb-code-block pre {
+  .er-code-block pre {
     margin: 0;
     padding: 0.875rem 1rem;
-    color: var(--sb-foreground);
-    font-family: var(--sb-font-mono);
+    color: var(--er-foreground);
+    font-family: var(--er-font-mono);
     font-size: 0.8125rem;
     line-height: 1.6;
     tab-size: 2;
@@ -65,33 +65,33 @@ const lines = computed(() => props.code.replace(/\n$/, '').split('\n'))
   }
 
   /* Without a header, the first line keeps clear of the copy button. */
-  .sb-code-block:not(:has(.sb-code-block-header)) pre {
+  .er-code-block:not(:has(.er-code-block-header)) pre {
     padding-right: 3rem;
   }
 
-  .sb-code-block pre:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-code-block pre:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: -2px;
   }
 
-  .sb-code-block[data-wrap] pre {
+  .er-code-block[data-wrap] pre {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
 
-  .sb-code-block code {
+  .er-code-block code {
     font: inherit;
-    counter-reset: sb-line;
+    counter-reset: er-line;
   }
 
   /* Numbers are drawn in CSS, so selecting and copying the code never picks them up. */
-  .sb-code-block-line::before {
-    content: counter(sb-line);
-    counter-increment: sb-line;
+  .er-code-block-line::before {
+    content: counter(er-line);
+    counter-increment: er-line;
     display: inline-block;
     width: 1.75rem;
     margin-right: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     opacity: 0.7;
     text-align: right;
     user-select: none;

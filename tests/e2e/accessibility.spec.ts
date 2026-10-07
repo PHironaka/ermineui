@@ -28,39 +28,39 @@ for (const scheme of ['light', 'dark'] as const) {
       }
 
       await page.locator('#dialog').getByRole('button', { name: 'Invite a teammate' }).click()
-      await scan('dialog', '.sb-dialog-content')
+      await scan('dialog', '.er-dialog-content')
       await page.keyboard.press('Escape')
 
       await page.locator('#dropdown-menu').getByRole('button', { name: 'View options' }).click()
-      await scan('dropdown menu', '.sb-menu')
+      await scan('dropdown menu', '.er-menu')
       await page.keyboard.press('Escape')
 
       await page.locator('#select').getByRole('combobox', { name: 'Region' }).click()
-      await scan('select', '.sb-select-content[data-state="open"]')
+      await scan('select', '.er-select-content[data-state="open"]')
       await page.keyboard.press('Escape')
 
       await page.locator('#date-picker').getByRole('button', { name: 'Launch date' }).click()
-      await scan('date picker', '.sb-date-picker-content')
+      await scan('date picker', '.er-date-picker-content')
       await page.keyboard.press('Escape')
 
       await page.locator('#date-range-picker').getByRole('button', { name: 'Report period' }).click()
-      await scan('date range picker', '.sb-date-range-picker-content')
+      await scan('date range picker', '.er-date-range-picker-content')
       await page.keyboard.press('Escape')
 
       await page.keyboard.press('ControlOrMeta+k')
-      await scan('command palette', '.sb-command')
+      await scan('command palette', '.er-command')
       await page.keyboard.press('Escape')
 
       await page.locator('#alert-dialog').getByRole('button', { name: 'Delete project' }).click()
-      await scan('alert dialog', '.sb-alert-dialog')
+      await scan('alert dialog', '.er-alert-dialog')
       await page.keyboard.press('Escape')
 
       await page.locator('#time-picker').getByRole('button', { name: /Brand colour/ }).click()
-      await scan('colour picker', '.sb-color-picker-content')
+      await scan('colour picker', '.er-color-picker-content')
       await page.keyboard.press('Escape')
 
       await page.locator('#toast').getByRole('button', { name: 'Error' }).click()
-      await scan('toast', '[data-sb-layer-ignore]')
+      await scan('toast', '[data-er-layer-ignore]')
 
       expect(problems).toEqual([])
     })

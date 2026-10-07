@@ -1,3 +1,3 @@
 <template>
-  <caption class="sb-table-caption"><slot /></caption>
+  <caption class="er-table-caption"><slot /></caption>
 </template>

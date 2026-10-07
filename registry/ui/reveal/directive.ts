@@ -33,7 +33,7 @@ export const vReveal: Directive<HTMLElement, number | undefined> = {
     const box = el.getBoundingClientRect()
     const onScreen = box.top < window.innerHeight && box.bottom > 0
     if (onScreen) return
-    if (binding.value) el.style.setProperty('--sb-reveal-delay', `${binding.value}ms`)
+    if (binding.value) el.style.setProperty('--er-reveal-delay', `${binding.value}ms`)
     el.dataset.reveal = 'waiting'
     watcher().observe(el)
   },

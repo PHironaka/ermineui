@@ -25,13 +25,13 @@ const label = ref<HTMLElement | null>(null)
     <Primitive
       v-bind="$attrs"
       :as="as"
-      class="sb-sidebar-item"
+      class="er-sidebar-item"
       :aria-current="active ? 'page' : undefined"
       :title="sidebar.collapsed.value ? label?.textContent?.trim() : undefined"
       @click="sidebar.navigate()"
     >
       <slot name="icon" />
-      <span ref="label" class="sb-sidebar-item-label"><slot /></span>
+      <span ref="label" class="er-sidebar-item-label"><slot /></span>
     </Primitive>
   </li>
 </template>

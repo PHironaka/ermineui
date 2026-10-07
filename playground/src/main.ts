@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import '../../registry/styles/sable.css'
+import '../../registry/styles/ermine.css'
 import App from './App.vue'
 import './playground.css'
 

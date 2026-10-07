@@ -11,14 +11,14 @@ const pressed = defineModel<boolean>({ default: false })
 </script>
 
 <template>
-  <button type="button" class="sb-toggle" :aria-pressed="pressed" :data-state="pressed ? 'on' : 'off'" :data-variant="variant" :data-size="size" @click="pressed = !pressed">
+  <button type="button" class="er-toggle" :aria-pressed="pressed" :data-state="pressed ? 'on' : 'off'" :data-variant="variant" :data-size="size" @click="pressed = !pressed">
     <slot :pressed="pressed" />
   </button>
 </template>
 
 <style>
 @layer components {
-  .sb-toggle {
+  .er-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -27,54 +27,54 @@ const pressed = defineModel<boolean>({ default: false })
     height: 2.25rem;
     padding: 0 0.625rem;
     border: 1px solid transparent;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration),
-      border-color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration),
+      border-color var(--er-duration);
   }
 
-  .sb-toggle[data-size='sm'] {
+  .er-toggle[data-size='sm'] {
     min-width: 2rem;
     height: 2rem;
     padding: 0 0.5rem;
     font-size: 0.8125rem;
   }
 
-  .sb-toggle[data-variant='outline'] {
-    border-color: var(--sb-input);
-    background: var(--sb-input-background);
-    box-shadow: var(--sb-shadow-xs);
+  .er-toggle[data-variant='outline'] {
+    border-color: var(--er-input);
+    background: var(--er-input-background);
+    box-shadow: var(--er-shadow-xs);
   }
 
-  .sb-toggle:hover {
-    background: color-mix(in oklab, var(--sb-accent) 60%, transparent);
-    color: var(--sb-foreground);
+  .er-toggle:hover {
+    background: color-mix(in oklab, var(--er-accent) 60%, transparent);
+    color: var(--er-foreground);
   }
 
-  .sb-toggle[data-state='on'] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-toggle[data-state='on'] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-toggle:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-toggle:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-toggle:disabled {
+  .er-toggle:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-toggle svg {
+  .er-toggle svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;

@@ -11,7 +11,7 @@ const root = ref<HTMLElement | null>(null)
 const openId = ref<string>()
 const tabStop = ref<string>()
 
-const triggers = () => Array.from(root.value?.querySelectorAll<HTMLElement>('.sb-menubar-trigger:not([disabled])') ?? [])
+const triggers = () => Array.from(root.value?.querySelectorAll<HTMLElement>('.er-menubar-trigger:not([disabled])') ?? [])
 
 provideMenubar({
   openId,
@@ -24,7 +24,7 @@ provideMenubar({
     tabStop.value = next.dataset.menu
     next.focus()
     // With a menu open, moving sideways opens the neighbouring menu, as desktop menu bars do.
-    if (open) next.dispatchEvent(new CustomEvent('sb-open-menu'))
+    if (open) next.dispatchEvent(new CustomEvent('er-open-menu'))
     else openId.value = undefined
   },
 })
@@ -35,34 +35,34 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="root" role="menubar" class="sb-menubar" :aria-label="label">
+  <div ref="root" role="menubar" class="er-menubar" :aria-label="label">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-menubar {
+  .er-menubar {
     display: inline-flex;
     align-items: center;
     gap: 0.125rem;
     max-width: 100%;
     padding: 0.25rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-background);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-background);
+    box-shadow: var(--er-shadow-xs);
   }
 
-  .sb-menubar-trigger {
+  .er-menubar-trigger {
     display: inline-flex;
     align-items: center;
     height: 1.75rem;
     padding: 0 0.625rem;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
@@ -71,19 +71,19 @@ onMounted(() => {
     outline: none;
   }
 
-  .sb-menubar-trigger:hover,
-  .sb-menubar-trigger:focus-visible,
-  .sb-menubar-trigger[data-state='open'] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-menubar-trigger:hover,
+  .er-menubar-trigger:focus-visible,
+  .er-menubar-trigger[data-state='open'] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-menubar-trigger:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-menubar-trigger:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 1px;
   }
 
-  .sb-menubar-trigger:disabled {
+  .er-menubar-trigger:disabled {
     opacity: 0.5;
     pointer-events: none;
   }

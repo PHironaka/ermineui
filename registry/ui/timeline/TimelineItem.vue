@@ -14,16 +14,16 @@ withDefaults(
 </script>
 
 <template>
-  <li class="sb-timeline-item" :data-tone="tone">
-    <span class="sb-timeline-marker" aria-hidden="true">
-      <slot name="icon"><span class="sb-timeline-dot" /></slot>
+  <li class="er-timeline-item" :data-tone="tone">
+    <span class="er-timeline-marker" aria-hidden="true">
+      <slot name="icon"><span class="er-timeline-dot" /></slot>
     </span>
-    <div class="sb-timeline-body">
-      <div class="sb-timeline-heading">
-        <span class="sb-timeline-title">{{ title }}</span>
-        <time v-if="time" class="sb-timeline-time" :datetime="datetime">{{ time }}</time>
+    <div class="er-timeline-body">
+      <div class="er-timeline-heading">
+        <span class="er-timeline-title">{{ title }}</span>
+        <time v-if="time" class="er-timeline-time" :datetime="datetime">{{ time }}</time>
       </div>
-      <div v-if="$slots.default" class="sb-timeline-content"><slot /></div>
+      <div v-if="$slots.default" class="er-timeline-content"><slot /></div>
     </div>
   </li>
 </template>

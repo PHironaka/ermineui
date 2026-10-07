@@ -13,11 +13,11 @@ const item = useAccordionItem()
 </script>
 
 <template>
-  <component :is="heading" class="sb-accordion-heading">
+  <component :is="heading" class="er-accordion-heading">
     <button
       :id="item.triggerId"
       type="button"
-      class="sb-accordion-trigger"
+      class="er-accordion-trigger"
       :aria-expanded="item.open.value"
       :aria-controls="item.contentId"
       :disabled="item.disabled.value"

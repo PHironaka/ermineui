@@ -44,7 +44,7 @@ function step(value: number | null): number | undefined {
   const { min, max } = extent.value
   return max === min ? STEPS.length - 1 : Math.min(STEPS.length - 1, Math.floor(((value - min) / (max - min)) * STEPS.length))
 }
-const fill = (index: number) => `color-mix(in oklab, var(--sb-chart-1) ${STEPS[index]}%, var(--sb-chart-surface))`
+const fill = (index: number) => `color-mix(in oklab, var(--er-chart-1) ${STEPS[index]}%, var(--er-chart-surface))`
 
 const activeCell = computed(() => {
   const at = active.value
@@ -91,22 +91,22 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <ChartFrame :label="label" :columns="[rowLabel, ...columns]" :rows="tableRows" :announcement="announcement" data-type="heatmap">
-    <div class="sb-heatmap">
-      <div class="sb-heatmap-columns" aria-hidden="true" :style="{ '--sb-heatmap-columns': columns.length }">
+    <div class="er-heatmap">
+      <div class="er-heatmap-columns" aria-hidden="true" :style="{ '--er-heatmap-columns': columns.length }">
         <span />
         <span v-for="column in columns" :key="column">{{ column }}</span>
       </div>
-      <div class="sb-heatmap-body">
-        <div class="sb-heatmap-rows" aria-hidden="true">
+      <div class="er-heatmap-body">
+        <div class="er-heatmap-rows" aria-hidden="true">
           <span v-for="row in rows" :key="row">{{ row }}</span>
         </div>
         <div
-          class="sb-chart-plot sb-heatmap-grid"
+          class="er-chart-plot er-heatmap-grid"
           role="img"
           aria-roledescription="chart"
           tabindex="0"
           :aria-label="`${label}. Use the arrow keys to read values.`"
-          :style="{ '--sb-heatmap-columns': columns.length }"
+          :style="{ '--er-heatmap-columns': columns.length }"
           @pointerleave="active = undefined"
           @blur="active = undefined"
           @keydown="onKeydown"
@@ -116,7 +116,7 @@ function onKeydown(event: KeyboardEvent) {
             <span
               v-for="(value, columnIndex) in row"
               :key="columnIndex"
-              class="sb-heatmap-cell"
+              class="er-heatmap-cell"
               :data-empty="value === null ? '' : undefined"
               :data-active="active?.row === rowIndex && active.column === columnIndex ? '' : undefined"
               :style="{ background: step(value) === undefined ? undefined : fill(step(value)!) }"
@@ -124,16 +124,16 @@ function onKeydown(event: KeyboardEvent) {
               @pointerdown="active = { row: rowIndex, column: columnIndex }"
             />
           </template>
-          <div v-if="activeCell" class="sb-chart-tooltip" :style="tooltipStyle">
-            <div class="sb-chart-tooltip-title">{{ activeCell.row }} · {{ activeCell.column }}</div>
-            <div class="sb-chart-tooltip-row"><strong style="margin-left: 0; padding-left: 0">{{ formatValue(activeCell.value) }}</strong></div>
+          <div v-if="activeCell" class="er-chart-tooltip" :style="tooltipStyle">
+            <div class="er-chart-tooltip-title">{{ activeCell.row }} · {{ activeCell.column }}</div>
+            <div class="er-chart-tooltip-row"><strong style="margin-left: 0; padding-left: 0">{{ formatValue(activeCell.value) }}</strong></div>
           </div>
         </div>
       </div>
       <!-- The key to the colours: which end is low and which is high, with the actual numbers. -->
-      <div class="sb-heatmap-scale">
+      <div class="er-heatmap-scale">
         <span>{{ formatValue(extent.min) }}</span>
-        <span v-for="(_step, index) in STEPS" :key="index" class="sb-heatmap-swatch" :style="{ background: fill(index) }" />
+        <span v-for="(_step, index) in STEPS" :key="index" class="er-heatmap-swatch" :style="{ background: fill(index) }" />
         <span>{{ formatValue(extent.max) }}</span>
       </div>
     </div>
@@ -142,65 +142,65 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-heatmap {
+  .er-heatmap {
     display: grid;
     gap: 0.375rem;
     min-width: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-heatmap-columns {
+  .er-heatmap-columns {
     display: grid;
-    grid-template-columns: var(--sb-heatmap-gutter, 2.5rem) repeat(var(--sb-heatmap-columns), minmax(0, 1fr));
+    grid-template-columns: var(--er-heatmap-gutter, 2.5rem) repeat(var(--er-heatmap-columns), minmax(0, 1fr));
     gap: 2px;
     text-align: center;
   }
 
-  .sb-heatmap-columns span {
+  .er-heatmap-columns span {
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .sb-heatmap-body {
+  .er-heatmap-body {
     display: grid;
-    grid-template-columns: var(--sb-heatmap-gutter, 2.5rem) minmax(0, 1fr);
+    grid-template-columns: var(--er-heatmap-gutter, 2.5rem) minmax(0, 1fr);
     gap: 2px;
   }
 
-  .sb-heatmap-rows {
+  .er-heatmap-rows {
     display: grid;
     gap: 2px;
     align-items: center;
   }
 
-  .sb-heatmap-rows span {
+  .er-heatmap-rows span {
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .sb-heatmap-grid {
+  .er-heatmap-grid {
     display: grid;
-    grid-template-columns: repeat(var(--sb-heatmap-columns), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--er-heatmap-columns), minmax(0, 1fr));
     gap: 2px;
   }
 
-  .sb-heatmap-cell {
+  .er-heatmap-cell {
     min-height: 1.5rem;
     border-radius: 3px;
   }
 
   /* No data is not the same as a low value, so it gets an outline in place of a fill. */
-  .sb-heatmap-cell[data-empty] {
-    box-shadow: inset 0 0 0 1px var(--sb-border);
+  .er-heatmap-cell[data-empty] {
+    box-shadow: inset 0 0 0 1px var(--er-border);
   }
 
-  .sb-heatmap-cell[data-active] {
-    outline: 2px solid var(--sb-foreground);
+  .er-heatmap-cell[data-active] {
+    outline: 2px solid var(--er-foreground);
     outline-offset: 1px;
   }
 
-  .sb-heatmap-scale {
+  .er-heatmap-scale {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -208,15 +208,15 @@ function onKeydown(event: KeyboardEvent) {
     margin-top: 0.25rem;
   }
 
-  .sb-heatmap-scale span:first-child {
+  .er-heatmap-scale span:first-child {
     margin-right: 0.375rem;
   }
 
-  .sb-heatmap-scale span:last-child {
+  .er-heatmap-scale span:last-child {
     margin-left: 0.375rem;
   }
 
-  .sb-heatmap-swatch {
+  .er-heatmap-swatch {
     width: 1rem;
     height: 0.625rem;
     border-radius: 2px;

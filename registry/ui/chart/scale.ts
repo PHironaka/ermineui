@@ -3,7 +3,7 @@ export interface ChartSeries {
   key: string
   /** Name shown in the legend, the readout and the table. Defaults to the key. */
   label?: string
-  /** Any CSS colour. Defaults to the next --sb-chart-N variable, in order. */
+  /** Any CSS colour. Defaults to the next --er-chart-N variable, in order. */
   color?: string
 }
 

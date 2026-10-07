@@ -1,3 +1,3 @@
 <template>
-  <div role="separator" class="sb-menu-separator" />
+  <div role="separator" class="er-menu-separator" />
 </template>

@@ -34,7 +34,7 @@ function toggle(item: string) {
 }
 
 onMounted(() => {
-  first.value = root.value?.querySelector<HTMLElement>('.sb-toggle-group-item:not(:disabled)')?.dataset.value
+  first.value = root.value?.querySelector<HTMLElement>('.er-toggle-group-item:not(:disabled)')?.dataset.value
 })
 
 provideToggleGroup({
@@ -46,7 +46,7 @@ provideToggleGroup({
 })
 
 function onKeydown(event: KeyboardEvent) {
-  const items = Array.from(root.value?.querySelectorAll<HTMLElement>('.sb-toggle-group-item:not(:disabled)') ?? [])
+  const items = Array.from(root.value?.querySelectorAll<HTMLElement>('.er-toggle-group-item:not(:disabled)') ?? [])
   const next = arrowTarget(event, items, 'horizontal')
   if (!next) return
   event.preventDefault()
@@ -57,26 +57,26 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="root" class="sb-toggle-group" :role="type === 'single' ? 'radiogroup' : 'group'" :data-size="size" @keydown="onKeydown">
+  <div ref="root" class="er-toggle-group" :role="type === 'single' ? 'radiogroup' : 'group'" :data-size="size" @keydown="onKeydown">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-toggle-group {
+  .er-toggle-group {
     display: inline-flex;
     align-items: center;
     gap: 2px;
     max-width: 100%;
     padding: 3px;
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-muted);
-    color: var(--sb-muted-foreground);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-muted);
+    color: var(--er-muted-foreground);
     overflow-x: auto;
   }
 
-  .sb-toggle-group-item {
+  .er-toggle-group-item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -84,7 +84,7 @@ function onKeydown(event: KeyboardEvent) {
     height: 1.875rem;
     padding: 0 0.75rem;
     border: 1px solid transparent;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     background: transparent;
     color: inherit;
     font-family: inherit;
@@ -93,39 +93,39 @@ function onKeydown(event: KeyboardEvent) {
     white-space: nowrap;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration),
-      box-shadow var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration),
+      box-shadow var(--er-duration);
   }
 
-  .sb-toggle-group[data-size='sm'] .sb-toggle-group-item {
+  .er-toggle-group[data-size='sm'] .er-toggle-group-item {
     height: 1.5rem;
     padding: 0 0.5rem;
     font-size: 0.8125rem;
   }
 
-  .sb-toggle-group-item:hover {
-    color: var(--sb-foreground);
+  .er-toggle-group-item:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-toggle-group-item[data-state='on'] {
-    border-color: light-dark(transparent, var(--sb-input));
-    background: light-dark(var(--sb-background), oklch(1 0 0 / 8%));
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-sm);
+  .er-toggle-group-item[data-state='on'] {
+    border-color: light-dark(transparent, var(--er-input));
+    background: light-dark(var(--er-background), oklch(1 0 0 / 8%));
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-sm);
   }
 
-  .sb-toggle-group-item:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-toggle-group-item:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-toggle-group-item:disabled {
+  .er-toggle-group-item:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-toggle-group-item svg {
+  .er-toggle-group-item svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;

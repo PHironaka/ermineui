@@ -94,12 +94,12 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 </script>
 
 <template>
-  <section class="sb-carousel" aria-roledescription="carousel" :aria-label="label">
+  <section class="er-carousel" aria-roledescription="carousel" :aria-label="label">
     <!-- Focusable so the arrow keys work; the slides themselves scroll with touch, trackpad or wheel.
          Any of those taking over cancels a scroll that a button started. -->
     <div
       ref="track"
-      class="sb-carousel-track"
+      class="er-carousel-track"
       tabindex="0"
       @scroll.passive="onScroll"
       @scrollend="heading = undefined"
@@ -111,13 +111,13 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
       <slot />
     </div>
     <!-- Buttons and dots move the slides without moving focus, so the new position is said aloud. -->
-    <p class="sb-carousel-status" role="status">{{ count > 1 ? `Slide ${slide} of ${count}` : '' }}</p>
+    <p class="er-carousel-status" role="status">{{ count > 1 ? `Slide ${slide} of ${count}` : '' }}</p>
     <!-- The controls sit under the slides, so they never cover what a slide shows. -->
-    <div v-if="count > 1" class="sb-carousel-controls">
-      <button type="button" class="sb-carousel-button" aria-label="Previous slide" :disabled="slide <= 1" @click="go(slide - 1)">
+    <div v-if="count > 1" class="er-carousel-controls">
+      <button type="button" class="er-carousel-button" aria-label="Previous slide" :disabled="slide <= 1" @click="go(slide - 1)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
       </button>
-      <div v-if="dots" class="sb-carousel-dots">
+      <div v-if="dots" class="er-carousel-dots">
         <button
           v-for="number in count"
           :key="number"
@@ -127,7 +127,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
           @click="go(number)"
         />
       </div>
-      <button type="button" class="sb-carousel-button" aria-label="Next slide" :disabled="slide >= count" @click="go(slide + 1)">
+      <button type="button" class="er-carousel-button" aria-label="Next slide" :disabled="slide >= count" @click="go(slide + 1)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
       </button>
     </div>
@@ -136,7 +136,7 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
 
 <style>
 @layer components {
-  .sb-carousel {
+  .er-carousel {
     position: relative;
     display: grid;
     gap: 0.75rem;
@@ -144,33 +144,33 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
     min-width: 0;
   }
 
-  .sb-carousel-track {
+  .er-carousel-track {
     display: flex;
-    gap: var(--sb-carousel-gap, 1rem);
-    border-radius: var(--sb-radius-lg);
+    gap: var(--er-carousel-gap, 1rem);
+    border-radius: var(--er-radius-lg);
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
 
-  .sb-carousel-track::-webkit-scrollbar {
+  .er-carousel-track::-webkit-scrollbar {
     display: none;
   }
 
-  .sb-carousel-track:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-carousel-track:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  /* One slide fills the view by default. Set --sb-carousel-size (e.g. 50%) to show several side by side. */
-  .sb-carousel-slide {
-    flex: 0 0 var(--sb-carousel-size, 100%);
+  /* One slide fills the view by default. Set --er-carousel-size (e.g. 50%) to show several side by side. */
+  .er-carousel-slide {
+    flex: 0 0 var(--er-carousel-size, 100%);
     min-width: 0;
     scroll-snap-align: start;
   }
 
-  .sb-carousel-status {
+  .er-carousel-status {
     margin: 0;
     position: absolute;
     width: 1px;
@@ -180,57 +180,57 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
     white-space: nowrap;
   }
 
-  .sb-carousel-controls {
+  .er-carousel-controls {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
   }
 
-  .sb-carousel-button {
+  .er-carousel-button {
     display: grid;
     flex-shrink: 0;
     place-items: center;
     width: 1.75rem;
     height: 1.75rem;
     padding: 0;
-    border: 1px solid var(--sb-input);
+    border: 1px solid var(--er-input);
     border-radius: 50%;
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      opacity var(--sb-duration);
+      background-color var(--er-duration),
+      opacity var(--er-duration);
   }
 
-  .sb-carousel-button:hover {
-    background: var(--sb-accent);
+  .er-carousel-button:hover {
+    background: var(--er-accent);
   }
 
-  .sb-carousel-button:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-carousel-button:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-carousel-button:disabled {
+  .er-carousel-button:disabled {
     opacity: 0.4;
     pointer-events: none;
   }
 
-  .sb-carousel-button svg {
+  .er-carousel-button svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-carousel-dots {
+  .er-carousel-dots {
     display: flex;
     justify-content: center;
     gap: 0.125rem;
   }
 
   /* The dot is small, but the button around it is a comfortable 24px target. */
-  .sb-carousel-dots button {
+  .er-carousel-dots button {
     display: grid;
     place-items: center;
     width: 1.5rem;
@@ -242,21 +242,21 @@ onBeforeUnmount(() => cancelAnimationFrame(frame))
     cursor: pointer;
   }
 
-  .sb-carousel-dots button::before {
+  .er-carousel-dots button::before {
     content: '';
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--sb-input);
-    transition: background-color var(--sb-duration);
+    background: var(--er-input);
+    transition: background-color var(--er-duration);
   }
 
-  .sb-carousel-dots button[aria-current]::before {
-    background: var(--sb-foreground);
+  .er-carousel-dots button[aria-current]::before {
+    background: var(--er-foreground);
   }
 
-  .sb-carousel-dots button:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-carousel-dots button:focus-visible {
+    outline: 2px solid var(--er-ring);
   }
 }
 </style>

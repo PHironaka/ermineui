@@ -25,42 +25,42 @@ provideTabs({
 </script>
 
 <template>
-  <div class="sb-tabs" :data-orientation="orientation">
+  <div class="er-tabs" :data-orientation="orientation">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-tabs {
+  .er-tabs {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .sb-tabs[data-orientation='vertical'] {
+  .er-tabs[data-orientation='vertical'] {
     flex-direction: row;
   }
 
-  .sb-tabs-list {
+  .er-tabs-list {
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
     gap: 2px;
     max-width: 100%;
     padding: 3px;
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-muted);
-    color: var(--sb-muted-foreground);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-muted);
+    color: var(--er-muted-foreground);
     overflow-x: auto;
   }
 
-  .sb-tabs[data-orientation='vertical'] .sb-tabs-list {
+  .er-tabs[data-orientation='vertical'] .er-tabs-list {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .sb-tabs-trigger {
+  .er-tabs-trigger {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -68,7 +68,7 @@ provideTabs({
     height: 1.875rem;
     padding: 0 0.75rem;
     border: 1px solid transparent;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     background: transparent;
     color: inherit;
     font-family: inherit;
@@ -77,37 +77,37 @@ provideTabs({
     white-space: nowrap;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration),
-      box-shadow var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration),
+      box-shadow var(--er-duration);
   }
 
-  .sb-tabs-trigger:hover {
-    color: var(--sb-foreground);
+  .er-tabs-trigger:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-tabs-trigger[data-state='active'] {
-    border-color: light-dark(transparent, var(--sb-input));
-    background: light-dark(var(--sb-background), oklch(1 0 0 / 8%));
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-sm);
+  .er-tabs-trigger[data-state='active'] {
+    border-color: light-dark(transparent, var(--er-input));
+    background: light-dark(var(--er-background), oklch(1 0 0 / 8%));
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-sm);
   }
 
-  .sb-tabs-trigger:focus-visible,
-  .sb-tabs-content:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-tabs-trigger:focus-visible,
+  .er-tabs-content:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-tabs-trigger:disabled {
+  .er-tabs-trigger:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-tabs-content {
+  .er-tabs-content {
     flex: 1;
     min-width: 0;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
   }
 }
 </style>

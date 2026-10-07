@@ -1,3 +1,3 @@
 <template>
-  <thead class="sb-table-header"><slot /></thead>
+  <thead class="er-table-header"><slot /></thead>
 </template>

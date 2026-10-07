@@ -42,13 +42,13 @@ const balanced = computed(() => props.balance ?? settings.value.step >= 2)
 <template>
   <component
     :is="as ?? settings.tag"
-    class="sb-fluid-type sb-typography"
+    class="er-fluid-type er-typography"
     :data-variant="variant"
     :data-tone="tone"
     :data-measure="measure ? '' : undefined"
     :data-balance="balanced ? '' : undefined"
     :data-clamp="lines ? '' : undefined"
-    :style="{ '--sb-step': step ?? settings.step, '--sb-lines': lines }"
+    :style="{ '--er-step': step ?? settings.step, '--er-lines': lines }"
   >
     <slot />
   </component>
@@ -56,87 +56,87 @@ const balanced = computed(() => props.balance ?? settings.value.step >= 2)
 
 <style>
 @layer components {
-  .sb-typography {
+  .er-typography {
     margin: 0;
-    color: var(--sb-foreground);
-    font-family: var(--sb-font-sans);
+    color: var(--er-foreground);
+    font-family: var(--er-font-sans);
     font-weight: 400;
     /* Line height and letter spacing have no units or use em, so they scale with the fluid size. */
     line-height: 1.6;
     overflow-wrap: break-word;
   }
 
-  .sb-typography[data-tone='muted'] {
-    color: var(--sb-muted-foreground);
+  .er-typography[data-tone='muted'] {
+    color: var(--er-muted-foreground);
   }
 
   /* The bigger the text, the tighter it is set. */
-  .sb-typography[data-variant='display'] {
+  .er-typography[data-variant='display'] {
     font-weight: 700;
     line-height: 1.04;
     letter-spacing: -0.035em;
   }
 
-  .sb-typography[data-variant='h1'] {
+  .er-typography[data-variant='h1'] {
     font-weight: 700;
     line-height: 1.1;
     letter-spacing: -0.03em;
   }
 
-  .sb-typography[data-variant='h2'] {
+  .er-typography[data-variant='h2'] {
     font-weight: 650;
     line-height: 1.15;
     letter-spacing: -0.025em;
   }
 
-  .sb-typography[data-variant='h3'] {
+  .er-typography[data-variant='h3'] {
     font-weight: 600;
     line-height: 1.25;
     letter-spacing: -0.02em;
   }
 
-  .sb-typography[data-variant='h4'] {
+  .er-typography[data-variant='h4'] {
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.01em;
   }
 
-  .sb-typography[data-variant='lead'] {
-    color: var(--sb-muted-foreground);
+  .er-typography[data-variant='lead'] {
+    color: var(--er-muted-foreground);
     line-height: 1.5;
   }
 
-  .sb-typography[data-variant='small'],
-  .sb-typography[data-variant='caption'] {
+  .er-typography[data-variant='small'],
+  .er-typography[data-variant='caption'] {
     line-height: 1.5;
   }
 
-  .sb-typography[data-variant='caption'] {
-    color: var(--sb-muted-foreground);
+  .er-typography[data-variant='caption'] {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-typography[data-variant='overline'] {
-    color: var(--sb-muted-foreground);
+  .er-typography[data-variant='overline'] {
+    color: var(--er-muted-foreground);
     font-weight: 600;
     line-height: 1.4;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .sb-typography[data-measure] {
+  .er-typography[data-measure] {
     max-inline-size: 65ch;
   }
 
-  .sb-typography[data-balance] {
+  .er-typography[data-balance] {
     text-wrap: balance;
   }
 
-  .sb-typography[data-clamp] {
+  .er-typography[data-clamp] {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--sb-lines);
-    line-clamp: var(--sb-lines);
+    -webkit-line-clamp: var(--er-lines);
+    line-clamp: var(--er-lines);
   }
 }
 </style>

@@ -35,7 +35,7 @@ function onPointerMove() {
     :id="id"
     ref="el"
     role="option"
-    class="sb-multi-select-item"
+    class="er-multi-select-item"
     :aria-selected="selected"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"
@@ -44,7 +44,7 @@ function onPointerMove() {
     @click="!disabled && select.toggle(value)"
     @pointermove="onPointerMove"
   >
-    <span class="sb-multi-select-box" aria-hidden="true">
+    <span class="er-multi-select-box" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
     </span>
     <span><slot /></span>

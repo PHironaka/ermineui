@@ -4,7 +4,7 @@
   "description": "Copy-in Vue 3 components styled with plain CSS variables. You own the code.",
   "type": "module",
   "bin": {
-    "sable": "bin/sable.mjs"
+    "ermine": "bin/ermine.mjs"
   },
   "files": [
     "bin",

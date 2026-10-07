@@ -11,7 +11,7 @@ withDefaults(
 
 <template>
   <div
-    class="sb-separator"
+    class="er-separator"
     :role="decorative ? 'none' : 'separator'"
     :aria-orientation="!decorative && orientation === 'vertical' ? 'vertical' : undefined"
     :data-orientation="orientation"
@@ -20,17 +20,17 @@ withDefaults(
 
 <style>
 @layer components {
-  .sb-separator {
+  .er-separator {
     flex-shrink: 0;
-    background: var(--sb-border);
+    background: var(--er-border);
   }
 
-  .sb-separator[data-orientation='horizontal'] {
+  .er-separator[data-orientation='horizontal'] {
     width: 100%;
     height: 1px;
   }
 
-  .sb-separator[data-orientation='vertical'] {
+  .er-separator[data-orientation='vertical'] {
     align-self: stretch;
     width: 1px;
   }

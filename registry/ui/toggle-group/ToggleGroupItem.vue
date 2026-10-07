@@ -15,7 +15,7 @@ const single = computed(() => group.type.value === 'single')
 <template>
   <button
     type="button"
-    class="sb-toggle-group-item"
+    class="er-toggle-group-item"
     :role="single ? 'radio' : undefined"
     :aria-checked="single ? on : undefined"
     :aria-pressed="single ? undefined : on"

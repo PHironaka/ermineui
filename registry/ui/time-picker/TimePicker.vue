@@ -49,7 +49,7 @@ const times = computed(() => {
 
 <template>
   <Select v-model="value" :name="name" :disabled="disabled">
-    <SelectTrigger v-bind="$attrs" :placeholder="placeholder" class="sb-time-picker" />
+    <SelectTrigger v-bind="$attrs" :placeholder="placeholder" class="er-time-picker" />
     <SelectContent>
       <SelectItem v-for="time in times" :key="time" :value="time">{{ label(time) }}</SelectItem>
     </SelectContent>
@@ -58,7 +58,7 @@ const times = computed(() => {
 
 <style>
 @layer components {
-  .sb-time-picker {
+  .er-time-picker {
     font-variant-numeric: tabular-nums;
   }
 }

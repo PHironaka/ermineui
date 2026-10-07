@@ -31,8 +31,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <span class="sb-avatar" :data-size="size" :role="alt ? 'img' : undefined" :aria-label="alt" :aria-hidden="alt ? undefined : true">
-    <span v-if="!loaded" class="sb-avatar-fallback"><slot /></span>
+  <span class="er-avatar" :data-size="size" :role="alt ? 'img' : undefined" :aria-label="alt" :aria-hidden="alt ? undefined : true">
+    <span v-if="!loaded" class="er-avatar-fallback"><slot /></span>
     <img
       v-if="src && !failed"
       ref="image"
@@ -47,7 +47,7 @@ onMounted(() => {
 
 <style>
 @layer components {
-  .sb-avatar {
+  .er-avatar {
     position: relative;
     display: inline-grid;
     flex-shrink: 0;
@@ -55,8 +55,8 @@ onMounted(() => {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    background: var(--sb-muted);
-    color: var(--sb-foreground);
+    background: var(--er-muted);
+    color: var(--er-foreground);
     font-size: 0.8125rem;
     font-weight: 600;
     line-height: 1;
@@ -64,19 +64,19 @@ onMounted(() => {
     user-select: none;
   }
 
-  .sb-avatar[data-size='sm'] {
+  .er-avatar[data-size='sm'] {
     width: 1.75rem;
     height: 1.75rem;
     font-size: 0.6875rem;
   }
 
-  .sb-avatar[data-size='lg'] {
+  .er-avatar[data-size='lg'] {
     width: 3.5rem;
     height: 3.5rem;
     font-size: 1.125rem;
   }
 
-  .sb-avatar img {
+  .er-avatar img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -85,7 +85,7 @@ onMounted(() => {
     opacity: 0;
   }
 
-  .sb-avatar img[data-loaded] {
+  .er-avatar img[data-loaded] {
     opacity: 1;
   }
 }

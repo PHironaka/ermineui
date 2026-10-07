@@ -10,7 +10,7 @@ import type { Directive } from 'vue'
  */
 const apply = (el: HTMLElement, name: string | undefined | null) => {
   // Names are CSS identifiers: anything else in them is replaced, so ids with dots or slashes still work.
-  el.style.setProperty('view-transition-name', name ? `sb-${String(name).replace(/[^\w-]/g, '-')}` : 'none')
+  el.style.setProperty('view-transition-name', name ? `er-${String(name).replace(/[^\w-]/g, '-')}` : 'none')
 }
 
 export const vTransitionName: Directive<HTMLElement, string | undefined | null> = {

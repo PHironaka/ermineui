@@ -31,7 +31,7 @@ useLayer(content, popover.open, {
 
 <template>
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="popover.open.value"
         :id="popover.contentId"
@@ -39,7 +39,7 @@ useLayer(content, popover.open, {
         v-bind="$attrs"
         role="dialog"
         tabindex="-1"
-        class="sb-floating sb-popover"
+        class="er-floating er-popover"
       >
         <slot :close="() => popover.setOpen(false)" />
       </div>
@@ -49,15 +49,15 @@ useLayer(content, popover.open, {
 
 <style>
 @layer components {
-  .sb-popover {
+  .er-popover {
     width: 18rem;
     padding: 1rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-md);
+    box-shadow: var(--er-shadow-md);
   }
 }
 </style>

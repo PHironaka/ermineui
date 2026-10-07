@@ -66,8 +66,8 @@ test.describe('share button and QR code', () => {
     await card.getByRole('button', { name: 'Share' }).click()
     await expect(readout(page, 'share-button')).toHaveText('Shared')
     expect(await page.evaluate(() => (window as unknown as { __shared: unknown }).__shared)).toEqual({
-      url: 'https://example.com/sable-ui',
-      title: 'Sable UI',
+      url: 'https://example.com/ermine-ui',
+      title: 'Ermine UI',
       text: 'Vue components you copy in and own.',
     })
   })
@@ -82,7 +82,7 @@ test.describe('share button and QR code', () => {
     await button.click()
     await expect(card.getByRole('button', { name: /Link copied/ })).toBeVisible()
     await expect(card.getByRole('status')).toHaveText('Link copied')
-    await expect(readout(page, 'share-button')).toHaveText('Copied https://example.com/sable-ui')
+    await expect(readout(page, 'share-button')).toHaveText('Copied https://example.com/ermine-ui')
   })
 
   test('closing the share sheet without choosing is not treated as an error', async ({ page }) => {
@@ -114,7 +114,7 @@ test.describe('share button and QR code', () => {
   }
 
   test('the QR code on the page really scans, and follows the link as it is edited', async ({ page }) => {
-    expect(await scan(page)).toBe('https://example.com/sable-ui')
+    expect(await scan(page)).toBe('https://example.com/ermine-ui')
     await demo(page, 'share-button').getByRole('textbox', { name: 'Link' }).fill('https://example.com/changed?x=1')
     expect(await scan(page)).toBe('https://example.com/changed?x=1')
   })
@@ -131,7 +131,7 @@ test.describe('share button and QR code', () => {
 
 test.describe('offline banner', () => {
   test('appears when the connection drops and confirms when it returns', async ({ page, context }) => {
-    const banner = page.locator('.sb-offline-banner')
+    const banner = page.locator('.er-offline-banner')
     await expect(banner).toHaveText('')
     await context.setOffline(true)
     await expect(banner).toContainText('You are offline')
@@ -200,8 +200,8 @@ test.describe('signature pad', () => {
 
 test.describe('scroll progress, reveal and count up', () => {
   test('the bar fills from empty to full as the page is scrolled', async ({ page }) => {
-    const bar = page.locator('.sb-scroll-progress')
-    const progress = () => bar.evaluate((el) => Number(getComputedStyle(el).getPropertyValue('--sb-scroll-progress')))
+    const bar = page.locator('.er-scroll-progress')
+    const progress = () => bar.evaluate((el) => Number(getComputedStyle(el).getPropertyValue('--er-scroll-progress')))
     expect(await progress()).toBe(0)
     await page.evaluate(() => window.scrollTo(0, (document.documentElement.scrollHeight - window.innerHeight) / 2))
     await expect.poll(progress).toBeCloseTo(0.5, 1)
@@ -212,13 +212,13 @@ test.describe('scroll progress, reveal and count up', () => {
 
   test('with reduced motion, revealed content is simply visible and numbers show their value', async ({ page }) => {
     const card = demo(page, 'scroll-progress')
-    await expect(card.locator('.sb-card').first()).toHaveCSS('opacity', '1')
-    await expect(card.locator('.sb-count-up [aria-hidden]').first()).toHaveText('21.5K')
+    await expect(card.locator('.er-card').first()).toHaveCSS('opacity', '1')
+    await expect(card.locator('.er-count-up [aria-hidden]').first()).toHaveText('21.5K')
   })
 
   test('with motion allowed, content waits out of view, then appears when scrolled to', async ({ page }) => {
     await reload(page)
-    const item = demo(page, 'scroll-progress').locator('.sb-card').first()
+    const item = demo(page, 'scroll-progress').locator('.er-card').first()
     await expect(item).toHaveAttribute('data-reveal', 'waiting')
     await expect(item).toHaveCSS('opacity', '0')
     await item.scrollIntoViewIfNeeded()
@@ -228,8 +228,8 @@ test.describe('scroll progress, reveal and count up', () => {
 
   test('a number counts up to its value once in view, while screen readers get the final value from the start', async ({ page }) => {
     await reload(page)
-    const count = demo(page, 'scroll-progress').locator('p .sb-count-up')
-    await expect(count.locator('.sb-count-up-value')).toHaveText('1,284,306')
+    const count = demo(page, 'scroll-progress').locator('p .er-count-up')
+    await expect(count.locator('.er-count-up-value')).toHaveText('1,284,306')
     await expect(count.locator('[aria-hidden]')).toHaveText('0')
     await count.scrollIntoViewIfNeeded()
     await expect(count.locator('[aria-hidden]')).toHaveText('1,284,306')
@@ -341,7 +341,7 @@ test.describe('view transition', () => {
     const names = await demo(page, 'view-transition')
       .getByRole('listitem')
       .evaluateAll((rows) => rows.map((row) => (row as HTMLElement).style.getPropertyValue('view-transition-name')))
-    expect(names).toEqual(['sb-region-fra1', 'sb-region-lhr1', 'sb-region-iad1', 'sb-region-sfo1', 'sb-region-sin1'])
+    expect(names).toEqual(['er-region-fra1', 'er-region-lhr1', 'er-region-iad1', 'er-region-sfo1', 'er-region-sin1'])
   })
 
   test('with motion allowed the browser’s transition is used; with reduced motion it is skipped', async ({ page }) => {
@@ -375,7 +375,7 @@ test.describe('view transition', () => {
     await page.getByRole('button', { name: /Switch to dark theme/ }).click()
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
     await expect(page.getByRole('button', { name: /Switch to light theme/ })).toBeVisible()
-    await expect(page.locator('html')).not.toHaveAttribute('data-sb-reveal')
+    await expect(page.locator('html')).not.toHaveAttribute('data-er-reveal')
   })
 })
 

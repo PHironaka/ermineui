@@ -30,8 +30,8 @@ const filler = (length: number) => Array.from({ length }, (_item, index) => Stri
 
 test('a link scans back as the same link, at every level', () => {
   for (const level of levels) {
-    const result = scan(createQr('https://example.com/docs?ref=sable', level))
-    assert.equal(result?.data, 'https://example.com/docs?ref=sable', `level ${level}`)
+    const result = scan(createQr('https://example.com/docs?ref=ermine', level))
+    assert.equal(result?.data, 'https://example.com/docs?ref=ermine', `level ${level}`)
   }
 })
 

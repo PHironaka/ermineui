@@ -39,18 +39,18 @@ function go(next: number) {
 </script>
 
 <template>
-  <nav class="sb-pagination" :aria-label="label">
-    <button type="button" class="sb-pagination-button" aria-label="Previous page" :disabled="current <= 1" @click="go(current - 1)">
+  <nav class="er-pagination" :aria-label="label">
+    <button type="button" class="er-pagination-button" aria-label="Previous page" :disabled="current <= 1" @click="go(current - 1)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="m15 18-6-6 6-6" />
       </svg>
     </button>
     <template v-for="(item, index) in items" :key="index">
-      <span v-if="item === null" class="sb-pagination-gap" aria-hidden="true">…</span>
+      <span v-if="item === null" class="er-pagination-gap" aria-hidden="true">…</span>
       <button
         v-else
         type="button"
-        class="sb-pagination-button"
+        class="er-pagination-button"
         :aria-label="`Page ${item}`"
         :aria-current="item === current ? 'page' : undefined"
         @click="go(item)"
@@ -58,7 +58,7 @@ function go(next: number) {
         {{ item }}
       </button>
     </template>
-    <button type="button" class="sb-pagination-button" aria-label="Next page" :disabled="current >= last" @click="go(current + 1)">
+    <button type="button" class="er-pagination-button" aria-label="Next page" :disabled="current >= last" @click="go(current + 1)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="m9 18 6-6-6-6" />
       </svg>
@@ -68,15 +68,15 @@ function go(next: number) {
 
 <style>
 @layer components {
-  .sb-pagination {
+  .er-pagination {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.25rem;
   }
 
-  .sb-pagination-button,
-  .sb-pagination-gap {
+  .er-pagination-button,
+  .er-pagination-gap {
     display: inline-grid;
     place-items: center;
     min-width: 2rem;
@@ -85,46 +85,46 @@ function go(next: number) {
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-pagination-gap {
-    color: var(--sb-muted-foreground);
+  .er-pagination-gap {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-pagination-button {
+  .er-pagination-button {
     padding: 0 0.375rem;
     border: 1px solid transparent;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      border-color var(--sb-duration);
+      background-color var(--er-duration),
+      border-color var(--er-duration);
   }
 
-  .sb-pagination-button:hover {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-pagination-button:hover {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-pagination-button[aria-current='page'] {
-    border-color: var(--sb-input);
-    background: var(--sb-input-background);
+  .er-pagination-button[aria-current='page'] {
+    border-color: var(--er-input);
+    background: var(--er-input-background);
     font-weight: 500;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
   }
 
-  .sb-pagination-button:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-pagination-button:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-pagination-button:disabled {
+  .er-pagination-button:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-pagination-button svg {
+  .er-pagination-button svg {
     width: 1rem;
     height: 1rem;
   }

@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-menu-label"><slot /></div>
+  <div class="er-menu-label"><slot /></div>
 </template>

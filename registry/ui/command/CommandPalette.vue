@@ -114,10 +114,10 @@ useLayer(content, open, {
 <template>
   <slot name="trigger" :open="() => (open = true)" />
   <Portal>
-    <Transition name="sb-command">
-      <div v-if="open" class="sb-command-overlay">
-        <div ref="content" v-bind="$attrs" role="dialog" aria-modal="true" tabindex="-1" class="sb-command" :aria-label="label">
-          <div class="sb-command-search">
+    <Transition name="er-command">
+      <div v-if="open" class="er-command-overlay">
+        <div ref="content" v-bind="$attrs" role="dialog" aria-modal="true" tabindex="-1" class="er-command" :aria-label="label">
+          <div class="er-command-search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
               <circle cx="11" cy="11" r="7" />
               <path d="m20 20-3.5-3.5" />
@@ -139,11 +139,11 @@ useLayer(content, open, {
             />
           </div>
           <!-- Pressing an item must not take focus out of the search box. -->
-          <div :id="listId" ref="list" role="listbox" class="sb-command-list" :aria-label="label" @mousedown.prevent>
+          <div :id="listId" ref="list" role="listbox" class="er-command-list" :aria-label="label" @mousedown.prevent>
             <slot />
-            <div v-if="empty" class="sb-command-empty"><slot name="empty">No results.</slot></div>
+            <div v-if="empty" class="er-command-empty"><slot name="empty">No results.</slot></div>
           </div>
-          <span class="sb-command-status" role="status">{{ status }}</span>
+          <span class="er-command-status" role="status">{{ status }}</span>
         </div>
       </div>
     </Transition>
@@ -152,117 +152,117 @@ useLayer(content, open, {
 
 <style>
 @layer components {
-  .sb-command-overlay {
+  .er-command-overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--sb-z-overlay);
+    z-index: var(--er-z-overlay);
     display: grid;
     /* Sits in the upper part of the window, so the list can grow downward without the box jumping. */
     align-items: start;
     justify-items: center;
     padding: min(15vh, 8rem) 1rem 1rem;
-    background: var(--sb-overlay);
+    background: var(--er-overlay);
   }
 
-  .sb-command {
+  .er-command {
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 34rem;
     max-height: min(26rem, 100%);
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
-    box-shadow: var(--sb-shadow-lg);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
+    box-shadow: var(--er-shadow-lg);
     outline: none;
     overflow: hidden;
   }
 
-  .sb-command-search {
+  .er-command-search {
     display: flex;
     flex-shrink: 0;
     align-items: center;
     gap: 0.625rem;
     padding: 0 0.875rem;
-    border-bottom: 1px solid var(--sb-border);
-    color: var(--sb-muted-foreground);
+    border-bottom: 1px solid var(--er-border);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-command-search svg {
+  .er-command-search svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-command-search input {
+  .er-command-search input {
     flex: 1;
     min-width: 0;
     height: 2.75rem;
     border: 0;
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 1rem;
     outline: none;
   }
 
-  .sb-command-search input::placeholder {
-    color: var(--sb-muted-foreground);
+  .er-command-search input::placeholder {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-command-list {
+  .er-command-list {
     padding: 0.25rem;
     font-size: 0.875rem;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 
-  .sb-command-heading {
+  .er-command-heading {
     padding: 0.5rem 0.5rem 0.25rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.75rem;
     font-weight: 500;
   }
 
-  .sb-command-item {
+  .er-command-item {
     display: flex;
     align-items: center;
     gap: 0.625rem;
     padding: 0.5rem;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     line-height: 1.25rem;
     cursor: default;
     user-select: none;
   }
 
-  .sb-command-item[data-active] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-command-item[data-active] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-command-item[data-disabled] {
+  .er-command-item[data-disabled] {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-command-item svg {
+  .er-command-item svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-command-shortcut {
+  .er-command-shortcut {
     margin-left: auto;
     padding-left: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
   }
 
-  .sb-command-status {
+  .er-command-status {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -271,28 +271,28 @@ useLayer(content, open, {
     white-space: nowrap;
   }
 
-  .sb-command-empty {
+  .er-command-empty {
     padding: 1.5rem 0.5rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     text-align: center;
   }
 
-  .sb-command-enter-active,
-  .sb-command-leave-active,
-  .sb-command-enter-active .sb-command,
-  .sb-command-leave-active .sb-command {
+  .er-command-enter-active,
+  .er-command-leave-active,
+  .er-command-enter-active .er-command,
+  .er-command-leave-active .er-command {
     transition:
-      opacity var(--sb-duration) var(--sb-ease),
-      transform var(--sb-duration) var(--sb-ease);
+      opacity var(--er-duration) var(--er-ease),
+      transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-command-enter-from,
-  .sb-command-leave-to {
+  .er-command-enter-from,
+  .er-command-leave-to {
     opacity: 0;
   }
 
-  .sb-command-enter-from .sb-command,
-  .sb-command-leave-to .sb-command {
+  .er-command-enter-from .er-command,
+  .er-command-leave-to .er-command {
     transform: scale(0.97) translateY(-4px);
   }
 }

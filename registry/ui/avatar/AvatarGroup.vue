@@ -23,9 +23,9 @@ export default defineComponent({
       const avatars = flatten(slots.default?.() ?? [])
       const shown = props.max !== undefined && avatars.length > props.max ? avatars.slice(0, props.max) : avatars
       const hidden = avatars.length - shown.length
-      return h('div', { class: 'sb-avatar-group', role: 'group', 'aria-label': props.label }, [
+      return h('div', { class: 'er-avatar-group', role: 'group', 'aria-label': props.label }, [
         ...shown,
-        hidden > 0 ? h('span', { class: 'sb-avatar sb-avatar-more', role: 'img', 'aria-label': `${hidden} more` }, `+${hidden}`) : null,
+        hidden > 0 ? h('span', { class: 'er-avatar er-avatar-more', role: 'img', 'aria-label': `${hidden} more` }, `+${hidden}`) : null,
       ])
     }
   },
@@ -34,27 +34,27 @@ export default defineComponent({
 
 <style>
 @layer components {
-  .sb-avatar-group {
+  .er-avatar-group {
     /* The ring between overlapping avatars is drawn in the colour behind them. */
-    --sb-avatar-ring: var(--sb-background);
+    --er-avatar-ring: var(--er-background);
     display: inline-flex;
     align-items: center;
   }
 
-  .sb-card .sb-avatar-group {
-    --sb-avatar-ring: var(--sb-card);
+  .er-card .er-avatar-group {
+    --er-avatar-ring: var(--er-card);
   }
 
-  .sb-avatar-group > .sb-avatar {
-    box-shadow: 0 0 0 2px var(--sb-avatar-ring);
+  .er-avatar-group > .er-avatar {
+    box-shadow: 0 0 0 2px var(--er-avatar-ring);
   }
 
-  .sb-avatar-group > .sb-avatar + .sb-avatar {
+  .er-avatar-group > .er-avatar + .er-avatar {
     margin-left: -0.5rem;
   }
 
-  .sb-avatar-more {
-    color: var(--sb-muted-foreground);
+  .er-avatar-more {
+    color: var(--er-muted-foreground);
     font-size: 0.75rem;
   }
 }

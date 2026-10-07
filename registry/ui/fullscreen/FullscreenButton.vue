@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- The name says what a press will do, and changes with the state. Escape always leaves full screen too. -->
-  <button v-if="supported" type="button" class="sb-fullscreen-button" :aria-label="active ? exitLabel : enterLabel" :title="active ? exitLabel : enterLabel" :data-state="active ? 'on' : 'off'" @click="toggle">
+  <button v-if="supported" type="button" class="er-fullscreen-button" :aria-label="active ? exitLabel : enterLabel" :title="active ? exitLabel : enterLabel" :data-state="active ? 'on' : 'off'" @click="toggle">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path v-if="active" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
       <path v-else d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
@@ -78,38 +78,38 @@ onBeforeUnmount(() => {
 
 <style>
 @layer components {
-  .sb-fullscreen-button {
+  .er-fullscreen-button {
     display: inline-grid;
     place-items: center;
     width: 2.25rem;
     height: 2.25rem;
     padding: 0;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
-    transition: background-color var(--sb-duration);
+    transition: background-color var(--er-duration);
   }
 
-  .sb-fullscreen-button:hover {
-    background: var(--sb-accent);
+  .er-fullscreen-button:hover {
+    background: var(--er-accent);
   }
 
-  .sb-fullscreen-button:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-fullscreen-button:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-fullscreen-button svg {
+  .er-fullscreen-button svg {
     width: 1rem;
     height: 1rem;
   }
 
   /* An element shown full screen gets the page's own background, not the browser's black. */
   :fullscreen {
-    background: var(--sb-background);
+    background: var(--er-background);
     overflow: auto;
   }
 }

@@ -130,12 +130,12 @@ useLayer(list, open, {
 </script>
 
 <template>
-  <div ref="anchor" class="sb-combobox">
+  <div ref="anchor" class="er-combobox">
     <input
       v-bind="$attrs"
       type="text"
       role="combobox"
-      class="sb-combobox-input"
+      class="er-combobox-input"
       autocomplete="off"
       aria-autocomplete="list"
       :aria-expanded="open"
@@ -152,7 +152,7 @@ useLayer(list, open, {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="m7 15 5 5 5-5M7 9l5-5 5 5" />
     </svg>
-    <span class="sb-combobox-status" role="status">{{ status }}</span>
+    <span class="er-combobox-status" role="status">{{ status }}</span>
   </div>
 
   <Portal>
@@ -161,12 +161,12 @@ useLayer(list, open, {
       :id="listId"
       ref="list"
       role="listbox"
-      class="sb-floating sb-combobox-content"
+      class="er-floating er-combobox-content"
       :data-state="open ? 'open' : 'closed'"
       @mousedown.prevent
     >
       <slot />
-      <div v-if="empty" class="sb-combobox-empty"><slot name="empty">No results.</slot></div>
+      <div v-if="empty" class="er-combobox-empty"><slot name="empty">No results.</slot></div>
     </div>
   </Portal>
 
@@ -175,69 +175,69 @@ useLayer(list, open, {
 
 <style>
 @layer components {
-  .sb-combobox {
+  .er-combobox {
     position: relative;
     width: 100%;
   }
 
-  .sb-combobox-input {
+  .er-combobox-input {
     display: block;
     width: 100%;
     min-width: 0;
     height: 2.25rem;
     padding: 0 2.25rem 0 0.75rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     font-family: inherit;
     /* 16px stops iOS from zooming the page when the field is focused. */
     font-size: 1rem;
     line-height: 1.25rem;
     text-overflow: ellipsis;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
   @media (min-width: 48rem) {
-    .sb-combobox-input {
+    .er-combobox-input {
       font-size: 0.875rem;
     }
   }
 
-  .sb-combobox-input::placeholder {
-    color: var(--sb-muted-foreground);
+  .er-combobox-input::placeholder {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-combobox-input:focus-visible {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-combobox-input:focus-visible {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-combobox-input:disabled {
+  .er-combobox-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-combobox-input[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-combobox-input[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 
-  .sb-combobox > svg {
+  .er-combobox > svg {
     position: absolute;
     top: 50%;
     right: 0.75rem;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     transform: translateY(-50%);
     pointer-events: none;
   }
 
-  .sb-combobox-status {
+  .er-combobox-status {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -246,73 +246,73 @@ useLayer(list, open, {
     white-space: nowrap;
   }
 
-  .sb-combobox-content {
-    min-width: max(8rem, var(--sb-anchor-width, 8rem));
-    max-height: min(20rem, var(--sb-available-size, 20rem));
+  .er-combobox-content {
+    min-width: max(8rem, var(--er-anchor-width, 8rem));
+    max-height: min(20rem, var(--er-available-size, 20rem));
     padding: 0.25rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-md);
+    box-shadow: var(--er-shadow-md);
     overflow-y: auto;
     /* Open/close animation in plain CSS: browsers without @starting-style simply skip it. */
     transition:
-      opacity var(--sb-duration) var(--sb-ease),
-      transform var(--sb-duration) var(--sb-ease),
-      display var(--sb-duration) allow-discrete;
+      opacity var(--er-duration) var(--er-ease),
+      transform var(--er-duration) var(--er-ease),
+      display var(--er-duration) allow-discrete;
   }
 
-  .sb-combobox-content[data-state='closed'] {
+  .er-combobox-content[data-state='closed'] {
     display: none;
     opacity: 0;
     transform: scale(0.96);
   }
 
   @starting-style {
-    .sb-combobox-content[data-state='open'] {
+    .er-combobox-content[data-state='open'] {
       opacity: 0;
       transform: scale(0.96);
     }
   }
 
-  .sb-combobox-item {
+  .er-combobox-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
     padding: 0.375rem 0.5rem;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     line-height: 1.25rem;
     cursor: default;
     user-select: none;
   }
 
-  .sb-combobox-item[data-active] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-combobox-item[data-active] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-combobox-item[data-disabled] {
+  .er-combobox-item[data-disabled] {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-combobox-item svg {
+  .er-combobox-item svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
     visibility: hidden;
   }
 
-  .sb-combobox-item[aria-selected='true'] svg {
+  .er-combobox-item[aria-selected='true'] svg {
     visibility: visible;
   }
 
-  .sb-combobox-empty {
+  .er-combobox-empty {
     padding: 0.75rem 0.5rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     text-align: center;
   }
 }

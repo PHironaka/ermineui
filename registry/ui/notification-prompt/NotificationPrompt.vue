@@ -54,68 +54,68 @@ function dismiss() {
 </script>
 
 <template>
-  <section v-if="open && permission === 'default'" class="sb-notification-prompt" :aria-labelledby="titleId">
+  <section v-if="open && permission === 'default'" class="er-notification-prompt" :aria-labelledby="titleId">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M6 9a6 6 0 1 1 12 0c0 6 2.500 7 2.500 7h-17S6 15 6 9ZM10 20a2 2 0 0 0 4 0" />
     </svg>
-    <div class="sb-notification-prompt-text">
-      <p :id="titleId" class="sb-notification-prompt-title">{{ title }}</p>
-      <p class="sb-notification-prompt-description">{{ description }}</p>
+    <div class="er-notification-prompt-text">
+      <p :id="titleId" class="er-notification-prompt-title">{{ title }}</p>
+      <p class="er-notification-prompt-description">{{ description }}</p>
     </div>
-    <div class="sb-notification-prompt-actions">
+    <div class="er-notification-prompt-actions">
       <Button size="sm" variant="ghost" @click="dismiss">{{ dismissLabel }}</Button>
       <Button size="sm" @click="allow">{{ allowLabel }}</Button>
     </div>
   </section>
   <!-- Refused: the page can no longer ask, so the only useful thing is to say where the setting lives.
        The paragraph is there from the start and filled in when the answer arrives, so it is announced. -->
-  <p v-if="open" class="sb-notification-prompt-note" role="status">
+  <p v-if="open" class="er-notification-prompt-note" role="status">
     <slot v-if="permission === 'denied'" name="denied">Notifications are blocked for this site. You can allow them in your browser's site settings.</slot>
   </p>
 </template>
 
 <style>
 @layer components {
-  .sb-notification-prompt {
+  .er-notification-prompt {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem 1rem;
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-card);
-    color: var(--sb-card-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-card);
+    color: var(--er-card-foreground);
     font-size: 0.875rem;
   }
 
-  .sb-notification-prompt > svg {
+  .er-notification-prompt > svg {
     flex-shrink: 0;
     width: 1.25rem;
     height: 1.25rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-notification-prompt-text {
+  .er-notification-prompt-text {
     flex: 1;
     min-width: 12rem;
   }
 
-  .sb-notification-prompt-title {
+  .er-notification-prompt-title {
     margin: 0;
     font-weight: 500;
   }
 
-  .sb-notification-prompt-description,
-  .sb-notification-prompt-note {
+  .er-notification-prompt-description,
+  .er-notification-prompt-note {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     line-height: 1.5;
   }
 
-  .sb-notification-prompt-note:empty {
+  .er-notification-prompt-note:empty {
     /* Out of sight but still in the page for screen readers, which is what lets them announce it filling in. */
     position: absolute;
     width: 1px;
@@ -124,7 +124,7 @@ function dismiss() {
     clip-path: inset(50%);
   }
 
-  .sb-notification-prompt-actions {
+  .er-notification-prompt-actions {
     display: flex;
     gap: 0.5rem;
     margin-left: auto;

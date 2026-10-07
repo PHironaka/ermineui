@@ -1,14 +1,14 @@
 <template>
-  <label class="sb-label"><slot /></label>
+  <label class="er-label"><slot /></label>
 </template>
 
 <style>
 @layer components {
-  .sb-label {
+  .er-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.25;
@@ -16,7 +16,7 @@
   }
 
   /* Dim the label when the control it wraps is disabled. */
-  .sb-label:has(:disabled) {
+  .er-label:has(:disabled) {
     opacity: 0.6;
     cursor: not-allowed;
   }

@@ -14,11 +14,11 @@ const item = useNavigationMenuItem()
 </script>
 
 <template>
-  <Transition name="sb-pop">
+  <Transition name="er-pop">
     <div
       v-show="item.isOpen.value"
       :id="item.contentId"
-      class="sb-navigation-menu-content"
+      class="er-navigation-menu-content"
       :aria-labelledby="item.triggerId"
       :data-align="align"
       @pointerenter="menu.cancelClose()"

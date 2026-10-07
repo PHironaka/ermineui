@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-card-header"><slot /></div>
+  <div class="er-card-header"><slot /></div>
 </template>

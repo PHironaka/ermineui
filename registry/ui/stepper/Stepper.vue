@@ -27,25 +27,25 @@ const items = computed(() =>
 </script>
 
 <template>
-  <ol class="sb-stepper" :aria-label="label" :data-orientation="orientation">
-    <li v-for="item in items" :key="item.number" class="sb-stepper-step" :data-state="item.state" :aria-current="item.state === 'current' ? 'step' : undefined">
+  <ol class="er-stepper" :aria-label="label" :data-orientation="orientation">
+    <li v-for="item in items" :key="item.number" class="er-stepper-step" :data-state="item.state" :aria-current="item.state === 'current' ? 'step' : undefined">
       <component
         :is="clickable && item.state === 'complete' ? 'button' : 'div'"
-        class="sb-stepper-item"
+        class="er-stepper-item"
         :type="clickable && item.state === 'complete' ? 'button' : undefined"
         @click="clickable && item.state === 'complete' && (step = item.number)"
       >
-        <span class="sb-stepper-marker" aria-hidden="true">
+        <span class="er-stepper-marker" aria-hidden="true">
           <svg v-if="item.state === 'complete'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 6 9 17l-5-5" />
           </svg>
           <template v-else>{{ item.number }}</template>
         </span>
-        <span class="sb-stepper-text">
-          <span class="sb-stepper-label">
-            <span v-if="item.state === 'complete'" class="sb-stepper-sr">Completed: </span>{{ item.label }}
+        <span class="er-stepper-text">
+          <span class="er-stepper-label">
+            <span v-if="item.state === 'complete'" class="er-stepper-sr">Completed: </span>{{ item.label }}
           </span>
-          <span v-if="item.description" class="sb-stepper-description">{{ item.description }}</span>
+          <span v-if="item.description" class="er-stepper-description">{{ item.description }}</span>
         </span>
       </component>
     </li>
@@ -54,7 +54,7 @@ const items = computed(() =>
 
 <style>
 @layer components {
-  .sb-stepper {
+  .er-stepper {
     display: flex;
     gap: 0.5rem;
     width: 100%;
@@ -64,12 +64,12 @@ const items = computed(() =>
     list-style: none;
   }
 
-  .sb-stepper[data-orientation='vertical'] {
+  .er-stepper[data-orientation='vertical'] {
     flex-direction: column;
     gap: 0;
   }
 
-  .sb-stepper-step {
+  .er-stepper-step {
     display: flex;
     flex: 1;
     align-items: center;
@@ -77,32 +77,32 @@ const items = computed(() =>
     min-width: 0;
   }
 
-  .sb-stepper-step:last-child {
+  .er-stepper-step:last-child {
     flex: none;
   }
 
   /* The connector to the next step: filled once this step is done. */
-  .sb-stepper-step:not(:last-child)::after {
+  .er-stepper-step:not(:last-child)::after {
     content: '';
     flex: 1;
     min-width: 1rem;
     height: 2px;
     border-radius: 1px;
-    background: var(--sb-border);
+    background: var(--er-border);
   }
 
-  .sb-stepper-step[data-state='complete']::after {
-    background: var(--sb-primary);
+  .er-stepper-step[data-state='complete']::after {
+    background: var(--er-primary);
   }
 
-  .sb-stepper[data-orientation='vertical'] .sb-stepper-step {
+  .er-stepper[data-orientation='vertical'] .er-stepper-step {
     flex: none;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
   }
 
-  .sb-stepper[data-orientation='vertical'] .sb-stepper-step:not(:last-child)::after {
+  .er-stepper[data-orientation='vertical'] .er-stepper-step:not(:last-child)::after {
     flex: none;
     width: 2px;
     min-width: 0;
@@ -110,81 +110,81 @@ const items = computed(() =>
     margin: 0 0 0.25rem 0.8125rem;
   }
 
-  .sb-stepper-item {
+  .er-stepper-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font: inherit;
     text-align: left;
   }
 
-  button.sb-stepper-item {
+  button.er-stepper-item {
     cursor: pointer;
   }
 
-  button.sb-stepper-item:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  button.er-stepper-item:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-stepper-marker {
+  .er-stepper-marker {
     display: grid;
     flex-shrink: 0;
     place-items: center;
     width: 1.75rem;
     height: 1.75rem;
-    border: 1px solid var(--sb-input);
+    border: 1px solid var(--er-input);
     border-radius: 50%;
     font-size: 0.8125rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     transition:
-      background-color var(--sb-duration),
-      border-color var(--sb-duration);
+      background-color var(--er-duration),
+      border-color var(--er-duration);
   }
 
-  .sb-stepper-marker svg {
+  .er-stepper-marker svg {
     width: 0.875rem;
     height: 0.875rem;
   }
 
-  .sb-stepper-step[data-state='complete'] .sb-stepper-marker {
-    border-color: var(--sb-primary);
-    background: var(--sb-primary);
-    color: var(--sb-primary-foreground);
+  .er-stepper-step[data-state='complete'] .er-stepper-marker {
+    border-color: var(--er-primary);
+    background: var(--er-primary);
+    color: var(--er-primary-foreground);
   }
 
-  .sb-stepper-step[data-state='current'] .sb-stepper-marker {
-    border-color: var(--sb-primary);
-    color: var(--sb-foreground);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--sb-primary) 15%, transparent);
+  .er-stepper-step[data-state='current'] .er-stepper-marker {
+    border-color: var(--er-primary);
+    color: var(--er-foreground);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--er-primary) 15%, transparent);
   }
 
-  .sb-stepper-step:not([data-state='upcoming']) .sb-stepper-label {
-    color: var(--sb-foreground);
+  .er-stepper-step:not([data-state='upcoming']) .er-stepper-label {
+    color: var(--er-foreground);
   }
 
-  .sb-stepper-text {
+  .er-stepper-text {
     display: grid;
     min-width: 0;
   }
 
-  .sb-stepper-label {
+  .er-stepper-label {
     font-weight: 500;
     white-space: nowrap;
   }
 
-  .sb-stepper-description {
+  .er-stepper-description {
     font-size: 0.8125rem;
   }
 
-  .sb-stepper-sr {
+  .er-stepper-sr {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -194,7 +194,7 @@ const items = computed(() =>
 
   /* On a narrow screen only the current step keeps its name; the rest shrink to their numbers. */
   @media (max-width: 40rem) {
-    .sb-stepper[data-orientation='horizontal'] .sb-stepper-step:not([data-state='current']) .sb-stepper-text {
+    .er-stepper[data-orientation='horizontal'] .er-stepper-step:not([data-state='current']) .er-stepper-text {
       position: absolute;
       width: 1px;
       height: 1px;

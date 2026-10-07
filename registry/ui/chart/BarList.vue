@@ -41,18 +41,18 @@ const rows = computed(() => {
 
 <template>
   <!-- A plain list: every bar has its name and its number written beside it, so nothing needs a tooltip or a legend. -->
-  <ul class="sb-bar-list" :aria-label="label">
+  <ul class="er-bar-list" :aria-label="label">
     <li v-for="row in rows" :key="row.name">
-      <span class="sb-bar-list-name">{{ row.name }}</span>
-      <span class="sb-bar-list-value">{{ formatValue(row.value) }}</span>
-      <span class="sb-bar-list-track" aria-hidden="true"><span :style="{ width: `${row.share * 100}%` }" /></span>
+      <span class="er-bar-list-name">{{ row.name }}</span>
+      <span class="er-bar-list-value">{{ formatValue(row.value) }}</span>
+      <span class="er-bar-list-track" aria-hidden="true"><span :style="{ width: `${row.share * 100}%` }" /></span>
     </li>
   </ul>
 </template>
 
 <style>
 @layer components {
-  .sb-bar-list {
+  .er-bar-list {
     display: grid;
     gap: 0.625rem;
     width: 100%;
@@ -63,37 +63,37 @@ const rows = computed(() => {
     list-style: none;
   }
 
-  .sb-bar-list li {
+  .er-bar-list li {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 0.25rem 1rem;
     min-width: 0;
   }
 
-  .sb-bar-list-name {
+  .er-bar-list-name {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .sb-bar-list-value {
+  .er-bar-list-value {
     font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-bar-list-track {
+  .er-bar-list-track {
     grid-column: 1 / -1;
     height: 0.375rem;
   }
 
   /* One series, so one colour for every bar: length carries the value, not shade. */
-  .sb-bar-list-track span {
+  .er-bar-list-track span {
     display: block;
     min-width: 2px;
     height: 100%;
     border-radius: 0 4px 4px 0;
-    background: var(--sb-chart-1);
+    background: var(--er-chart-1);
   }
 }
 </style>

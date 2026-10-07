@@ -5,5 +5,5 @@ const sheet = useDialog()
 </script>
 
 <template>
-  <h2 :id="sheet.titleId" class="sb-sheet-title"><slot /></h2>
+  <h2 :id="sheet.titleId" class="er-sheet-title"><slot /></h2>
 </template>

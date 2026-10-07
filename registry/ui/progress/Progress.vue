@@ -17,44 +17,44 @@ const percent = computed(() => (known.value ? Math.max(0, Math.min((props.value!
 <template>
   <div
     role="progressbar"
-    class="sb-progress"
+    class="er-progress"
     aria-valuemin="0"
     :aria-valuemax="max"
     :aria-valuenow="known ? Math.max(0, Math.min(value!, max)) : undefined"
     :data-state="known ? (percent === 100 ? 'complete' : 'loading') : 'indeterminate'"
-    :style="{ '--sb-progress': `${percent}%` }"
+    :style="{ '--er-progress': `${percent}%` }"
   >
-    <div class="sb-progress-bar" />
+    <div class="er-progress-bar" />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-progress {
+  .er-progress {
     width: 100%;
     height: 0.5rem;
     border-radius: 999px;
-    background: color-mix(in oklab, var(--sb-primary) 15%, transparent);
+    background: color-mix(in oklab, var(--er-primary) 15%, transparent);
     overflow: hidden;
   }
 
-  .sb-progress-bar {
+  .er-progress-bar {
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    background: var(--sb-primary);
-    transform: translateX(calc(var(--sb-progress, 0%) - 100%));
-    transition: transform 300ms var(--sb-ease);
+    background: var(--er-primary);
+    transform: translateX(calc(var(--er-progress, 0%) - 100%));
+    transition: transform 300ms var(--er-ease);
   }
 
-  .sb-progress[data-state='indeterminate'] .sb-progress-bar {
+  .er-progress[data-state='indeterminate'] .er-progress-bar {
     width: 40%;
     transform: none;
     transition: none;
-    animation: sb-progress-slide 1.4s ease-in-out infinite;
+    animation: er-progress-slide 1.4s ease-in-out infinite;
   }
 
-  @keyframes sb-progress-slide {
+  @keyframes er-progress-slide {
     from {
       transform: translateX(-100%);
     }
@@ -65,17 +65,17 @@ const percent = computed(() => (known.value ? Math.max(0, Math.min((props.value!
 
   /* Without motion, a bar that fades in place still reads as "working". */
   @media (prefers-reduced-motion: reduce) {
-    .sb-progress-bar {
+    .er-progress-bar {
       transition: none;
     }
 
-    .sb-progress[data-state='indeterminate'] .sb-progress-bar {
+    .er-progress[data-state='indeterminate'] .er-progress-bar {
       width: 100%;
-      animation: sb-progress-fade 2s ease-in-out infinite;
+      animation: er-progress-fade 2s ease-in-out infinite;
     }
   }
 
-  @keyframes sb-progress-fade {
+  @keyframes er-progress-fade {
     50% {
       opacity: 0.35;
     }

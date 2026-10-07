@@ -81,15 +81,15 @@ const records = computed(() =>
 const groups = computed(() => {
   if (!props.group) return []
   const found = [...new Set(records.value.map((record) => record.group))]
-  const named = found.slice(0, MAX_GROUPS).map((name, index) => ({ name, color: `var(--sb-chart-${index + 1})` }))
-  return found.length > MAX_GROUPS ? [...named, { name: OTHER, color: 'var(--sb-muted-foreground)' }] : named
+  const named = found.slice(0, MAX_GROUPS).map((name, index) => ({ name, color: `var(--er-chart-${index + 1})` }))
+  return found.length > MAX_GROUPS ? [...named, { name: OTHER, color: 'var(--er-muted-foreground)' }] : named
 })
 
 const points = computed(() =>
   records.value
     .map((record) => {
       const group = groups.value.find((item) => item.name === record.group) ?? groups.value.find((item) => item.name === OTHER)
-      return { ...record, legend: group?.name ?? '', color: group?.color ?? 'var(--sb-chart-1)' }
+      return { ...record, legend: group?.name ?? '', color: group?.color ?? 'var(--er-chart-1)' }
     })
     .filter((point) => !hidden.value.includes(point.legend))
     // Left to right, so the arrow keys walk across the chart.
@@ -212,7 +212,7 @@ function clear() {
   >
     <div
       ref="plot"
-      class="sb-chart-plot"
+      class="er-chart-plot"
       role="img"
       aria-roledescription="chart"
       tabindex="0"
@@ -224,13 +224,13 @@ function clear() {
       @blur="clear"
       @keydown="onKeydown"
     >
-      <p v-if="!records.length" class="sb-chart-empty"><slot name="empty">No data</slot></p>
+      <p v-if="!records.length" class="er-chart-empty"><slot name="empty">No data</slot></p>
       <svg v-else-if="width" :width="width" :height="height" aria-hidden="true">
-        <g class="sb-chart-grid">
+        <g class="er-chart-grid">
           <line v-for="tick in yTicks" :key="`y-${tick.value}`" :x1="left" :x2="width - right" :y1="tick.y" :y2="tick.y" />
           <line v-for="tick in xTicks" :key="`x-${tick.value}`" :x1="tick.x" :x2="tick.x" :y1="top" :y2="bottom" />
         </g>
-        <g class="sb-chart-axis">
+        <g class="er-chart-axis">
           <text v-for="tick in yTicks" :key="`y-${tick.value}`" :x="left - 8" :y="tick.y" text-anchor="end" dominant-baseline="middle">{{ tick.text }}</text>
           <text v-for="tick in xTicks" :key="`x-${tick.value}`" :x="tick.x" :y="bottom + 18" text-anchor="middle">{{ tick.text }}</text>
           <text v-if="yTitle" :x="0" :y="12">{{ yTitle }}</text>
@@ -238,20 +238,20 @@ function clear() {
         </g>
 
         <!-- Each dot carries a ring in the surface colour, so overlapping points stay separate. -->
-        <circle v-for="(dot, index) in dots" :key="index" class="sb-chart-dot" :cx="dot.cx" :cy="dot.cy" r="4" :fill="dot.color" />
-        <circle v-if="activeDot" class="sb-chart-dot" :cx="activeDot.cx" :cy="activeDot.cy" r="6" :fill="activeDot.color" />
+        <circle v-for="(dot, index) in dots" :key="index" class="er-chart-dot" :cx="dot.cx" :cy="dot.cy" r="4" :fill="dot.color" />
+        <circle v-if="activeDot" class="er-chart-dot" :cx="activeDot.cx" :cy="activeDot.cy" r="6" :fill="activeDot.color" />
       </svg>
 
-      <div v-if="activeDot && width" class="sb-chart-tooltip" :style="tooltipStyle">
-        <div v-if="activeDot.name || activeDot.legend" class="sb-chart-tooltip-row">
-          <span v-if="activeDot.legend" class="sb-chart-key" data-shape="dot" :style="{ background: activeDot.color }" />
+      <div v-if="activeDot && width" class="er-chart-tooltip" :style="tooltipStyle">
+        <div v-if="activeDot.name || activeDot.legend" class="er-chart-tooltip-row">
+          <span v-if="activeDot.legend" class="er-chart-key" data-shape="dot" :style="{ background: activeDot.color }" />
           <span>{{ [activeDot.name, activeDot.legend].filter(Boolean).join(' · ') }}</span>
         </div>
-        <div class="sb-chart-tooltip-row">
+        <div class="er-chart-tooltip-row">
           <span>{{ xTitle }}</span>
           <strong>{{ formatValue(activeDot.x) }}</strong>
         </div>
-        <div class="sb-chart-tooltip-row">
+        <div class="er-chart-tooltip-row">
           <span>{{ yTitle }}</span>
           <strong>{{ formatValue(activeDot.y) }}</strong>
         </div>

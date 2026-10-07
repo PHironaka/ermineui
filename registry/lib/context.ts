@@ -14,7 +14,7 @@ export function createContext<T>(name: string) {
 
   function useContext(): T {
     const value = inject(key, null)
-    if (value === null) throw new Error(`[sable] This component must be used inside <${name}>.`)
+    if (value === null) throw new Error(`[ermine] This component must be used inside <${name}>.`)
     return value
   }
 

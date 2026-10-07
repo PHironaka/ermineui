@@ -24,14 +24,14 @@ useFloating(tooltip.anchor, content, tooltip.open, props)
 
 <template>
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="tooltip.open.value"
         :id="tooltip.contentId"
         ref="content"
         v-bind="$attrs"
         role="tooltip"
-        class="sb-floating sb-tooltip"
+        class="er-floating er-tooltip"
         @pointerenter="tooltip.show(true)"
         @pointerleave="tooltip.hide()"
       >
@@ -43,12 +43,12 @@ useFloating(tooltip.anchor, content, tooltip.open, props)
 
 <style>
 @layer components {
-  .sb-tooltip {
+  .er-tooltip {
     max-width: min(20rem, calc(100vw - 1rem));
     padding: 0.375rem 0.75rem;
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-primary);
-    color: var(--sb-primary-foreground);
+    border-radius: var(--er-radius-md);
+    background: var(--er-primary);
+    color: var(--er-primary-foreground);
     font-size: 0.75rem;
     line-height: 1.35;
     text-wrap: balance;

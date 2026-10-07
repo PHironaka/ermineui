@@ -26,7 +26,7 @@ function toggle() {
 
 <template>
   <!-- A pressed-state button: screen readers say "Sound, pressed" or "Sound, not pressed". -->
-  <button type="button" class="sb-sound-toggle" :aria-label="label" :title="label" :aria-pressed="mounted ? settings.enabled : true" @click="toggle">
+  <button type="button" class="er-sound-toggle" :aria-label="label" :title="label" :aria-pressed="mounted ? settings.enabled : true" @click="toggle">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M4 9v6h4l5 4V5L8 9H4Z" />
       <template v-if="!mounted || settings.enabled">
@@ -40,37 +40,37 @@ function toggle() {
 
 <style>
 @layer components {
-  .sb-sound-toggle {
+  .er-sound-toggle {
     display: inline-grid;
     place-items: center;
     width: 2.25rem;
     height: 2.25rem;
     padding: 0;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration);
   }
 
-  .sb-sound-toggle:hover {
-    background: var(--sb-accent);
+  .er-sound-toggle:hover {
+    background: var(--er-accent);
   }
 
-  .sb-sound-toggle[aria-pressed='false'] {
-    color: var(--sb-muted-foreground);
+  .er-sound-toggle[aria-pressed='false'] {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-sound-toggle:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-sound-toggle:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-sound-toggle svg {
+  .er-sound-toggle svg {
     width: 1rem;
     height: 1rem;
   }

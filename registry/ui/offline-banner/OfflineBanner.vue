@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- Always in the page, empty while online, so the change is announced when it happens. -->
-  <div class="sb-offline-banner" role="status" :data-state="state">
+  <div class="er-offline-banner" role="status" :data-state="state">
     <template v-if="state === 'offline'">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M3 3l18 18M8.500 16.500a5 5 0 0 1 7 0M5 13a10 10 0 0 1 4-2.500M19 13a10 10 0 0 0-4.500-2.700M2 9a15 15 0 0 1 4.500-3M22 9a15 15 0 0 0-9-3.900M12 20h.01" />
@@ -64,25 +64,25 @@ onBeforeUnmount(() => {
 
 <style>
 @layer components {
-  .sb-offline-banner {
+  .er-offline-banner {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     width: 100%;
     padding: 0.5rem 1rem;
-    background: color-mix(in oklab, var(--sb-warning) 14%, var(--sb-background));
-    color: var(--sb-foreground);
+    background: color-mix(in oklab, var(--er-warning) 14%, var(--er-background));
+    color: var(--er-foreground);
     font-size: 0.875rem;
     text-align: center;
   }
 
-  .sb-offline-banner[data-state='back'] {
-    background: color-mix(in oklab, var(--sb-success) 14%, var(--sb-background));
+  .er-offline-banner[data-state='back'] {
+    background: color-mix(in oklab, var(--er-success) 14%, var(--er-background));
   }
 
   /* Takes no room while there is nothing to say. */
-  .sb-offline-banner[data-state='online'] {
+  .er-offline-banner[data-state='online'] {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
     clip-path: inset(50%);
   }
 
-  .sb-offline-banner svg {
+  .er-offline-banner svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;

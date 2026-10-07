@@ -24,7 +24,7 @@ const PATTERNS = {
 export type HapticName = keyof typeof PATTERNS
 export const hapticNames = Object.keys(PATTERNS) as HapticName[]
 
-const STORAGE_KEY = 'sb-haptics'
+const STORAGE_KEY = 'er-haptics'
 
 /** Whether vibration is used. Shared by the whole page and remembered between visits. */
 export const hapticSettings = reactive({ enabled: true })

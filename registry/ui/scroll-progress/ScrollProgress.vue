@@ -44,26 +44,26 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- Decoration: the scrollbar already tells assistive technology where the reader is. -->
-  <div class="sb-scroll-progress" aria-hidden="true" :style="{ '--sb-scroll-progress': progress }">
+  <div class="er-scroll-progress" aria-hidden="true" :style="{ '--er-scroll-progress': progress }">
     <div />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-scroll-progress {
+  .er-scroll-progress {
     position: fixed;
     inset: 0 0 auto;
-    z-index: var(--sb-z-overlay);
+    z-index: var(--er-z-overlay);
     height: 3px;
     pointer-events: none;
   }
 
   /* Scaled, not resized, so filling it never makes the browser lay the page out again. */
-  .sb-scroll-progress div {
+  .er-scroll-progress div {
     height: 100%;
-    background: var(--sb-primary);
-    transform: scaleX(var(--sb-scroll-progress, 0));
+    background: var(--er-primary);
+    transform: scaleX(var(--er-scroll-progress, 0));
     transform-origin: left;
   }
 }

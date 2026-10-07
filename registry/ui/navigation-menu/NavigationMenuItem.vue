@@ -10,7 +10,7 @@ provideNavigationMenuItem({ id, isOpen, triggerId: `${id}-trigger`, contentId: `
 </script>
 
 <template>
-  <li class="sb-navigation-menu-item" :data-state="isOpen ? 'open' : 'closed'">
+  <li class="er-navigation-menu-item" :data-state="isOpen ? 'open' : 'closed'">
     <slot :open="isOpen" />
   </li>
 </template>

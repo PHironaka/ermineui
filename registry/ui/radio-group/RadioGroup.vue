@@ -26,26 +26,26 @@ provideRadioGroup({
 </script>
 
 <template>
-  <div role="radiogroup" class="sb-radio-group" :aria-orientation="orientation" :data-orientation="orientation">
+  <div role="radiogroup" class="er-radio-group" :aria-orientation="orientation" :data-orientation="orientation">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-radio-group {
+  .er-radio-group {
     display: grid;
     gap: 0.75rem;
   }
 
-  .sb-radio-group[data-orientation='horizontal'] {
+  .er-radio-group[data-orientation='horizontal'] {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem 1.25rem;
   }
 
   /* A real radio button, restyled — so forms, labels and the arrow keys all work as usual. */
-  .sb-radio {
+  .er-radio {
     appearance: none;
     display: inline-grid;
     place-content: center;
@@ -53,44 +53,44 @@ provideRadioGroup({
     width: 1rem;
     height: 1rem;
     margin: 0;
-    border: 1px solid var(--sb-input);
+    border: 1px solid var(--er-input);
     border-radius: 50%;
-    background: var(--sb-input-background);
-    box-shadow: var(--sb-shadow-xs);
+    background: var(--er-input-background);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
-    transition: border-color var(--sb-duration);
+    transition: border-color var(--er-duration);
   }
 
-  .sb-radio::before {
+  .er-radio::before {
     content: '';
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--sb-primary);
+    background: var(--er-primary);
     transform: scale(0);
-    transition: transform var(--sb-duration) var(--sb-ease);
+    transition: transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-radio:checked {
-    border-color: var(--sb-primary);
+  .er-radio:checked {
+    border-color: var(--er-primary);
   }
 
-  .sb-radio:checked::before {
+  .er-radio:checked::before {
     transform: scale(1);
   }
 
-  .sb-radio:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-radio:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-radio:disabled {
+  .er-radio:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-radio[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-radio[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 }
 </style>

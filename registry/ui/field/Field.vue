@@ -25,56 +25,56 @@ const control = computed(() => ({
 </script>
 
 <template>
-  <div class="sb-field" :data-invalid="error ? '' : undefined">
-    <label v-if="label" class="sb-field-label" :for="id">
+  <div class="er-field" :data-invalid="error ? '' : undefined">
+    <label v-if="label" class="er-field-label" :for="id">
       {{ label }}
-      <span v-if="required" class="sb-field-required" aria-hidden="true">*</span>
+      <span v-if="required" class="er-field-required" aria-hidden="true">*</span>
     </label>
     <slot :control="control" :id="id" :invalid="!!error" />
-    <p v-if="hint" :id="hintId" class="sb-field-hint">{{ hint }}</p>
+    <p v-if="hint" :id="hintId" class="er-field-hint">{{ hint }}</p>
     <!-- Always in the page, empty until there is a problem: screen readers reliably announce text that
          arrives in an alert they already know about, and often miss an alert that is added later. -->
-    <p :id="errorId" class="sb-field-error" role="alert">{{ error || '' }}</p>
+    <p :id="errorId" class="er-field-error" role="alert">{{ error || '' }}</p>
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-field {
+  .er-field {
     position: relative;
     display: grid;
     gap: 0.5rem;
     min-width: 0;
   }
 
-  .sb-field-label {
-    color: var(--sb-foreground);
+  .er-field-label {
+    color: var(--er-foreground);
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.25;
   }
 
-  .sb-field-required {
-    color: var(--sb-destructive);
+  .er-field-required {
+    color: var(--er-destructive);
   }
 
-  .sb-field-hint,
-  .sb-field-error {
+  .er-field-hint,
+  .er-field-error {
     margin: 0;
     font-size: 0.8125rem;
     line-height: 1.4;
   }
 
-  .sb-field-hint {
-    color: var(--sb-muted-foreground);
+  .er-field-hint {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-field-error {
-    color: var(--sb-destructive);
+  .er-field-error {
+    color: var(--er-destructive);
   }
 
   /* While empty it takes no room in the layout. */
-  .sb-field-error:empty {
+  .er-field-error:empty {
     position: absolute;
     width: 1px;
     height: 1px;

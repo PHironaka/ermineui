@@ -44,7 +44,7 @@ function onKeydown(event: KeyboardEvent) {
     :ref="(el) => (menu.anchor.value = el as HTMLElement | null)"
     type="button"
     role="menuitem"
-    class="sb-menubar-trigger"
+    class="er-menubar-trigger"
     aria-haspopup="menu"
     :aria-expanded="menu.open.value"
     :aria-controls="menu.open.value ? menu.contentId : undefined"
@@ -56,7 +56,7 @@ function onKeydown(event: KeyboardEvent) {
     @pointerenter="onPointerEnter"
     @keydown="onKeydown"
     @focus="bar.tabStop.value = id"
-    @sb-open-menu="openMenu(true)"
+    @er-open-menu="openMenu(true)"
   >
     <slot />
   </button>

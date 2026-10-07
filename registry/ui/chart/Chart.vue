@@ -67,7 +67,7 @@ onBeforeUnmount(() => observer?.disconnect())
 const names = computed(() => props.series.map((series) => series.label ?? series.key))
 // Eight colours are defined. Past that, series go grey rather than repeating a colour that is already taken.
 const colors = computed(() =>
-  props.series.map((series, index) => series.color ?? (index < 8 ? `var(--sb-chart-${index + 1})` : 'var(--sb-muted-foreground)')),
+  props.series.map((series, index) => series.color ?? (index < 8 ? `var(--er-chart-${index + 1})` : 'var(--er-muted-foreground)')),
 )
 const rows = computed(() =>
   props.data.map((row) => {
@@ -269,7 +269,7 @@ function clear() {
   >
     <div
       ref="plot"
-      class="sb-chart-plot"
+      class="er-chart-plot"
       role="img"
       aria-roledescription="chart"
       tabindex="0"
@@ -281,12 +281,12 @@ function clear() {
       @blur="clear"
       @keydown="onKeydown"
     >
-      <p v-if="!rows.length" class="sb-chart-empty"><slot name="empty">No data</slot></p>
+      <p v-if="!rows.length" class="er-chart-empty"><slot name="empty">No data</slot></p>
       <svg v-else-if="width" :width="width" :height="height" aria-hidden="true">
-        <g class="sb-chart-grid">
+        <g class="er-chart-grid">
           <line v-for="tick in ticks" :key="tick.value" :x1="left" :x2="width - right" :y1="tick.y" :y2="tick.y" />
         </g>
-        <g class="sb-chart-axis">
+        <g class="er-chart-axis">
           <text v-for="tick in ticks" :key="tick.value" :x="left - 8" :y="tick.y" text-anchor="end" dominant-baseline="middle">{{ tick.text }}</text>
           <text v-for="item in xLabels" :key="item.x" :x="item.x" :y="height - 6" text-anchor="middle">{{ item.text }}</text>
         </g>
@@ -294,7 +294,7 @@ function clear() {
         <!-- Bars: the whole column behind the hovered group lights up, so the target is far bigger than a bar. -->
         <rect
           v-if="isBar && active !== null"
-          class="sb-chart-band"
+          class="er-chart-band"
           :x="left + band * active"
           :y="TOP"
           :width="band"
@@ -305,29 +305,29 @@ function clear() {
 
         <template v-if="!isBar">
           <template v-if="type === 'area'">
-            <path v-for="(item, index) in lines" :key="`area-${index}`" class="sb-chart-area" :d="item.area" :fill="item.color" />
+            <path v-for="(item, index) in lines" :key="`area-${index}`" class="er-chart-area" :d="item.area" :fill="item.color" />
           </template>
-          <line v-if="active !== null" class="sb-chart-crosshair" :x1="center(active)" :x2="center(active)" :y1="TOP" :y2="bottom" />
-          <path v-for="(item, index) in lines" :key="`line-${index}`" class="sb-chart-line" :d="item.line" :stroke="item.color" />
+          <line v-if="active !== null" class="er-chart-crosshair" :x1="center(active)" :x2="center(active)" :y1="TOP" :y2="bottom" />
+          <path v-for="(item, index) in lines" :key="`line-${index}`" class="er-chart-line" :d="item.line" :stroke="item.color" />
           <template v-for="(item, index) in lines" :key="`end-${index}`">
-            <circle v-if="item.end" class="sb-chart-dot" :cx="item.end.x" :cy="item.end.y" r="4" :fill="item.color" />
+            <circle v-if="item.end" class="er-chart-dot" :cx="item.end.x" :cy="item.end.y" r="4" :fill="item.color" />
           </template>
           <template v-for="item in readout" :key="`dot-${item.index}`">
-            <circle v-if="item.value !== null" class="sb-chart-dot" :cx="center(active!)" :cy="y(item.value)" r="4" :fill="colors[item.index]" />
+            <circle v-if="item.value !== null" class="er-chart-dot" :cx="center(active!)" :cy="y(item.value)" r="4" :fill="colors[item.index]" />
           </template>
-          <g class="sb-chart-ends">
+          <g class="er-chart-ends">
             <text v-for="end in ends" :key="end.text" :x="width - right + 10" :y="end.y" dominant-baseline="middle">{{ end.text }}</text>
           </g>
         </template>
 
         <!-- Drawn last so it sits over the bars: the line every bar grows from. -->
-        <line class="sb-chart-baseline" :x1="left" :x2="width - right" :y1="baseline" :y2="baseline" />
+        <line class="er-chart-baseline" :x1="left" :x2="width - right" :y1="baseline" :y2="baseline" />
       </svg>
 
-      <div v-if="activeRow && width" class="sb-chart-tooltip" :style="tooltipStyle">
-        <div class="sb-chart-tooltip-title">{{ activeRow.label }}</div>
-        <div v-for="item in readout" :key="item.index" class="sb-chart-tooltip-row">
-          <span class="sb-chart-key" data-shape="line" :style="{ background: colors[item.index] }" />
+      <div v-if="activeRow && width" class="er-chart-tooltip" :style="tooltipStyle">
+        <div class="er-chart-tooltip-title">{{ activeRow.label }}</div>
+        <div v-for="item in readout" :key="item.index" class="er-chart-tooltip-row">
+          <span class="er-chart-key" data-shape="line" :style="{ background: colors[item.index] }" />
           <span>{{ names[item.index] }}</span>
           <strong>{{ formatValue(item.value) }}</strong>
         </div>

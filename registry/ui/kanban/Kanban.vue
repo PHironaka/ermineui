@@ -100,7 +100,7 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
     if (next) move(card.id, next.id, Math.min(from.index, next.cards.length))
   }
   await nextTick()
-  Array.from(root.value?.querySelectorAll<HTMLElement>('.sb-kanban-card') ?? [])
+  Array.from(root.value?.querySelectorAll<HTMLElement>('.er-kanban-card') ?? [])
     .find((el) => el.dataset.card === card.id)
     ?.focus()
 }
@@ -108,25 +108,25 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
 
 <template>
   <!-- How to move a card is said once, for the board, not again on every card. -->
-  <div ref="root" class="sb-kanban" role="group" :aria-label="label" :aria-describedby="`${uid}-help`">
+  <div ref="root" class="er-kanban" role="group" :aria-label="label" :aria-describedby="`${uid}-help`">
     <section
       v-for="column in columns"
       :key="column.id"
-      class="sb-kanban-column"
+      class="er-kanban-column"
       :aria-labelledby="`${uid}-${column.id}`"
       :data-target="target?.column === column.id ? '' : undefined"
       @dragover.prevent="onDragOverColumn(column)"
       @drop.prevent="onDrop"
     >
-      <h3 class="sb-kanban-title">
+      <h3 class="er-kanban-title">
         <span :id="`${uid}-${column.id}`">{{ column.title }}</span>
-        <span class="sb-kanban-count">{{ column.cards.length }}<span class="sb-kanban-sr"> {{ column.cards.length === 1 ? 'card' : 'cards' }}</span></span>
+        <span class="er-kanban-count">{{ column.cards.length }}<span class="er-kanban-sr"> {{ column.cards.length === 1 ? 'card' : 'cards' }}</span></span>
       </h3>
-      <ul class="sb-kanban-cards">
+      <ul class="er-kanban-cards">
         <template v-for="(card, index) in column.cards" :key="card.id">
-          <li v-if="target?.column === column.id && target.index === index" class="sb-kanban-drop" aria-hidden="true" />
+          <li v-if="target?.column === column.id && target.index === index" class="er-kanban-drop" aria-hidden="true" />
           <li
-            class="sb-kanban-card"
+            class="er-kanban-card"
             tabindex="0"
             draggable="true"
             aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown Alt+ArrowLeft Alt+ArrowRight"
@@ -140,17 +140,17 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
             <slot name="card" :card="card" :column="column">{{ card.title }}</slot>
           </li>
         </template>
-        <li v-if="target?.column === column.id && target.index === column.cards.length" class="sb-kanban-drop" aria-hidden="true" />
+        <li v-if="target?.column === column.id && target.index === column.cards.length" class="er-kanban-drop" aria-hidden="true" />
       </ul>
     </section>
-    <p :id="`${uid}-help`" class="sb-kanban-sr">To move a card, focus it, hold Alt and press an arrow key.</p>
-    <p class="sb-kanban-sr" role="status">{{ announcement }}</p>
+    <p :id="`${uid}-help`" class="er-kanban-sr">To move a card, focus it, hold Alt and press an arrow key.</p>
+    <p class="er-kanban-sr" role="status">{{ announcement }}</p>
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-kanban {
+  .er-kanban {
     /* Positioned, so the visually hidden text inside scrolls with the board instead of widening the page. */
     position: relative;
     display: grid;
@@ -164,23 +164,23 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
     scrollbar-width: thin;
   }
 
-  .sb-kanban-column {
+  .er-kanban-column {
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 0.5rem;
     min-width: 0;
     padding: 0.625rem;
     border: 1px solid transparent;
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-muted);
-    transition: border-color var(--sb-duration);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-muted);
+    transition: border-color var(--er-duration);
   }
 
-  .sb-kanban-column[data-target] {
-    border-color: var(--sb-ring);
+  .er-kanban-column[data-target] {
+    border-color: var(--er-ring);
   }
 
-  .sb-kanban-title {
+  .er-kanban-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -190,13 +190,13 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
     font-weight: 600;
   }
 
-  .sb-kanban-count {
-    color: var(--sb-muted-foreground);
+  .er-kanban-count {
+    color: var(--er-muted-foreground);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-kanban-cards {
+  .er-kanban-cards {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -206,36 +206,36 @@ async function onKeydown(event: KeyboardEvent, card: KanbanCard) {
     list-style: none;
   }
 
-  .sb-kanban-card {
+  .er-kanban-card {
     padding: 0.625rem 0.75rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-card);
-    color: var(--sb-card-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-card);
+    color: var(--er-card-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     cursor: grab;
-    transition: opacity var(--sb-duration);
+    transition: opacity var(--er-duration);
   }
 
-  .sb-kanban-card:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-kanban-card:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 1px;
   }
 
-  .sb-kanban-card[data-dragging] {
+  .er-kanban-card[data-dragging] {
     opacity: 0.4;
   }
 
   /* The line that shows where the card will land. */
-  .sb-kanban-drop {
+  .er-kanban-drop {
     height: 2px;
     margin: -0.3125rem 0;
     border-radius: 1px;
-    background: var(--sb-ring);
+    background: var(--er-ring);
   }
 
-  .sb-kanban-sr {
+  .er-kanban-sr {
     position: absolute;
     width: 1px;
     height: 1px;

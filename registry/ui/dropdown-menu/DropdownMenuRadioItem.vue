@@ -29,7 +29,7 @@ function onClick(event: MouseEvent) {
   <div
     role="menuitemradio"
     tabindex="-1"
-    class="sb-menu-item"
+    class="er-menu-item"
     :aria-checked="checked"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"
@@ -38,7 +38,7 @@ function onClick(event: MouseEvent) {
     @pointermove="onItemPointerMove"
     @pointerleave="onItemPointerLeave"
   >
-    <span class="sb-menu-indicator">
+    <span class="er-menu-indicator">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <circle cx="12" cy="12" r="5" />
       </svg>

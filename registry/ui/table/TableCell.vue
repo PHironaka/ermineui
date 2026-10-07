@@ -9,5 +9,5 @@ withDefaults(
 </script>
 
 <template>
-  <td class="sb-table-cell" :data-align="align"><slot /></td>
+  <td class="er-table-cell" :data-align="align"><slot /></td>
 </template>

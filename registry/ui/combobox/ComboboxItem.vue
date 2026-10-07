@@ -39,7 +39,7 @@ function onPointerMove() {
     :id="id"
     ref="el"
     role="option"
-    class="sb-combobox-item"
+    class="er-combobox-item"
     :aria-selected="selected"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"

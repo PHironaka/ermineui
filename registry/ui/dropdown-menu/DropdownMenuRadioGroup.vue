@@ -12,5 +12,5 @@ provideDropdownMenuRadio({
 </script>
 
 <template>
-  <div role="group" class="sb-menu-group"><slot /></div>
+  <div role="group" class="er-menu-group"><slot /></div>
 </template>

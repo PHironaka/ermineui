@@ -89,10 +89,10 @@ function onPaste(event: ClipboardEvent) {
 </script>
 
 <template>
-  <div class="sb-tags-input-wrap">
+  <div class="er-tags-input-wrap">
     <!-- Pressing anywhere in the box puts the cursor in the input, as it would in a plain text field. -->
-    <div class="sb-tags-input" :data-disabled="disabled ? '' : undefined" @mousedown="($event.target as HTMLElement).tagName !== 'INPUT' && $event.preventDefault()" @click="input?.focus()">
-      <span v-for="(tag, index) in tags" :key="tag" class="sb-tags-input-tag">
+    <div class="er-tags-input" :data-disabled="disabled ? '' : undefined" @mousedown="($event.target as HTMLElement).tagName !== 'INPUT' && $event.preventDefault()" @click="input?.focus()">
+      <span v-for="(tag, index) in tags" :key="tag" class="er-tags-input-tag">
         {{ tag }}
         <button type="button" tabindex="-1" :aria-label="`Remove ${tag}`" :disabled="disabled" @click.stop="remove(index)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -114,8 +114,8 @@ function onPaste(event: ClipboardEvent) {
       />
     </div>
     <!-- Always in the page, empty until a tag is turned away, so the reason is reliably announced. -->
-    <p class="sb-tags-input-problem" role="alert">{{ problem }}</p>
-    <span class="sb-tags-input-status" role="status">{{ status }}</span>
+    <p class="er-tags-input-problem" role="alert">{{ problem }}</p>
+    <span class="er-tags-input-status" role="status">{{ status }}</span>
     <template v-if="name">
       <input v-for="tag in tags" :key="tag" type="hidden" :name="name" :value="tag" :disabled="disabled" />
     </template>
@@ -124,7 +124,7 @@ function onPaste(event: ClipboardEvent) {
 
 <style>
 @layer components {
-  .sb-tags-input-wrap {
+  .er-tags-input-wrap {
     position: relative;
     display: grid;
     gap: 0.375rem;
@@ -132,46 +132,46 @@ function onPaste(event: ClipboardEvent) {
     min-width: 0;
   }
 
-  .sb-tags-input {
+  .er-tags-input {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.25rem;
     min-height: 2.25rem;
     padding: 0.25rem 0.375rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    box-shadow: var(--er-shadow-xs);
     cursor: text;
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-tags-input:focus-within {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-tags-input:focus-within {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-tags-input:has(input[aria-invalid='true']) {
-    border-color: var(--sb-destructive);
+  .er-tags-input:has(input[aria-invalid='true']) {
+    border-color: var(--er-destructive);
   }
 
-  .sb-tags-input[data-disabled] {
+  .er-tags-input[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-tags-input input {
+  .er-tags-input input {
     flex: 1;
     min-width: 6rem;
     height: 1.5rem;
     padding: 0 0.375rem;
     border: 0;
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     /* 16px stops iOS from zooming the page when the field is focused. */
     font-size: 1rem;
@@ -179,32 +179,32 @@ function onPaste(event: ClipboardEvent) {
   }
 
   @media (min-width: 48rem) {
-    .sb-tags-input input {
+    .er-tags-input input {
       font-size: 0.875rem;
     }
   }
 
-  .sb-tags-input input::placeholder {
-    color: var(--sb-muted-foreground);
+  .er-tags-input input::placeholder {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-tags-input-tag {
+  .er-tags-input-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.125rem;
     max-width: 100%;
     height: 1.5rem;
     padding: 0 0.125rem 0 0.5rem;
-    border-radius: var(--sb-radius-sm);
-    background: var(--sb-secondary);
-    color: var(--sb-secondary-foreground);
+    border-radius: var(--er-radius-sm);
+    background: var(--er-secondary);
+    color: var(--er-secondary-foreground);
     font-size: 0.8125rem;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
   }
 
-  .sb-tags-input-tag button {
+  .er-tags-input-tag button {
     display: grid;
     flex-shrink: 0;
     place-items: center;
@@ -214,27 +214,27 @@ function onPaste(event: ClipboardEvent) {
     border: 0;
     border-radius: 3px;
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
   }
 
-  .sb-tags-input-tag button:hover {
-    background: color-mix(in oklab, var(--sb-foreground) 10%, transparent);
-    color: var(--sb-foreground);
+  .er-tags-input-tag button:hover {
+    background: color-mix(in oklab, var(--er-foreground) 10%, transparent);
+    color: var(--er-foreground);
   }
 
-  .sb-tags-input-tag svg {
+  .er-tags-input-tag svg {
     width: 0.75rem;
     height: 0.75rem;
   }
 
-  .sb-tags-input-problem {
+  .er-tags-input-problem {
     margin: 0;
-    color: var(--sb-destructive);
+    color: var(--er-destructive);
     font-size: 0.8125rem;
   }
 
-  .sb-tags-input-status {
+  .er-tags-input-status {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -243,7 +243,7 @@ function onPaste(event: ClipboardEvent) {
     white-space: nowrap;
   }
 
-  .sb-tags-input-problem:empty {
+  .er-tags-input-problem:empty {
     position: absolute;
     width: 1px;
     height: 1px;

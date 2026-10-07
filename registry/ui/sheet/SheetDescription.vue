@@ -13,5 +13,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <p :id="sheet.descriptionId" class="sb-sheet-description"><slot /></p>
+  <p :id="sheet.descriptionId" class="er-sheet-description"><slot /></p>
 </template>

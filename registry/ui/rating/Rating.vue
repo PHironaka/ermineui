@@ -34,15 +34,15 @@ const STAR = 'M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5
 </script>
 
 <template>
-  <div v-if="readonly" class="sb-rating" role="img" :aria-label="`${label}: ${model} out of ${max}`" :data-size="size" data-readonly>
-    <span v-for="star in stars" :key="star" class="sb-rating-star">
+  <div v-if="readonly" class="er-rating" role="img" :aria-label="`${label}: ${model} out of ${max}`" :data-size="size" data-readonly>
+    <span v-for="star in stars" :key="star" class="er-rating-star">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="STAR" /></svg>
-      <svg class="sb-rating-fill" viewBox="0 0 24 24" aria-hidden="true" :style="{ clipPath: `inset(0 ${(1 - fill(star)) * 100}% 0 0)` }"><path :d="STAR" /></svg>
+      <svg class="er-rating-fill" viewBox="0 0 24 24" aria-hidden="true" :style="{ clipPath: `inset(0 ${(1 - fill(star)) * 100}% 0 0)` }"><path :d="STAR" /></svg>
     </span>
   </div>
   <!-- Real radio buttons underneath, so arrow keys, forms and screen readers work without extra code. -->
-  <div v-else class="sb-rating" role="radiogroup" :aria-label="label" :data-size="size" :data-disabled="disabled ? '' : undefined">
-    <label v-for="star in stars" :key="star" class="sb-rating-star" :data-on="star <= model ? '' : undefined">
+  <div v-else class="er-rating" role="radiogroup" :aria-label="label" :data-size="size" :data-disabled="disabled ? '' : undefined">
+    <label v-for="star in stars" :key="star" class="er-rating-star" :data-on="star <= model ? '' : undefined">
       <input
         type="radio"
         :name="name ?? fallbackName"
@@ -60,71 +60,71 @@ const STAR = 'M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5
 
 <style>
 @layer components {
-  .sb-rating {
-    --sb-rating-color: var(--sb-warning);
+  .er-rating {
+    --er-rating-color: var(--er-warning);
     display: inline-flex;
     gap: 0.125rem;
     vertical-align: middle;
   }
 
-  .sb-rating-star {
+  .er-rating-star {
     position: relative;
     display: block;
     width: 1.25rem;
     height: 1.25rem;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
   }
 
-  .sb-rating[data-size='sm'] .sb-rating-star {
+  .er-rating[data-size='sm'] .er-rating-star {
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-rating[data-size='lg'] .sb-rating-star {
+  .er-rating[data-size='lg'] .er-rating-star {
     width: 1.75rem;
     height: 1.75rem;
   }
 
-  .sb-rating-star svg {
+  .er-rating-star svg {
     display: block;
     width: 100%;
     height: 100%;
     fill: transparent;
-    stroke: var(--sb-input);
+    stroke: var(--er-input);
     stroke-width: 1.5;
     stroke-linejoin: round;
     transition:
-      fill var(--sb-duration),
-      stroke var(--sb-duration);
+      fill var(--er-duration),
+      stroke var(--er-duration);
   }
 
-  .sb-rating-star .sb-rating-fill,
-  .sb-rating-star[data-on] svg {
-    fill: var(--sb-rating-color);
-    stroke: var(--sb-rating-color);
+  .er-rating-star .er-rating-fill,
+  .er-rating-star[data-on] svg {
+    fill: var(--er-rating-color);
+    stroke: var(--er-rating-color);
   }
 
-  .sb-rating-fill {
+  .er-rating-fill {
     position: absolute;
     inset: 0;
   }
 
-  .sb-rating:not([data-readonly]) .sb-rating-star {
+  .er-rating:not([data-readonly]) .er-rating-star {
     cursor: pointer;
   }
 
   /* While pointing, the stars up to the pointer light up as a preview of what a press would choose. */
-  .sb-rating:not([data-readonly], [data-disabled]):hover .sb-rating-star svg {
-    fill: var(--sb-rating-color);
-    stroke: var(--sb-rating-color);
+  .er-rating:not([data-readonly], [data-disabled]):hover .er-rating-star svg {
+    fill: var(--er-rating-color);
+    stroke: var(--er-rating-color);
   }
 
-  .sb-rating:not([data-readonly], [data-disabled]) .sb-rating-star:hover ~ .sb-rating-star svg {
+  .er-rating:not([data-readonly], [data-disabled]) .er-rating-star:hover ~ .er-rating-star svg {
     fill: transparent;
-    stroke: var(--sb-input);
+    stroke: var(--er-input);
   }
 
-  .sb-rating-star input {
+  .er-rating-star input {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -134,16 +134,16 @@ const STAR = 'M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5
     cursor: inherit;
   }
 
-  .sb-rating-star:has(input:focus-visible) {
-    outline: 2px solid var(--sb-ring);
+  .er-rating-star:has(input:focus-visible) {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-rating[data-disabled] {
+  .er-rating[data-disabled] {
     opacity: 0.5;
   }
 
-  .sb-rating[data-disabled] .sb-rating-star {
+  .er-rating[data-disabled] .er-rating-star {
     cursor: not-allowed;
   }
 }

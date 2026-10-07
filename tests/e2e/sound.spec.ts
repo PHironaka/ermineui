@@ -6,7 +6,7 @@ import { demo, expect, test } from './helpers'
 async function recordAudio(page: Page, options: { reducedMotion?: 'reduce' | 'no-preference'; saved?: string } = {}) {
   await page.emulateMedia({ reducedMotion: options.reducedMotion ?? 'no-preference' })
   await page.addInitScript((saved) => {
-    if (saved) localStorage.setItem('sb-sound', saved)
+    if (saved) localStorage.setItem('er-sound', saved)
     const played: Array<{ freq: number; volume: number }> = []
     ;(window as unknown as { __played: typeof played }).__played = played
     const param = (onSet: (value: number) => void = () => {}) => ({ value: 1, setValueAtTime: onSet, exponentialRampToValueAtTime: () => {} })
@@ -129,7 +129,7 @@ test.describe('sound', () => {
     const card = demo(page, 'sound')
     await card.getByRole('button', { name: 'Sound', exact: true }).click()
     await card.getByRole('slider', { name: 'Volume' }).fill('30')
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('sb-sound'))).toBe('{"enabled":false,"volume":0.3}')
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('er-sound'))).toBe('{"enabled":false,"volume":0.3}')
     await page.reload()
     await expect(demo(page, 'sound').getByRole('button', { name: 'Sound', exact: true })).toHaveAttribute('aria-pressed', 'false')
     await expect(demo(page, 'sound').getByRole('slider', { name: 'Volume' })).toHaveValue('30')

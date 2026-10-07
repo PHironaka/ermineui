@@ -28,7 +28,7 @@ async function onKeydown(event: KeyboardEvent) {
   <button
     :id="item.triggerId"
     type="button"
-    class="sb-navigation-menu-trigger"
+    class="er-navigation-menu-trigger"
     :aria-expanded="item.isOpen.value"
     :aria-controls="item.contentId"
     @pointerenter="onPointerEnter"

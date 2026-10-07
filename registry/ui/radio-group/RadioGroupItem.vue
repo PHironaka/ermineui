@@ -12,7 +12,7 @@ const group = useRadioGroup()
 <template>
   <input
     type="radio"
-    class="sb-radio"
+    class="er-radio"
     :name="group.name.value"
     :value="value"
     :checked="group.value.value === value"

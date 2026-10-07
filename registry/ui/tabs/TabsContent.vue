@@ -14,7 +14,7 @@ const tabs = useTabs()
     :id="panelId(tabs.baseId, value)"
     role="tabpanel"
     tabindex="0"
-    class="sb-tabs-content"
+    class="er-tabs-content"
     :aria-labelledby="tabId(tabs.baseId, value)"
   >
     <slot />

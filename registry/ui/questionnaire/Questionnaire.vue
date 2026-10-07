@@ -57,7 +57,7 @@ watch(
 async function goTo(next: number) {
   step.value = Math.max(1, Math.min(next, steps.value.length))
   await nextTick()
-  root.value?.querySelector<HTMLElement>(`[data-step="${current.value?.id}"] .sb-questionnaire-title`)?.focus()
+  root.value?.querySelector<HTMLElement>(`[data-step="${current.value?.id}"] .er-questionnaire-title`)?.focus()
 }
 
 async function next() {
@@ -75,8 +75,8 @@ async function next() {
 
 <template>
   <!-- A real form, so Enter in a text field moves on just as pressing Next does. -->
-  <form ref="root" class="sb-questionnaire" novalidate :aria-label="label" @submit.prevent="next">
-    <div v-if="indicator === 'progress' && steps.length" class="sb-questionnaire-progress">
+  <form ref="root" class="er-questionnaire" novalidate :aria-label="label" @submit.prevent="next">
+    <div v-if="indicator === 'progress' && steps.length" class="er-questionnaire-progress">
       <p>Step {{ index + 1 }} of {{ steps.length }}</p>
       <Progress :value="index + 1" :max="steps.length" aria-label="Steps completed" />
     </div>
@@ -89,7 +89,7 @@ async function next() {
 
     <slot :step="index + 1" :count="steps.length" :go-to="goTo" />
 
-    <div class="sb-questionnaire-footer">
+    <div class="er-questionnaire-footer">
       <Button v-if="index > 0" variant="outline" :disabled="busy" @click="goTo(step - 1)">{{ backLabel }}</Button>
       <Button type="submit" :disabled="busy">{{ isLast ? submitLabel : nextLabel }}</Button>
     </div>
@@ -98,32 +98,32 @@ async function next() {
 
 <style>
 @layer components {
-  .sb-questionnaire {
+  .er-questionnaire {
     display: grid;
     gap: 1.5rem;
     width: 100%;
     min-width: 0;
   }
 
-  .sb-questionnaire-progress {
+  .er-questionnaire-progress {
     display: grid;
     gap: 0.5rem;
   }
 
-  .sb-questionnaire-progress p {
+  .er-questionnaire-progress p {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-questionnaire-step {
+  .er-questionnaire-step {
     display: grid;
     gap: 0.5rem;
     min-width: 0;
   }
 
-  .sb-questionnaire-title {
+  .er-questionnaire-title {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
@@ -131,19 +131,19 @@ async function next() {
     outline: none;
   }
 
-  .sb-questionnaire-description {
+  .er-questionnaire-description {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
   }
 
-  .sb-questionnaire-fields {
+  .er-questionnaire-fields {
     display: grid;
     gap: 1rem;
     margin-top: 0.75rem;
   }
 
-  .sb-questionnaire-footer {
+  .er-questionnaire-footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;

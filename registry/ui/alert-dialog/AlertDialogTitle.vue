@@ -5,5 +5,5 @@ const dialog = useDialog()
 </script>
 
 <template>
-  <h2 :id="dialog.titleId" class="sb-alert-dialog-title"><slot /></h2>
+  <h2 :id="dialog.titleId" class="er-alert-dialog-title"><slot /></h2>
 </template>

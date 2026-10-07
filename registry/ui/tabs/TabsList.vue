@@ -16,7 +16,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div role="tablist" class="sb-tabs-list" :aria-orientation="tabs.orientation.value" @keydown="onKeydown">
+  <div role="tablist" class="er-tabs-list" :aria-orientation="tabs.orientation.value" @keydown="onKeydown">
     <slot />
   </div>
 </template>

@@ -8,69 +8,69 @@ withDefaults(
 </script>
 
 <template>
-  <div role="alert" class="sb-alert" :data-variant="variant">
+  <div role="alert" class="er-alert" :data-variant="variant">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-alert {
-    --sb-alert-color: var(--sb-foreground);
+  .er-alert {
+    --er-alert-color: var(--er-foreground);
     display: grid;
     gap: 0.25rem 0.75rem;
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid color-mix(in oklab, var(--sb-alert-color) 30%, var(--sb-border));
-    border-radius: var(--sb-radius-lg);
-    background: color-mix(in oklab, var(--sb-alert-color) 5%, var(--sb-card));
-    color: var(--sb-card-foreground);
+    border: 1px solid color-mix(in oklab, var(--er-alert-color) 30%, var(--er-border));
+    border-radius: var(--er-radius-lg);
+    background: color-mix(in oklab, var(--er-alert-color) 5%, var(--er-card));
+    color: var(--er-card-foreground);
     font-size: 0.875rem;
   }
 
-  .sb-alert[data-variant='default'] {
-    border-color: var(--sb-border);
-    background: var(--sb-card);
+  .er-alert[data-variant='default'] {
+    border-color: var(--er-border);
+    background: var(--er-card);
   }
 
-  .sb-alert[data-variant='info'] {
-    --sb-alert-color: var(--sb-info);
+  .er-alert[data-variant='info'] {
+    --er-alert-color: var(--er-info);
   }
 
-  .sb-alert[data-variant='success'] {
-    --sb-alert-color: var(--sb-success);
+  .er-alert[data-variant='success'] {
+    --er-alert-color: var(--er-success);
   }
 
-  .sb-alert[data-variant='warning'] {
-    --sb-alert-color: var(--sb-warning);
+  .er-alert[data-variant='warning'] {
+    --er-alert-color: var(--er-warning);
   }
 
-  .sb-alert[data-variant='destructive'] {
-    --sb-alert-color: var(--sb-destructive);
+  .er-alert[data-variant='destructive'] {
+    --er-alert-color: var(--er-destructive);
   }
 
   /* An svg placed first becomes the icon, in a column of its own beside the text. */
-  .sb-alert:has(> svg) {
+  .er-alert:has(> svg) {
     grid-template-columns: auto 1fr;
   }
 
-  .sb-alert > svg {
+  .er-alert > svg {
     grid-row: 1 / span 2;
     width: 1rem;
     height: 1rem;
     margin-top: 0.125rem;
-    color: var(--sb-alert-color);
+    color: var(--er-alert-color);
   }
 
-  .sb-alert-title {
+  .er-alert-title {
     grid-column: -2;
     font-weight: 500;
     line-height: 1.25rem;
   }
 
-  .sb-alert-description {
+  .er-alert-description {
     grid-column: -2;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     line-height: 1.5;
   }
 }

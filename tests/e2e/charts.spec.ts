@@ -14,7 +14,7 @@ test.describe('line, area and bar charts', () => {
     const box = (await plot.boundingBox())!
     // Just inside the left edge of the plot area, over the first position.
     await page.mouse.move(box.x + 42, box.y + box.height / 2)
-    const tooltip = area.locator('.sb-chart-tooltip')
+    const tooltip = area.locator('.er-chart-tooltip')
     await expect(tooltip).toContainText('Aug 3')
     await expect(tooltip).toContainText('41,200')
     await expect(tooltip).toContainText('28,100')
@@ -28,14 +28,14 @@ test.describe('line, area and bar charts', () => {
     await page.keyboard.press('End')
     await expect(area.getByRole('status')).toHaveText('Sep 28: Requests 66,800, Served from cache 52,300')
     await page.keyboard.press('ArrowLeft')
-    await expect(area.locator('.sb-chart-tooltip')).toContainText('Sep 21')
+    await expect(area.locator('.er-chart-tooltip')).toContainText('Sep 21')
     await page.keyboard.press('Escape')
-    await expect(area.locator('.sb-chart-tooltip')).toBeHidden()
+    await expect(area.locator('.er-chart-tooltip')).toBeHidden()
   })
 
   test('the legend hides a series, rescales the axis, and keeps the last one', async ({ page }) => {
     const bars = chart(page, 'Deployments by month')
-    const ticks = bars.locator('.sb-chart-axis text[text-anchor="end"]')
+    const ticks = bars.locator('.er-chart-axis text[text-anchor="end"]')
     await expect(ticks).toHaveText(['0', '50', '100', '150'])
     await bars.getByRole('button', { name: 'Preview' }).click()
     await expect(bars.getByRole('button', { name: 'Preview' })).toHaveAttribute('aria-pressed', 'false')
@@ -77,8 +77,8 @@ test.describe('line, area and bar charts', () => {
 test.describe('donut, scatter, heatmap, gauge, bar list', () => {
   test('the donut folds small slices into Other and lists every value beside it', async ({ page }) => {
     const donut = chart(page, 'Bandwidth by region, last 30 days')
-    await expect(donut.locator('.sb-chart-slice')).toHaveCount(6)
-    const rows = donut.locator('.sb-chart-donut-legend li')
+    await expect(donut.locator('.er-chart-slice')).toHaveCount(6)
+    const rows = donut.locator('.er-chart-donut-legend li')
     await expect(rows.first()).toHaveText(/Frankfurt\s*412 GB\s*32.7%/)
     await expect(rows.last()).toHaveText(/Other\s*63 GB\s*5%/)
     await donut.getByRole('img').focus()
@@ -88,13 +88,13 @@ test.describe('donut, scatter, heatmap, gauge, bar list', () => {
 
   test('the scatter chart finds the nearest point and can hide a group', async ({ page }) => {
     const scatter = chart(page, 'Build time against bundle size')
-    const dots = scatter.locator('circle.sb-chart-dot')
+    const dots = scatter.locator('circle.er-chart-dot')
     await expect(dots).toHaveCount(20)
     await scatter.getByRole('img').scrollIntoViewIfNeeded()
     const first = (await dots.first().boundingBox())!
     // A little off the dot: the pointer only has to be close.
     await page.mouse.move(first.x - 8, first.y + 14)
-    await expect(scatter.locator('.sb-chart-tooltip')).toContainText('embed · Vite')
+    await expect(scatter.locator('.er-chart-tooltip')).toContainText('embed · Vite')
     await page.mouse.move(0, 0)
     await scatter.getByRole('button', { name: 'Nuxt' }).click()
     await expect(dots).toHaveCount(14)
@@ -105,11 +105,11 @@ test.describe('donut, scatter, heatmap, gauge, bar list', () => {
 
   test('the heatmap reads out cells by pointer and keyboard, and marks a missing one', async ({ page }) => {
     const heatmap = chart(page, 'Requests by day and hour (thousands)')
-    const cells = heatmap.locator('.sb-heatmap-cell')
+    const cells = heatmap.locator('.er-heatmap-cell')
     await expect(cells).toHaveCount(56)
-    await expect(heatmap.locator('.sb-heatmap-cell[data-empty]')).toHaveCount(1)
+    await expect(heatmap.locator('.er-heatmap-cell[data-empty]')).toHaveCount(1)
     await cells.nth(11).hover()
-    await expect(heatmap.locator('.sb-chart-tooltip')).toContainText('Tue · 09')
+    await expect(heatmap.locator('.er-chart-tooltip')).toContainText('Tue · 09')
     await page.mouse.move(0, 0)
     await heatmap.getByRole('img').focus()
     await page.keyboard.press('ArrowRight')
@@ -127,7 +127,7 @@ test.describe('donut, scatter, heatmap, gauge, bar list', () => {
 
   test('the bar list is sorted with values written beside each name', async ({ page }) => {
     const list = chart(page, 'Top pages by views').getByRole('list', { name: 'Top pages by views' })
-    await expect(list.locator('.sb-bar-list-name')).toHaveText(['/', '/products', '/cart', '/checkout', '/account', '/help'])
-    await expect(list.locator('.sb-bar-list-value').first()).toHaveText('61,940')
+    await expect(list.locator('.er-bar-list-name')).toHaveText(['/', '/products', '/cart', '/checkout', '/account', '/help'])
+    await expect(list.locator('.er-bar-list-value').first()).toHaveText('61,940')
   })
 })

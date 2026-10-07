@@ -55,7 +55,7 @@ export async function revealTransition(update: () => void | Promise<void>, origi
   const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))
 
   const root = document.documentElement
-  root.dataset.sbReveal = ''
+  root.dataset.erReveal = ''
   const transition = (document as TransitionDocument).startViewTransition!(async () => {
     await update()
     await nextTick()
@@ -70,6 +70,6 @@ export async function revealTransition(update: () => void | Promise<void>, origi
   } catch {
     // Skipped: the change still happened, just without the animation.
   } finally {
-    delete root.dataset.sbReveal
+    delete root.dataset.erReveal
   }
 }

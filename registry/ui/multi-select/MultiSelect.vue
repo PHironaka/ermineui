@@ -132,8 +132,8 @@ useLayer(list, open, {
 
 <template>
   <!-- Pressing anywhere in the box puts the cursor in the input, as it would in a plain text field. -->
-  <div ref="anchor" class="sb-multi-select" :data-disabled="disabled ? '' : undefined" @mousedown="($event.target as HTMLElement).tagName !== 'INPUT' && $event.preventDefault()" @click="input?.focus()">
-    <span v-for="value in values" :key="value" class="sb-multi-select-tag">
+  <div ref="anchor" class="er-multi-select" :data-disabled="disabled ? '' : undefined" @mousedown="($event.target as HTMLElement).tagName !== 'INPUT' && $event.preventDefault()" @click="input?.focus()">
+    <span v-for="value in values" :key="value" class="er-multi-select-tag">
       {{ labels.get(value) ?? value }}
       <button type="button" tabindex="-1" :aria-label="`Remove ${labels.get(value) ?? value}`" :disabled="disabled" @click.stop="remove(value)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
@@ -157,7 +157,7 @@ useLayer(list, open, {
       @click="show"
       @blur="close"
     />
-    <span class="sb-multi-select-status" role="status">{{ status }}</span>
+    <span class="er-multi-select-status" role="status">{{ status }}</span>
   </div>
 
   <Portal>
@@ -167,13 +167,13 @@ useLayer(list, open, {
       ref="list"
       role="listbox"
       aria-multiselectable="true"
-      class="sb-floating sb-multi-select-content"
+      class="er-floating er-multi-select-content"
       :data-state="open ? 'open' : 'closed'"
       :data-full="full ? '' : undefined"
       @mousedown.prevent
     >
       <slot />
-      <div v-if="empty" class="sb-multi-select-empty"><slot name="empty">No results.</slot></div>
+      <div v-if="empty" class="er-multi-select-empty"><slot name="empty">No results.</slot></div>
     </div>
   </Portal>
 
@@ -184,7 +184,7 @@ useLayer(list, open, {
 
 <style>
 @layer components {
-  .sb-multi-select {
+  .er-multi-select {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -193,39 +193,39 @@ useLayer(list, open, {
     width: 100%;
     min-height: 2.25rem;
     padding: 0.25rem 0.375rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    box-shadow: var(--sb-shadow-xs);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    box-shadow: var(--er-shadow-xs);
     cursor: text;
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-multi-select:focus-within {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-multi-select:focus-within {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-multi-select:has(input[aria-invalid='true']) {
-    border-color: var(--sb-destructive);
+  .er-multi-select:has(input[aria-invalid='true']) {
+    border-color: var(--er-destructive);
   }
 
-  .sb-multi-select[data-disabled] {
+  .er-multi-select[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-multi-select input {
+  .er-multi-select input {
     flex: 1;
     min-width: 6rem;
     height: 1.5rem;
     padding: 0 0.375rem;
     border: 0;
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     /* 16px stops iOS from zooming the page when the field is focused. */
     font-size: 1rem;
@@ -233,31 +233,31 @@ useLayer(list, open, {
   }
 
   @media (min-width: 48rem) {
-    .sb-multi-select input {
+    .er-multi-select input {
       font-size: 0.875rem;
     }
   }
 
-  .sb-multi-select input::placeholder {
-    color: var(--sb-muted-foreground);
+  .er-multi-select input::placeholder {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-multi-select-tag {
+  .er-multi-select-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.125rem;
     max-width: 100%;
     height: 1.5rem;
     padding: 0 0.125rem 0 0.5rem;
-    border-radius: var(--sb-radius-sm);
-    background: var(--sb-secondary);
-    color: var(--sb-secondary-foreground);
+    border-radius: var(--er-radius-sm);
+    background: var(--er-secondary);
+    color: var(--er-secondary-foreground);
     font-size: 0.8125rem;
     font-weight: 500;
     white-space: nowrap;
   }
 
-  .sb-multi-select-tag button {
+  .er-multi-select-tag button {
     display: grid;
     place-items: center;
     width: 1.125rem;
@@ -266,21 +266,21 @@ useLayer(list, open, {
     border: 0;
     border-radius: 3px;
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
   }
 
-  .sb-multi-select-tag button:hover {
-    background: color-mix(in oklab, var(--sb-foreground) 10%, transparent);
-    color: var(--sb-foreground);
+  .er-multi-select-tag button:hover {
+    background: color-mix(in oklab, var(--er-foreground) 10%, transparent);
+    color: var(--er-foreground);
   }
 
-  .sb-multi-select-tag svg {
+  .er-multi-select-tag svg {
     width: 0.75rem;
     height: 0.75rem;
   }
 
-  .sb-multi-select-status {
+  .er-multi-select-status {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -289,89 +289,89 @@ useLayer(list, open, {
     white-space: nowrap;
   }
 
-  .sb-multi-select-content {
-    min-width: max(8rem, var(--sb-anchor-width, 8rem));
-    max-height: min(20rem, var(--sb-available-size, 20rem));
+  .er-multi-select-content {
+    min-width: max(8rem, var(--er-anchor-width, 8rem));
+    max-height: min(20rem, var(--er-available-size, 20rem));
     padding: 0.25rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-md);
+    box-shadow: var(--er-shadow-md);
     overflow-y: auto;
     /* Open/close animation in plain CSS: browsers without @starting-style simply skip it. */
     transition:
-      opacity var(--sb-duration) var(--sb-ease),
-      transform var(--sb-duration) var(--sb-ease),
-      display var(--sb-duration) allow-discrete;
+      opacity var(--er-duration) var(--er-ease),
+      transform var(--er-duration) var(--er-ease),
+      display var(--er-duration) allow-discrete;
   }
 
-  .sb-multi-select-content[data-state='closed'] {
+  .er-multi-select-content[data-state='closed'] {
     display: none;
     opacity: 0;
     transform: scale(0.96);
   }
 
   @starting-style {
-    .sb-multi-select-content[data-state='open'] {
+    .er-multi-select-content[data-state='open'] {
       opacity: 0;
       transform: scale(0.96);
     }
   }
 
-  .sb-multi-select-item {
+  .er-multi-select-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.375rem 0.5rem;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     line-height: 1.25rem;
     cursor: default;
     user-select: none;
   }
 
-  .sb-multi-select-item[data-active] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-multi-select-item[data-active] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
   /* At the limit, options not yet chosen fade: they cannot be added until one is removed. */
-  .sb-multi-select-item[data-disabled],
-  .sb-multi-select-content[data-full] .sb-multi-select-item[aria-selected='false'] {
+  .er-multi-select-item[data-disabled],
+  .er-multi-select-content[data-full] .er-multi-select-item[aria-selected='false'] {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-multi-select-box {
+  .er-multi-select-box {
     display: grid;
     flex-shrink: 0;
     place-items: center;
     width: 1rem;
     height: 1rem;
-    border: 1px solid var(--sb-input);
+    border: 1px solid var(--er-input);
     border-radius: 4px;
   }
 
-  .sb-multi-select-box svg {
+  .er-multi-select-box svg {
     width: 0.75rem;
     height: 0.75rem;
     visibility: hidden;
   }
 
-  .sb-multi-select-item[aria-selected='true'] .sb-multi-select-box {
-    border-color: var(--sb-primary);
-    background: var(--sb-primary);
-    color: var(--sb-primary-foreground);
+  .er-multi-select-item[aria-selected='true'] .er-multi-select-box {
+    border-color: var(--er-primary);
+    background: var(--er-primary);
+    color: var(--er-primary-foreground);
   }
 
-  .sb-multi-select-item[aria-selected='true'] .sb-multi-select-box svg {
+  .er-multi-select-item[aria-selected='true'] .er-multi-select-box svg {
     visibility: visible;
   }
 
-  .sb-multi-select-empty {
+  .er-multi-select-empty {
     padding: 0.75rem 0.5rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     text-align: center;
   }
 }

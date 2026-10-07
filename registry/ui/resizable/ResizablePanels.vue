@@ -65,14 +65,14 @@ provideResizable({
 </script>
 
 <template>
-  <div ref="root" class="sb-resizable" :data-direction="direction">
+  <div ref="root" class="er-resizable" :data-direction="direction">
     <slot :sizes="sizes" />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-resizable {
+  .er-resizable {
     display: flex;
     width: 100%;
     height: 100%;
@@ -80,60 +80,60 @@ provideResizable({
     min-height: 0;
   }
 
-  .sb-resizable[data-direction='vertical'] {
+  .er-resizable[data-direction='vertical'] {
     flex-direction: column;
   }
 
   /* Sizes are flex-grow shares of the space left after the handles, so they always add up exactly. */
-  .sb-resizable-panel {
-    flex: var(--sb-panel-size, 1) 1 0px;
+  .er-resizable-panel {
+    flex: var(--er-panel-size, 1) 1 0px;
     min-width: 0;
     min-height: 0;
     overflow: auto;
   }
 
-  .sb-resizable-panel:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-resizable-panel:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: -2px;
   }
 
-  .sb-resizable-handle {
+  .er-resizable-handle {
     position: relative;
     flex: none;
     width: 1px;
-    background: var(--sb-border);
+    background: var(--er-border);
     cursor: col-resize;
     touch-action: none;
     outline: none;
-    transition: background-color var(--sb-duration);
+    transition: background-color var(--er-duration);
   }
 
-  .sb-resizable[data-direction='vertical'] > .sb-resizable-handle {
+  .er-resizable[data-direction='vertical'] > .er-resizable-handle {
     width: auto;
     height: 1px;
     cursor: row-resize;
   }
 
   /* The line is 1px, but the area that can be grabbed is much wider. */
-  .sb-resizable-handle::before {
+  .er-resizable-handle::before {
     content: '';
     position: absolute;
     inset: 0 -0.375rem;
     z-index: 1;
   }
 
-  .sb-resizable[data-direction='vertical'] > .sb-resizable-handle::before {
+  .er-resizable[data-direction='vertical'] > .er-resizable-handle::before {
     inset: -0.375rem 0;
   }
 
-  .sb-resizable-handle:hover,
-  .sb-resizable-handle[data-dragging],
-  .sb-resizable-handle:focus-visible {
-    background: var(--sb-ring);
-    box-shadow: 0 0 0 1px var(--sb-ring);
+  .er-resizable-handle:hover,
+  .er-resizable-handle[data-dragging],
+  .er-resizable-handle:focus-visible {
+    background: var(--er-ring);
+    box-shadow: 0 0 0 1px var(--er-ring);
   }
 
-  .sb-resizable-grip {
+  .er-resizable-grip {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -142,19 +142,19 @@ provideResizable({
     place-items: center;
     width: 0.75rem;
     height: 1.25rem;
-    border: 1px solid var(--sb-border);
+    border: 1px solid var(--er-border);
     border-radius: 3px;
-    background: var(--sb-background);
-    color: var(--sb-muted-foreground);
+    background: var(--er-background);
+    color: var(--er-muted-foreground);
     transform: translate(-50%, -50%);
     pointer-events: none;
   }
 
-  .sb-resizable[data-direction='vertical'] > .sb-resizable-handle > .sb-resizable-grip {
+  .er-resizable[data-direction='vertical'] > .er-resizable-handle > .er-resizable-grip {
     transform: translate(-50%, -50%) rotate(90deg);
   }
 
-  .sb-resizable-grip svg {
+  .er-resizable-grip svg {
     width: 0.625rem;
     height: 0.625rem;
   }

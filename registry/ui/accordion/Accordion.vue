@@ -44,9 +44,9 @@ provideAccordion({
 })
 
 function onKeydown(event: KeyboardEvent) {
-  if (!(event.target instanceof HTMLElement) || !event.target.matches('.sb-accordion-trigger')) return
+  if (!(event.target instanceof HTMLElement) || !event.target.matches('.er-accordion-trigger')) return
   const root = event.currentTarget as HTMLElement
-  const triggers = Array.from(root.querySelectorAll<HTMLElement>('.sb-accordion-trigger:not(:disabled)'))
+  const triggers = Array.from(root.querySelectorAll<HTMLElement>('.er-accordion-trigger:not(:disabled)'))
   const next = arrowTarget(event, triggers, 'vertical')
   if (!next) return
   event.preventDefault()
@@ -55,27 +55,27 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="sb-accordion" @keydown="onKeydown">
+  <div class="er-accordion" @keydown="onKeydown">
     <slot />
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-accordion {
+  .er-accordion {
     width: 100%;
   }
 
-  .sb-accordion-item {
-    border-bottom: 1px solid var(--sb-border);
+  .er-accordion-item {
+    border-bottom: 1px solid var(--er-border);
   }
 
-  .sb-accordion-heading {
+  .er-accordion-heading {
     margin: 0;
     font: inherit;
   }
 
-  .sb-accordion-trigger {
+  .er-accordion-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -83,9 +83,9 @@ function onKeydown(event: KeyboardEvent) {
     width: 100%;
     padding: 1rem 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 500;
@@ -94,60 +94,60 @@ function onKeydown(event: KeyboardEvent) {
     cursor: pointer;
   }
 
-  .sb-accordion-trigger:hover {
+  .er-accordion-trigger:hover {
     text-decoration: underline;
     text-underline-offset: 4px;
   }
 
-  .sb-accordion-trigger:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-accordion-trigger:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-accordion-trigger:disabled {
+  .er-accordion-trigger:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-accordion-trigger svg {
+  .er-accordion-trigger svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
-    transition: transform var(--sb-duration) var(--sb-ease);
+    color: var(--er-muted-foreground);
+    transition: transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-accordion-trigger[aria-expanded='true'] svg {
+  .er-accordion-trigger[aria-expanded='true'] svg {
     transform: rotate(180deg);
   }
 
   /* Animates to the content's own height: a grid row going from 0fr to 1fr needs no measuring. */
-  .sb-accordion-content {
+  .er-accordion-content {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows var(--sb-duration) var(--sb-ease);
+    transition: grid-template-rows var(--er-duration) var(--er-ease);
   }
 
-  .sb-accordion-content[data-state='open'] {
+  .er-accordion-content[data-state='open'] {
     grid-template-rows: 1fr;
   }
 
-  .sb-accordion-content > div {
+  .er-accordion-content > div {
     min-height: 0;
     overflow: hidden;
     /* Hidden outright once it has closed, so its text cannot be selected or found while out of sight. */
     visibility: hidden;
-    transition: visibility 0s linear var(--sb-duration);
+    transition: visibility 0s linear var(--er-duration);
   }
 
-  .sb-accordion-content[data-state='open'] > div {
+  .er-accordion-content[data-state='open'] > div {
     visibility: visible;
     transition-delay: 0s;
   }
 
-  .sb-accordion-body {
+  .er-accordion-body {
     padding-bottom: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
   }
 }

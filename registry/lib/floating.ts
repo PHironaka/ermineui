@@ -81,13 +81,13 @@ export function computePlacement(
 
 /**
  * Keeps `floating` positioned next to `anchor` while `active` is true.
- * Give the floating element the `.sb-floating` class (position: fixed).
+ * Give the floating element the `.er-floating` class (position: fixed).
  *
  * Besides left/top it sets, on the floating element:
  *   data-side                 the side it actually ended up on
- *   --sb-anchor-width         width of the anchor (e.g. min-width for a select)
- *   --sb-available-size       free space on that side (e.g. a max-height)
- *   --sb-transform-origin     so scale animations grow from the anchor
+ *   --er-anchor-width         width of the anchor (e.g. min-width for a select)
+ *   --er-available-size       free space on that side (e.g. a max-height)
+ *   --er-transform-origin     so scale animations grow from the anchor
  */
 export function useFloating(
   anchor: Ref<HTMLElement | null | undefined>,
@@ -112,9 +112,9 @@ export function useFloating(
     floatingEl.style.left = `${Math.round(placement.x)}px`
     floatingEl.style.top = `${Math.round(placement.y)}px`
     floatingEl.dataset.side = placement.side
-    floatingEl.style.setProperty('--sb-anchor-width', `${Math.round(rect.width)}px`)
-    floatingEl.style.setProperty('--sb-available-size', `${Math.floor(placement.available)}px`)
-    floatingEl.style.setProperty('--sb-transform-origin', ORIGIN[placement.side])
+    floatingEl.style.setProperty('--er-anchor-width', `${Math.round(rect.width)}px`)
+    floatingEl.style.setProperty('--er-available-size', `${Math.floor(placement.available)}px`)
+    floatingEl.style.setProperty('--er-transform-origin', ORIGIN[placement.side])
   }
 
   watch(

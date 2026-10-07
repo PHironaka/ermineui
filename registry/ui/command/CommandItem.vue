@@ -42,7 +42,7 @@ function run() {
     v-show="visible"
     :id="id"
     :role="visible ? 'option' : 'none'"
-    class="sb-command-item"
+    class="er-command-item"
     :aria-selected="command.activeId.value === id"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"
@@ -52,6 +52,6 @@ function run() {
   >
     <slot name="icon" />
     <span ref="label"><slot /></span>
-    <span v-if="shortcut" class="sb-command-shortcut" aria-hidden="true">{{ shortcut }}</span>
+    <span v-if="shortcut" class="er-command-shortcut" aria-hidden="true">{{ shortcut }}</span>
   </div>
 </template>

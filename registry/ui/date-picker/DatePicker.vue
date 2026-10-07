@@ -74,7 +74,7 @@ useLayer(content, open, {
   ignore: () => [anchor.value],
   onDismiss: () => setOpen(false),
   // Start on the chosen day (or today), not on the "previous month" button.
-  initialFocus: () => content.value?.querySelector<HTMLElement>('.sb-calendar-day[tabindex="0"]'),
+  initialFocus: () => content.value?.querySelector<HTMLElement>('.er-calendar-day[tabindex="0"]'),
 })
 </script>
 
@@ -83,7 +83,7 @@ useLayer(content, open, {
     ref="anchor"
     v-bind="$attrs"
     type="button"
-    class="sb-date-picker"
+    class="er-date-picker"
     aria-haspopup="dialog"
     :aria-expanded="open"
     :aria-controls="open ? contentId : undefined"
@@ -98,13 +98,13 @@ useLayer(content, open, {
       <rect x="3" y="4" width="18" height="18" rx="2" />
       <path d="M16 2v4M8 2v4M3 10h18" />
     </svg>
-    <span :id="valueId" class="sb-date-picker-value">
+    <span :id="valueId" class="er-date-picker-value">
       <slot :value="value" :label="label">{{ label || placeholder }}</slot>
     </span>
   </button>
 
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="open"
         :id="contentId"
@@ -112,7 +112,7 @@ useLayer(content, open, {
         role="dialog"
         aria-label="Choose a date"
         tabindex="-1"
-        class="sb-floating sb-date-picker-content"
+        class="er-floating er-date-picker-content"
       >
         <Calendar
           v-model="value"
@@ -132,68 +132,68 @@ useLayer(content, open, {
 
 <style>
 @layer components {
-  .sb-date-picker {
+  .er-date-picker {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
     height: 2.25rem;
     padding: 0 0.75rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     line-height: 1.25rem;
     text-align: left;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-date-picker:focus-visible {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-date-picker:focus-visible {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-date-picker:disabled {
+  .er-date-picker:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-date-picker[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-date-picker[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 
-  .sb-date-picker[data-placeholder] .sb-date-picker-value {
-    color: var(--sb-muted-foreground);
+  .er-date-picker[data-placeholder] .er-date-picker-value {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-date-picker-value {
+  .er-date-picker-value {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .sb-date-picker svg {
+  .er-date-picker svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-date-picker-content {
+  .er-date-picker-content {
     padding: 0.75rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
-    box-shadow: var(--sb-shadow-md);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
+    box-shadow: var(--er-shadow-md);
   }
 }
 </style>

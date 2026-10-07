@@ -16,7 +16,7 @@ const selected = computed(() => tabs.value.value === props.value)
     :id="tabId(tabs.baseId, value)"
     type="button"
     role="tab"
-    class="sb-tabs-trigger"
+    class="er-tabs-trigger"
     :aria-selected="selected"
     :aria-controls="panelId(tabs.baseId, value)"
     :tabindex="selected ? 0 : -1"

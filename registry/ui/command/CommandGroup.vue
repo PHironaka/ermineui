@@ -16,7 +16,7 @@ const visible = computed(() => [...command.entries.values()].some((entry) => ent
 
 <template>
   <div v-show="visible" role="group" :aria-labelledby="`${id}-heading`">
-    <div :id="`${id}-heading`" class="sb-command-heading">{{ heading }}</div>
+    <div :id="`${id}-heading`" class="er-command-heading">{{ heading }}</div>
     <slot />
   </div>
 </template>

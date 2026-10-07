@@ -9,26 +9,26 @@ withDefaults(
 </script>
 
 <template>
-  <nav class="sb-breadcrumb" :aria-label="label">
+  <nav class="er-breadcrumb" :aria-label="label">
     <ol><slot /></ol>
   </nav>
 </template>
 
 <style>
 @layer components {
-  .sb-breadcrumb ol {
+  .er-breadcrumb ol {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.375rem;
     margin: 0;
     padding: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
     list-style: none;
   }
 
-  .sb-breadcrumb-item {
+  .er-breadcrumb-item {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
@@ -36,7 +36,7 @@ withDefaults(
   }
 
   /* The separator is drawn in CSS, so screen readers hear a plain list of links. */
-  .sb-breadcrumb-item + .sb-breadcrumb-item::before {
+  .er-breadcrumb-item + .er-breadcrumb-item::before {
     content: '';
     flex-shrink: 0;
     width: 0.875rem;
@@ -47,24 +47,24 @@ withDefaults(
     opacity: 0.7;
   }
 
-  .sb-breadcrumb-link {
-    border-radius: var(--sb-radius-sm);
+  .er-breadcrumb-link {
+    border-radius: var(--er-radius-sm);
     color: inherit;
     text-decoration: none;
-    transition: color var(--sb-duration);
+    transition: color var(--er-duration);
   }
 
-  a.sb-breadcrumb-link:hover {
-    color: var(--sb-foreground);
+  a.er-breadcrumb-link:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-breadcrumb-link:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-breadcrumb-link:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-breadcrumb-link[aria-current='page'] {
-    color: var(--sb-foreground);
+  .er-breadcrumb-link[aria-current='page'] {
+    color: var(--er-foreground);
     font-weight: 500;
   }
 }

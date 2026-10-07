@@ -26,7 +26,7 @@ function onClick(event: MouseEvent) {
   <div
     role="menuitemcheckbox"
     tabindex="-1"
-    class="sb-menu-item"
+    class="er-menu-item"
     :aria-checked="checked"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled ? '' : undefined"
@@ -35,7 +35,7 @@ function onClick(event: MouseEvent) {
     @pointermove="onItemPointerMove"
     @pointerleave="onItemPointerLeave"
   >
-    <span class="sb-menu-indicator">
+    <span class="er-menu-indicator">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M20 6 9 17l-5-5" />
       </svg>

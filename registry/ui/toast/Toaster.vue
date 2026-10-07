@@ -58,20 +58,20 @@ function runAction(toast: ToastItem) {
 <template>
   <Portal>
     <section
-      class="sb-toaster"
+      class="er-toaster"
       :aria-label="label"
       :data-position="position"
-      data-sb-layer-ignore
+      data-er-layer-ignore
       @pointerenter="hovered = true"
       @pointerleave="hovered = false"
       @focusin="focused = true"
       @focusout="onFocusOut"
     >
-      <TransitionGroup name="sb-toast" tag="ol" class="sb-toast-list" aria-live="polite" aria-relevant="additions text">
-        <li v-for="toast in ordered" :key="toast.id" class="sb-toast" :data-variant="toast.variant">
+      <TransitionGroup name="er-toast" tag="ol" class="er-toast-list" aria-live="polite" aria-relevant="additions text">
+        <li v-for="toast in ordered" :key="toast.id" class="er-toast" :data-variant="toast.variant">
           <svg
             v-if="toast.variant !== 'default'"
-            class="sb-toast-icon"
+            class="er-toast-icon"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -97,14 +97,14 @@ function runAction(toast: ToastItem) {
               <path d="M12 11v5.5M12 7.5h.01" />
             </template>
           </svg>
-          <div class="sb-toast-body">
-            <p class="sb-toast-title">{{ toast.title }}</p>
-            <p v-if="toast.description" class="sb-toast-description">{{ toast.description }}</p>
+          <div class="er-toast-body">
+            <p class="er-toast-title">{{ toast.title }}</p>
+            <p v-if="toast.description" class="er-toast-description">{{ toast.description }}</p>
           </div>
-          <button v-if="toast.action" type="button" class="sb-toast-action" @click="runAction(toast)">
+          <button v-if="toast.action" type="button" class="er-toast-action" @click="runAction(toast)">
             {{ toast.action.label }}
           </button>
-          <button type="button" class="sb-toast-close" :aria-label="dismissLabel" @click="dismissToast(toast.id)">
+          <button type="button" class="er-toast-close" :aria-label="dismissLabel" @click="dismissToast(toast.id)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
@@ -117,36 +117,36 @@ function runAction(toast: ToastItem) {
 
 <style>
 @layer components {
-  .sb-toaster {
+  .er-toaster {
     position: fixed;
     inset: 0;
-    z-index: var(--sb-z-toast);
+    z-index: var(--er-z-toast);
     display: flex;
     padding: 1rem;
     pointer-events: none;
   }
 
-  .sb-toaster[data-position^='top'] {
+  .er-toaster[data-position^='top'] {
     align-items: flex-start;
   }
 
-  .sb-toaster[data-position^='bottom'] {
+  .er-toaster[data-position^='bottom'] {
     align-items: flex-end;
   }
 
-  .sb-toaster[data-position$='left'] {
+  .er-toaster[data-position$='left'] {
     justify-content: flex-start;
   }
 
-  .sb-toaster[data-position$='center'] {
+  .er-toaster[data-position$='center'] {
     justify-content: center;
   }
 
-  .sb-toaster[data-position$='right'] {
+  .er-toaster[data-position$='right'] {
     justify-content: flex-end;
   }
 
-  .sb-toast-list {
+  .er-toast-list {
     position: relative;
     width: min(22rem, 100%);
     margin: 0;
@@ -154,85 +154,85 @@ function runAction(toast: ToastItem) {
     list-style: none;
   }
 
-  .sb-toast + .sb-toast {
+  .er-toast + .er-toast {
     margin-top: 0.5rem;
   }
 
-  .sb-toast {
+  .er-toast {
     display: flex;
     align-items: flex-start;
     gap: 0.625rem;
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-lg);
+    box-shadow: var(--er-shadow-lg);
     pointer-events: auto;
   }
 
-  .sb-toast-icon {
+  .er-toast-icon {
     flex-shrink: 0;
     width: 1.125rem;
     height: 1.125rem;
     margin-top: 0.0625rem;
   }
 
-  .sb-toast[data-variant='success'] .sb-toast-icon {
-    color: var(--sb-success);
+  .er-toast[data-variant='success'] .er-toast-icon {
+    color: var(--er-success);
   }
 
-  .sb-toast[data-variant='error'] .sb-toast-icon {
-    color: var(--sb-destructive);
+  .er-toast[data-variant='error'] .er-toast-icon {
+    color: var(--er-destructive);
   }
 
-  .sb-toast[data-variant='warning'] .sb-toast-icon {
-    color: var(--sb-warning);
+  .er-toast[data-variant='warning'] .er-toast-icon {
+    color: var(--er-warning);
   }
 
-  .sb-toast[data-variant='info'] .sb-toast-icon {
-    color: var(--sb-info);
+  .er-toast[data-variant='info'] .er-toast-icon {
+    color: var(--er-info);
   }
 
-  .sb-toast-body {
+  .er-toast-body {
     flex: 1;
     min-width: 0;
   }
 
-  .sb-toast-title,
-  .sb-toast-description {
+  .er-toast-title,
+  .er-toast-description {
     margin: 0;
     line-height: 1.35;
     overflow-wrap: anywhere;
   }
 
-  .sb-toast-title {
+  .er-toast-title {
     font-weight: 500;
   }
 
-  .sb-toast-description {
+  .er-toast-description {
     margin-top: 0.125rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-toast-action {
+  .er-toast-action {
     flex-shrink: 0;
     align-self: center;
     height: 1.75rem;
     padding: 0 0.625rem;
     border: 0;
-    border-radius: var(--sb-radius-sm);
-    background: var(--sb-primary);
-    color: var(--sb-primary-foreground);
+    border-radius: var(--er-radius-sm);
+    background: var(--er-primary);
+    color: var(--er-primary-foreground);
     font: inherit;
     font-size: 0.8125rem;
     font-weight: 500;
     cursor: pointer;
   }
 
-  .sb-toast-close {
+  .er-toast-close {
     flex-shrink: 0;
     display: grid;
     place-content: center;
@@ -240,48 +240,48 @@ function runAction(toast: ToastItem) {
     height: 1.25rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
   }
 
-  .sb-toast-close:hover {
-    color: var(--sb-foreground);
+  .er-toast-close:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-toast-close svg {
+  .er-toast-close svg {
     width: 0.875rem;
     height: 0.875rem;
   }
 
-  .sb-toast-action:focus-visible,
-  .sb-toast-close:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-toast-action:focus-visible,
+  .er-toast-close:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-toast-enter-active,
-  .sb-toast-leave-active,
-  .sb-toast-move {
+  .er-toast-enter-active,
+  .er-toast-leave-active,
+  .er-toast-move {
     transition:
-      opacity calc(var(--sb-duration) * 1.5) var(--sb-ease),
-      transform calc(var(--sb-duration) * 1.5) var(--sb-ease);
+      opacity calc(var(--er-duration) * 1.5) var(--er-ease),
+      transform calc(var(--er-duration) * 1.5) var(--er-ease);
   }
 
   /* Leaving toasts step out of the flow so the rest can slide into place. */
-  .sb-toast-leave-active {
+  .er-toast-leave-active {
     position: absolute;
   }
 
-  .sb-toast-enter-from,
-  .sb-toast-leave-to {
+  .er-toast-enter-from,
+  .er-toast-leave-to {
     opacity: 0;
     transform: translateY(0.75rem);
   }
 
-  .sb-toaster[data-position^='top'] .sb-toast-enter-from,
-  .sb-toaster[data-position^='top'] .sb-toast-leave-to {
+  .er-toaster[data-position^='top'] .er-toast-enter-from,
+  .er-toaster[data-position^='top'] .er-toast-leave-to {
     transform: translateY(-0.75rem);
   }
 }

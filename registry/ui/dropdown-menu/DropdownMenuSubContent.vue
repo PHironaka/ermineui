@@ -58,7 +58,7 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <Portal>
-    <Transition name="sb-pop">
+    <Transition name="er-pop">
       <div
         v-if="active"
         :id="sub.contentId"
@@ -66,7 +66,7 @@ function onKeydown(event: KeyboardEvent) {
         v-bind="$attrs"
         role="menu"
         tabindex="-1"
-        class="sb-floating sb-menu"
+        class="er-floating er-menu"
         @keydown="onKeydown"
         @pointerenter="sub.cancelClose()"
         @focusin="sub.cancelClose()"

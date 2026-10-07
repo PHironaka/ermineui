@@ -1,3 +1,3 @@
 <template>
-  <span class="sb-menu-shortcut" aria-hidden="true"><slot /></span>
+  <span class="er-menu-shortcut" aria-hidden="true"><slot /></span>
 </template>

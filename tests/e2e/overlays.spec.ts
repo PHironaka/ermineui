@@ -142,7 +142,7 @@ test.describe('hover card', () => {
   test('appears after a pause, can be moved into, and closes on leaving', async ({ page }) => {
     const link = demo(page, 'hover-card').getByRole('link', { name: 'Ines Kovač' }).first()
     await link.hover()
-    const card = page.locator('.sb-hover-card')
+    const card = page.locator('.er-hover-card')
     await expect(card).toBeVisible()
     await card.getByRole('link', { name: 'See her deployments' }).hover()
     await page.waitForTimeout(400)
@@ -209,12 +209,12 @@ test.describe('tour', () => {
     await expect(tour).toContainText('1 of 3')
 
     const target = (await card.locator('#tour-deploy').boundingBox())!
-    const spotlight = (await page.locator('.sb-tour-spotlight').boundingBox())!
+    const spotlight = (await page.locator('.er-tour-spotlight').boundingBox())!
     expect(Math.abs(spotlight.x - (target.x - 6))).toBeLessThan(2)
     expect(Math.abs(spotlight.width - (target.width + 12))).toBeLessThan(2)
 
     // Scoped to the tour's own card: the page behind has other "Next" buttons.
-    const controls = page.locator('.sb-tour')
+    const controls = page.locator('.er-tour')
     await controls.getByRole('button', { name: 'Next' }).click()
     await expect(page.getByRole('dialog', { name: 'Find anything' })).toContainText('2 of 3')
     await controls.getByRole('button', { name: 'Back' }).click()
@@ -222,16 +222,16 @@ test.describe('tour', () => {
     await controls.getByRole('button', { name: 'Next' }).click()
     await controls.getByRole('button', { name: 'Next' }).click()
     await controls.getByRole('button', { name: 'Done' }).click()
-    await expect(page.locator('.sb-tour')).toBeHidden()
+    await expect(page.locator('.er-tour')).toBeHidden()
     await expect(page.getByText('Tour finished')).toBeVisible()
   })
 
   test('Escape ends it and returns focus', async ({ page }) => {
     const start = demo(page, 'alert-dialog').getByRole('button', { name: 'Start the tour' })
     await start.click()
-    await expect(page.locator('.sb-tour')).toBeVisible()
+    await expect(page.locator('.er-tour')).toBeVisible()
     await page.keyboard.press('Escape')
-    await expect(page.locator('.sb-tour')).toBeHidden()
+    await expect(page.locator('.er-tour')).toBeHidden()
     await expect(start).toBeFocused()
   })
 })

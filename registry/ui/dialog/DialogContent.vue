@@ -42,15 +42,15 @@ watch(
 
 <template>
   <Portal>
-    <Transition name="sb-dialog">
-      <div v-if="dialog.open.value" class="sb-dialog-overlay">
+    <Transition name="er-dialog">
+      <div v-if="dialog.open.value" class="er-dialog-overlay">
         <div
           ref="content"
           v-bind="$attrs"
           role="dialog"
           aria-modal="true"
           tabindex="-1"
-          class="sb-dialog-content"
+          class="er-dialog-content"
           :aria-labelledby="dialog.titleId"
           :aria-describedby="dialog.hasDescription.value ? dialog.descriptionId : undefined"
         >
@@ -58,7 +58,7 @@ watch(
           <button
             v-if="showClose"
             type="button"
-            class="sb-dialog-x"
+            class="er-dialog-x"
             :aria-label="closeLabel"
             @click="dialog.setOpen(false)"
           >
@@ -75,60 +75,60 @@ watch(
 <style>
 @layer components {
   /* The overlay is also the scroll container, so a tall dialog scrolls instead of being cut off. */
-  .sb-dialog-overlay {
+  .er-dialog-overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--sb-z-overlay);
+    z-index: var(--er-z-overlay);
     display: grid;
     place-items: center;
     padding: 1rem;
-    background: var(--sb-overlay);
+    background: var(--er-overlay);
     overflow-y: auto;
   }
 
-  .sb-dialog-content {
+  .er-dialog-content {
     position: relative;
     display: grid;
     gap: 1rem;
     width: 100%;
     max-width: 32rem;
     padding: 1.5rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-background);
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-lg);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-background);
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-lg);
     outline: none;
   }
 
-  .sb-dialog-header {
+  .er-dialog-header {
     display: grid;
     gap: 0.5rem;
     padding-right: 1.5rem;
   }
 
-  .sb-dialog-title {
+  .er-dialog-title {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.2;
   }
 
-  .sb-dialog-description {
+  .er-dialog-description {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
     line-height: 1.5;
   }
 
-  .sb-dialog-footer {
+  .er-dialog-footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.5rem;
   }
 
-  .sb-dialog-x {
+  .er-dialog-x {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -138,43 +138,43 @@ watch(
     height: 1.5rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
-    transition: color var(--sb-duration);
+    transition: color var(--er-duration);
   }
 
-  .sb-dialog-x:hover {
-    color: var(--sb-foreground);
+  .er-dialog-x:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-dialog-x:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-dialog-x:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-dialog-x svg {
+  .er-dialog-x svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-dialog-enter-active,
-  .sb-dialog-leave-active,
-  .sb-dialog-enter-active .sb-dialog-content,
-  .sb-dialog-leave-active .sb-dialog-content {
+  .er-dialog-enter-active,
+  .er-dialog-leave-active,
+  .er-dialog-enter-active .er-dialog-content,
+  .er-dialog-leave-active .er-dialog-content {
     transition:
-      opacity var(--sb-duration) var(--sb-ease),
-      transform var(--sb-duration) var(--sb-ease);
+      opacity var(--er-duration) var(--er-ease),
+      transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-dialog-enter-from,
-  .sb-dialog-leave-to {
+  .er-dialog-enter-from,
+  .er-dialog-leave-to {
     opacity: 0;
   }
 
-  .sb-dialog-enter-from .sb-dialog-content,
-  .sb-dialog-leave-to .sb-dialog-content {
+  .er-dialog-enter-from .er-dialog-content,
+  .er-dialog-leave-to .er-dialog-content {
     transform: scale(0.96);
   }
 }

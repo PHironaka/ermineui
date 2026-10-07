@@ -47,7 +47,7 @@ const length = computed(() => Math.PI * radius.value)
 
 <template>
   <div
-    class="sb-gauge"
+    class="er-gauge"
     role="meter"
     :aria-label="label"
     :aria-valuenow="value"
@@ -59,79 +59,79 @@ const length = computed(() => Math.PI * radius.value)
   >
     <svg :width="size" :height="size / 2 + STROKE / 2" aria-hidden="true">
       <!-- The unfilled part is a pale step of the same colour, so the state reads across the whole arc. -->
-      <path class="sb-gauge-track" :d="arc" :stroke-width="STROKE" />
-      <path class="sb-gauge-fill" :d="arc" :stroke-width="STROKE" :stroke-dasharray="`${length * share} ${length}`" />
+      <path class="er-gauge-track" :d="arc" :stroke-width="STROKE" />
+      <path class="er-gauge-fill" :d="arc" :stroke-width="STROKE" :stroke-dasharray="`${length * share} ${length}`" />
     </svg>
-    <div class="sb-gauge-text">
+    <div class="er-gauge-text">
       <strong>{{ shown }}</strong>
       <span>{{ label }}</span>
       <!-- The state is written out as well as coloured. -->
-      <span v-if="stateText" class="sb-gauge-state">{{ stateText }}</span>
+      <span v-if="stateText" class="er-gauge-state">{{ stateText }}</span>
     </div>
   </div>
 </template>
 
 <style>
 @layer components {
-  .sb-gauge {
-    --sb-gauge-color: var(--sb-chart-1);
+  .er-gauge {
+    --er-gauge-color: var(--er-chart-1);
     position: relative;
     display: grid;
     justify-items: center;
     max-width: 100%;
   }
 
-  .sb-gauge[data-state='warning'] {
-    --sb-gauge-color: var(--sb-warning);
+  .er-gauge[data-state='warning'] {
+    --er-gauge-color: var(--er-warning);
   }
 
-  .sb-gauge[data-state='critical'] {
-    --sb-gauge-color: var(--sb-destructive);
+  .er-gauge[data-state='critical'] {
+    --er-gauge-color: var(--er-destructive);
   }
 
-  .sb-gauge svg {
+  .er-gauge svg {
     display: block;
     max-width: 100%;
   }
 
-  .sb-gauge path {
+  .er-gauge path {
     fill: none;
     stroke-linecap: round;
   }
 
-  .sb-gauge-track {
-    stroke: color-mix(in oklab, var(--sb-gauge-color) 18%, transparent);
+  .er-gauge-track {
+    stroke: color-mix(in oklab, var(--er-gauge-color) 18%, transparent);
   }
 
-  .sb-gauge-fill {
-    stroke: var(--sb-gauge-color);
-    transition: stroke-dasharray 300ms var(--sb-ease);
+  .er-gauge-fill {
+    stroke: var(--er-gauge-color);
+    transition: stroke-dasharray 300ms var(--er-ease);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .sb-gauge-fill {
+    .er-gauge-fill {
       transition: none;
     }
   }
 
-  .sb-gauge-text {
+  .er-gauge-text {
     display: grid;
     justify-items: center;
     margin-top: -1.75rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     text-align: center;
   }
 
-  .sb-gauge-text strong {
-    color: var(--sb-foreground);
+  .er-gauge-text strong {
+    color: var(--er-foreground);
     font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
   }
 
-  .sb-gauge-state {
-    color: var(--sb-foreground);
+  .er-gauge-state {
+    color: var(--er-foreground);
     font-size: 0.75rem;
     font-weight: 600;
   }

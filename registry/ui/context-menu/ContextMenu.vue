@@ -36,13 +36,13 @@ provideContextMenu({
 <template>
   <slot :open="open" />
   <Portal>
-    <span ref="anchor" class="sb-context-menu-point" aria-hidden="true" :style="{ left: `${point.x}px`, top: `${point.y}px` }" />
+    <span ref="anchor" class="er-context-menu-point" aria-hidden="true" :style="{ left: `${point.x}px`, top: `${point.y}px` }" />
   </Portal>
 </template>
 
 <style>
 @layer components {
-  .sb-context-menu-point {
+  .er-context-menu-point {
     position: fixed;
     width: 0;
     height: 0;

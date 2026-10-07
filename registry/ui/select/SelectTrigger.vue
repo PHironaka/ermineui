@@ -31,7 +31,7 @@ function onKeydown(event: KeyboardEvent) {
     :ref="setAnchor"
     type="button"
     role="combobox"
-    class="sb-select-trigger"
+    class="er-select-trigger"
     aria-haspopup="listbox"
     :aria-expanded="select.open.value"
     :aria-controls="select.contentId"
@@ -41,7 +41,7 @@ function onKeydown(event: KeyboardEvent) {
     @click="select.setOpen(!select.open.value)"
     @keydown="onKeydown"
   >
-    <span class="sb-select-value">
+    <span class="er-select-value">
       <slot :value="select.value.value" :label="label">{{ label ?? placeholder }}</slot>
     </span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -52,7 +52,7 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-select-trigger {
+  .er-select-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,52 +60,52 @@ function onKeydown(event: KeyboardEvent) {
     width: 100%;
     height: 2.25rem;
     padding: 0 0.75rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     font-family: inherit;
     font-size: 0.875rem;
     line-height: 1.25rem;
     text-align: left;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     cursor: pointer;
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
-  .sb-select-trigger:focus-visible {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-select-trigger:focus-visible {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-select-trigger:disabled {
+  .er-select-trigger:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-select-trigger[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-select-trigger[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 
-  .sb-select-trigger[data-placeholder] .sb-select-value {
-    color: var(--sb-muted-foreground);
+  .er-select-trigger[data-placeholder] .er-select-value {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-select-value {
+  .er-select-value {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .sb-select-trigger svg {
+  .er-select-trigger svg {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 }
 </style>

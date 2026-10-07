@@ -137,10 +137,10 @@ test.describe('stat', () => {
   test('writes the direction as a sign and an arrow, and marks good and bad', async ({ page }) => {
     const card = demo(page, 'stat')
     await expect(card.getByText('1.8M')).toBeVisible()
-    await expect(card.locator('.sb-stat-delta').nth(0)).toHaveAttribute('data-tone', 'good')
-    await expect(card.locator('.sb-stat-delta').nth(0)).toContainText('+12.4%')
+    await expect(card.locator('.er-stat-delta').nth(0)).toHaveAttribute('data-tone', 'good')
+    await expect(card.locator('.er-stat-delta').nth(0)).toContainText('+12.4%')
     // Error rate going down is good news; build time going up is bad news.
-    await expect(card.locator('.sb-stat-delta').nth(1)).toHaveAttribute('data-tone', 'good')
-    await expect(card.locator('.sb-stat-delta').nth(2)).toHaveAttribute('data-tone', 'bad')
+    await expect(card.locator('.er-stat-delta').nth(1)).toHaveAttribute('data-tone', 'good')
+    await expect(card.locator('.er-stat-delta').nth(2)).toHaveAttribute('data-tone', 'bad')
   })
 })

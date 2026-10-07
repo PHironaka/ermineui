@@ -151,22 +151,22 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="sb-calendar">
-    <div class="sb-calendar-header">
-      <button type="button" class="sb-calendar-nav" aria-label="Previous month" :disabled="!canGoBack" @click="shiftMonth(-1)">
+  <div class="er-calendar">
+    <div class="er-calendar-header">
+      <button type="button" class="er-calendar-nav" aria-label="Previous month" :disabled="!canGoBack" @click="shiftMonth(-1)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m15 18-6-6 6-6" />
         </svg>
       </button>
-      <div :id="titleId" class="sb-calendar-title" aria-live="polite">{{ title }}</div>
-      <button type="button" class="sb-calendar-nav" aria-label="Next month" :disabled="!canGoForward" @click="shiftMonth(1)">
+      <div :id="titleId" class="er-calendar-title" aria-live="polite">{{ title }}</div>
+      <button type="button" class="er-calendar-nav" aria-label="Next month" :disabled="!canGoForward" @click="shiftMonth(1)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m9 18 6-6-6-6" />
         </svg>
       </button>
     </div>
 
-    <table ref="grid" role="grid" class="sb-calendar-grid" :aria-labelledby="titleId" @keydown="onKeydown">
+    <table ref="grid" role="grid" class="er-calendar-grid" :aria-labelledby="titleId" @keydown="onKeydown">
       <thead>
         <tr>
           <th v-for="(name, index) in weekdays" :key="index" scope="col" :abbr="name.long">{{ name.short }}</th>
@@ -178,7 +178,7 @@ function onKeydown(event: KeyboardEvent) {
           <td v-for="(cell, column) in week" :key="column" role="gridcell" :aria-selected="cell.date === value || cell.inRange">
             <button
               type="button"
-              class="sb-calendar-day"
+              class="er-calendar-day"
               :tabindex="cell.date === focused ? 0 : -1"
               :aria-label="cell.label"
               :aria-current="cell.date === today ? 'date' : undefined"
@@ -205,12 +205,12 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-calendar {
+  .er-calendar {
     width: max-content;
     font-size: 0.875rem;
   }
 
-  .sb-calendar-header {
+  .er-calendar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -218,124 +218,124 @@ function onKeydown(event: KeyboardEvent) {
     margin-bottom: 0.5rem;
   }
 
-  .sb-calendar-title {
+  .er-calendar-title {
     font-weight: 500;
   }
 
-  .sb-calendar-nav {
+  .er-calendar-nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 1.75rem;
     height: 1.75rem;
     padding: 0;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-sm);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-sm);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     cursor: pointer;
-    transition: background-color var(--sb-duration);
+    transition: background-color var(--er-duration);
   }
 
-  .sb-calendar-nav:hover {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-calendar-nav:hover {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-calendar-nav:disabled {
+  .er-calendar-nav:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-calendar-nav svg {
+  .er-calendar-nav svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .sb-calendar-grid {
+  .er-calendar-grid {
     border-collapse: collapse;
   }
 
-  .sb-calendar-grid th {
+  .er-calendar-grid th {
     width: 2.25rem;
     height: 2rem;
     padding: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.75rem;
     font-weight: 400;
   }
 
-  .sb-calendar-grid td {
+  .er-calendar-grid td {
     padding: 0;
   }
 
-  .sb-calendar-day {
+  .er-calendar-day {
     display: block;
     width: 2.25rem;
     height: 2.25rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-md);
+    border-radius: var(--er-radius-md);
     background: transparent;
     color: inherit;
     font: inherit;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     transition:
-      background-color var(--sb-duration),
-      color var(--sb-duration);
+      background-color var(--er-duration),
+      color var(--er-duration);
   }
 
-  .sb-calendar-day:hover {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-calendar-day:hover {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-calendar-nav:focus-visible,
-  .sb-calendar-day:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-calendar-nav:focus-visible,
+  .er-calendar-day:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 1px;
   }
 
-  .sb-calendar-day[data-outside] {
-    color: var(--sb-muted-foreground);
+  .er-calendar-day[data-outside] {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-calendar-day[data-today] {
-    box-shadow: inset 0 0 0 1px var(--sb-input);
+  .er-calendar-day[data-today] {
+    box-shadow: inset 0 0 0 1px var(--er-input);
     font-weight: 600;
   }
 
   /* A range is one continuous band: square where days join, rounded only at its two ends. */
-  .sb-calendar-day[data-in-range] {
+  .er-calendar-day[data-in-range] {
     border-radius: 0;
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
   }
 
-  .sb-calendar-day[data-selected],
-  .sb-calendar-day[data-range-start],
-  .sb-calendar-day[data-range-end] {
-    background: var(--sb-primary);
-    color: var(--sb-primary-foreground);
+  .er-calendar-day[data-selected],
+  .er-calendar-day[data-range-start],
+  .er-calendar-day[data-range-end] {
+    background: var(--er-primary);
+    color: var(--er-primary-foreground);
     box-shadow: none;
   }
 
-  .sb-calendar-day[data-range-start] {
-    border-radius: var(--sb-radius-md) 0 0 var(--sb-radius-md);
+  .er-calendar-day[data-range-start] {
+    border-radius: var(--er-radius-md) 0 0 var(--er-radius-md);
   }
 
-  .sb-calendar-day[data-range-end] {
-    border-radius: 0 var(--sb-radius-md) var(--sb-radius-md) 0;
+  .er-calendar-day[data-range-end] {
+    border-radius: 0 var(--er-radius-md) var(--er-radius-md) 0;
   }
 
-  .sb-calendar-day[data-range-start][data-range-end] {
-    border-radius: var(--sb-radius-md);
+  .er-calendar-day[data-range-start][data-range-end] {
+    border-radius: var(--er-radius-md);
   }
 
-  .sb-calendar-day[aria-disabled='true'] {
+  .er-calendar-day[aria-disabled='true'] {
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     opacity: 0.45;
     cursor: not-allowed;
   }

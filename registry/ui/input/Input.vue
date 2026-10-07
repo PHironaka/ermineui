@@ -3,71 +3,71 @@ const model = defineModel<string | number>()
 </script>
 
 <template>
-  <input v-model="model" class="sb-input" />
+  <input v-model="model" class="er-input" />
 </template>
 
 <style>
 @layer components {
-  .sb-input {
+  .er-input {
     display: block;
     width: 100%;
     min-width: 0;
     height: 2.25rem;
     padding: 0 0.75rem;
-    border: 1px solid var(--sb-input);
-    border-radius: var(--sb-radius-md);
-    background: var(--sb-input-background);
-    color: var(--sb-foreground);
+    border: 1px solid var(--er-input);
+    border-radius: var(--er-radius-md);
+    background: var(--er-input-background);
+    color: var(--er-foreground);
     font-family: inherit;
     /* 16px stops iOS from zooming the page when the field is focused. */
     font-size: 1rem;
     line-height: 1.25rem;
-    box-shadow: var(--sb-shadow-xs);
+    box-shadow: var(--er-shadow-xs);
     transition:
-      border-color var(--sb-duration),
-      outline-color var(--sb-duration);
+      border-color var(--er-duration),
+      outline-color var(--er-duration);
   }
 
   @media (min-width: 48rem) {
-    .sb-input {
+    .er-input {
       font-size: 0.875rem;
     }
   }
 
-  .sb-input::placeholder {
-    color: var(--sb-muted-foreground);
+  .er-input::placeholder {
+    color: var(--er-muted-foreground);
   }
 
-  .sb-input:focus-visible {
-    border-color: var(--sb-ring);
-    outline: 2px solid color-mix(in oklab, var(--sb-ring) 45%, transparent);
+  .er-input:focus-visible {
+    border-color: var(--er-ring);
+    outline: 2px solid color-mix(in oklab, var(--er-ring) 45%, transparent);
     outline-offset: 0;
   }
 
-  .sb-input:disabled {
+  .er-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
 
-  .sb-input[aria-invalid='true'] {
-    border-color: var(--sb-destructive);
+  .er-input[aria-invalid='true'] {
+    border-color: var(--er-destructive);
   }
 
-  .sb-input[aria-invalid='true']:focus-visible {
-    outline-color: color-mix(in oklab, var(--sb-destructive) 35%, transparent);
+  .er-input[aria-invalid='true']:focus-visible {
+    outline-color: color-mix(in oklab, var(--er-destructive) 35%, transparent);
   }
 
-  .sb-input[type='file'] {
+  .er-input[type='file'] {
     padding: 0.3125rem 0.75rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-input::file-selector-button {
+  .er-input::file-selector-button {
     margin-right: 0.75rem;
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--sb-foreground);
+    color: var(--er-foreground);
     font: inherit;
     font-weight: 500;
   }

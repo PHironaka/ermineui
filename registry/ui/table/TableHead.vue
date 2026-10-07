@@ -11,5 +11,5 @@ withDefaults(
 </script>
 
 <template>
-  <th class="sb-table-head" :scope="scope" :data-align="align"><slot /></th>
+  <th class="er-table-head" :scope="scope" :data-align="align"><slot /></th>
 </template>

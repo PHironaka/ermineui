@@ -13,5 +13,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <p :id="dialog.descriptionId" class="sb-alert-dialog-description"><slot /></p>
+  <p :id="dialog.descriptionId" class="er-alert-dialog-description"><slot /></p>
 </template>

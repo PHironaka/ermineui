@@ -20,14 +20,14 @@ const fill = computed(() => {
 </script>
 
 <template>
-  <input v-model.number="model" type="range" class="sb-slider" :min="min" :max="max" :step="step" :style="{ '--sb-slider-fill': fill }" />
+  <input v-model.number="model" type="range" class="er-slider" :min="min" :max="max" :step="step" :style="{ '--er-slider-fill': fill }" />
 </template>
 
 <style>
 @layer components {
   /* A real range input, restyled — so arrow keys, Home / End, touch and forms all work as usual. */
-  .sb-slider {
-    --sb-slider-track: color-mix(in oklab, var(--sb-primary) 15%, transparent);
+  .er-slider {
+    --er-slider-track: color-mix(in oklab, var(--er-primary) 15%, transparent);
     appearance: none;
     display: block;
     width: 100%;
@@ -37,59 +37,59 @@ const fill = computed(() => {
     cursor: pointer;
   }
 
-  .sb-slider::-webkit-slider-runnable-track {
+  .er-slider::-webkit-slider-runnable-track {
     height: 0.375rem;
     border-radius: 999px;
-    background: linear-gradient(to right, var(--sb-primary) var(--sb-slider-fill), var(--sb-slider-track) var(--sb-slider-fill));
+    background: linear-gradient(to right, var(--er-primary) var(--er-slider-fill), var(--er-slider-track) var(--er-slider-fill));
   }
 
-  .sb-slider::-moz-range-track {
+  .er-slider::-moz-range-track {
     height: 0.375rem;
     border-radius: 999px;
-    background: var(--sb-slider-track);
+    background: var(--er-slider-track);
   }
 
-  .sb-slider::-moz-range-progress {
+  .er-slider::-moz-range-progress {
     height: 0.375rem;
     border-radius: 999px;
-    background: var(--sb-primary);
+    background: var(--er-primary);
   }
 
-  .sb-slider::-webkit-slider-thumb {
+  .er-slider::-webkit-slider-thumb {
     appearance: none;
     width: 1rem;
     height: 1rem;
     margin-top: -0.3125rem;
-    border: 1px solid var(--sb-primary);
+    border: 1px solid var(--er-primary);
     border-radius: 50%;
-    background: var(--sb-background);
-    box-shadow: var(--sb-shadow-sm);
-    transition: box-shadow var(--sb-duration);
+    background: var(--er-background);
+    box-shadow: var(--er-shadow-sm);
+    transition: box-shadow var(--er-duration);
   }
 
-  .sb-slider::-moz-range-thumb {
+  .er-slider::-moz-range-thumb {
     box-sizing: border-box;
     width: 1rem;
     height: 1rem;
-    border: 1px solid var(--sb-primary);
+    border: 1px solid var(--er-primary);
     border-radius: 50%;
-    background: var(--sb-background);
-    box-shadow: var(--sb-shadow-sm);
+    background: var(--er-background);
+    box-shadow: var(--er-shadow-sm);
   }
 
-  .sb-slider:focus-visible {
+  .er-slider:focus-visible {
     outline: none;
   }
 
-  .sb-slider:focus-visible::-webkit-slider-thumb {
-    box-shadow: 0 0 0 4px color-mix(in oklab, var(--sb-ring) 35%, transparent);
+  .er-slider:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--er-ring) 35%, transparent);
   }
 
-  .sb-slider:focus-visible::-moz-range-thumb {
-    box-shadow: 0 0 0 4px color-mix(in oklab, var(--sb-ring) 35%, transparent);
+  .er-slider:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--er-ring) 35%, transparent);
   }
 
-  .sb-slider:disabled {
+  .er-slider:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }

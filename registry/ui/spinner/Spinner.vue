@@ -11,7 +11,7 @@ withDefaults(
 
 <template>
   <svg
-    class="sb-spinner"
+    class="er-spinner"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -29,24 +29,24 @@ withDefaults(
 
 <style>
 @layer components {
-  .sb-spinner {
+  .er-spinner {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    animation: sb-spinner-turn 0.7s linear infinite;
+    animation: er-spinner-turn 0.7s linear infinite;
   }
 
-  .sb-spinner[data-size='sm'] {
+  .er-spinner[data-size='sm'] {
     width: 0.75rem;
     height: 0.75rem;
   }
 
-  .sb-spinner[data-size='lg'] {
+  .er-spinner[data-size='lg'] {
     width: 1.5rem;
     height: 1.5rem;
   }
 
-  @keyframes sb-spinner-turn {
+  @keyframes er-spinner-turn {
     to {
       transform: rotate(360deg);
     }
@@ -54,7 +54,7 @@ withDefaults(
 
   /* The turning is the whole message, so reduced motion slows it rather than stopping it. */
   @media (prefers-reduced-motion: reduce) {
-    .sb-spinner {
+    .er-spinner {
       animation-duration: 2.5s;
     }
   }

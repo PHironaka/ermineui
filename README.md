@@ -1,4 +1,4 @@
-# Sable UI
+# Ermine UI
 
 Vue 3 components you copy into your project and own, in the spirit of shadcn/ui.
 
@@ -7,7 +7,7 @@ Vue 3 components you copy into your project and own, in the spirit of shadcn/ui.
 - **Behavior written from scratch.** Positioning, focus trapping, dismissal, keyboard navigation and scroll locking live in six small helper files that are copied in alongside the components. The only dependency is Vue (3.5 or newer).
 - **Copy-in distribution.** A small command line copies component source into your project. Nothing is imported from `node_modules`, so every line is yours to edit.
 
-The npm package for the command line is `ermine-ui` (free on npm when checked on 7 October 2026, and not yet published). The project itself is still called Sable throughout: the `sable` command, `sable.json`, `sable.css` and the `sb-` prefix.
+The npm package for the command line is `ermine-ui` (free on npm when checked on 7 October 2026, and not yet published). The project was called Sable until then; everything was renamed together, including the CSS prefix, which went from `sb-` to `er-`.
 
 ## Components
 
@@ -99,28 +99,28 @@ Until the CLI is published, run it from this folder (or `npm link` inside `cli/`
 
 ```sh
 # from your app's folder
-node /path/to/sable-ui/cli/bin/sable.mjs init
-node /path/to/sable-ui/cli/bin/sable.mjs add button dialog select
+node /path/to/ermine-ui/cli/bin/ermine.mjs init
+node /path/to/ermine-ui/cli/bin/ermine.mjs add button dialog select
 ```
 
 Once published this becomes `npx ermine-ui init` and `npx ermine-ui add button`.
 
-`init` detects the framework, suggests folders, writes `sable.json` and copies the theme stylesheet. `add` copies the components you name plus the helpers and components they depend on. Files that already exist are kept unless you pass `--overwrite`.
+`init` detects the framework, suggests folders, writes `ermine.json` and copies the theme stylesheet. `add` copies the components you name plus the helpers and components they depend on. Files that already exist are kept unless you pass `--overwrite`.
 
 The theme stylesheet is yours and is never overwritten, even with `--overwrite`. If a component you add later relies on variables your copy does not have yet (chart colours and the type scale arrived after the first release), `add` appends just those variables to the end of your file, says so, and leaves everything already there untouched.
 
 | Command | What it does |
 |---|---|
-| `sable init` | Create `sable.json` and the theme stylesheet (`-y` accepts the suggested folders) |
-| `sable add <name...>` | Copy components and their dependencies (`--all` for everything) |
-| `sable list` | Show available components and which are already installed |
+| `ermine init` | Create `ermine.json` and the theme stylesheet (`-y` accepts the suggested folders) |
+| `ermine add <name...>` | Copy components and their dependencies (`--all` for everything) |
+| `ermine list` | Show available components and which are already installed |
 | `--registry <url or path>` | Read components from a different `registry.json`, such as your own fork |
 
 ### Vue + Vite
 
 ```ts
 // src/main.ts
-import './styles/sable.css'
+import './styles/ermine.css'
 ```
 
 ```vue
@@ -138,7 +138,7 @@ import { Button } from '@/components/ui/button'
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  css: ['~/assets/css/sable.css'],
+  css: ['~/assets/css/ermine.css'],
   components: [
     // Auto-import the components by their own names: <Button>, <DialogContent>, ...
     { path: '~/components/ui', pathPrefix: false, extensions: ['.vue'] },
@@ -155,7 +155,7 @@ Add the Vue integration (`npx astro add vue`), import the stylesheet in a layout
 
 ```astro
 ---
-import '../styles/sable.css'
+import '../styles/ermine.css'
 import SettingsForm from '../components/SettingsForm.vue'
 ---
 <SettingsForm client:load />
@@ -167,12 +167,12 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 
 ## Theming
 
-`sable.css` defines every colour, radius, shadow and duration as a CSS variable. Edit the values and all components follow.
+`ermine.css` defines every colour, radius, shadow and duration as a CSS variable. Edit the values and all components follow.
 
 ```css
 :root {
-  --sb-primary: light-dark(oklch(0.5 0.2 265), oklch(0.75 0.15 265));
-  --sb-radius: 0.375rem;
+  --er-primary: light-dark(oklch(0.5 0.2 265), oklch(0.75 0.15 265));
+  --er-radius: 0.375rem;
 }
 ```
 
@@ -180,12 +180,12 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 - **Overriding a component.** Component styles sit in `@layer components`, so any rule you write outside a layer wins without `!important`:
 
   ```css
-  .sb-button[data-variant='outline'] { border-style: dashed; }
+  .er-button[data-variant='outline'] { border-style: dashed; }
   ```
 
   Or edit the `<style>` block in the component file; it is your code.
 - **Variants and state are data attributes** (`data-variant`, `data-size`, `data-state`, `data-side`), which keeps selectors readable.
-- **With Tailwind.** The layer is named `components`, the same layer Tailwind uses, so utility classes on a Sable component override its defaults.
+- **With Tailwind.** The layer is named `components`, the same layer Tailwind uses, so utility classes on a Ermine component override its defaults.
 
 ## Patterns
 
@@ -303,7 +303,7 @@ Typing filters on each item's text (or its `text-value`). Emptying the field and
 />
 ```
 
-`type` is `line`, `area` or `bar`. Each row of `data` is one position along the bottom axis; each entry in `series` names the property to plot. The value axis always starts at zero. Colours come from `--sb-chart-1` to `--sb-chart-8` in `sable.css`, handed out in the order of `series`, so keep that order stable and a series keeps its colour. Pointing at the chart, or focusing it and pressing the arrow keys, shows every series' value at that position, and "Show table" swaps the chart for the same numbers as a table. Give the chart a visible heading of your own; `label` is for screen readers. On a surface other than the page or a card, set `--sb-chart-surface` to that surface's colour.
+`type` is `line`, `area` or `bar`. Each row of `data` is one position along the bottom axis; each entry in `series` names the property to plot. The value axis always starts at zero. Colours come from `--er-chart-1` to `--er-chart-8` in `ermine.css`, handed out in the order of `series`, so keep that order stable and a series keeps its colour. Pointing at the chart, or focusing it and pressing the arrow keys, shows every series' value at that position, and "Show table" swaps the chart for the same numbers as a table. Give the chart a visible heading of your own; `label` is for screen readers. On a surface other than the page or a card, set `--er-chart-surface` to that surface's colour.
 
 Clicking a legend entry hides that series and rescales the chart; the rest keep their colours. Bind `v-model:hidden` (an array of series keys) to control it yourself.
 
@@ -457,7 +457,7 @@ The sidebar is the navigation only; placing it beside your page is up to your la
 </ResizablePanels>
 ```
 
-The carousel has no autoplay. Set `--sb-carousel-size: 50%` on it to show two slides at a time. Panel sizes are percentages; `ResizablePanels` fills its parent, so give the parent a height. Nest a second `ResizablePanels` inside a panel for a grid of splits.
+The carousel has no autoplay. Set `--er-carousel-size: 50%` on it to show two slides at a time. Panel sizes are percentages; `ResizablePanels` fills its parent, so give the parent a height. Nest a second `ResizablePanels` inside a panel for a grid of splits.
 
 **Haptics**
 
@@ -571,9 +571,9 @@ Text sizes are fluid: each one is a `clamp()` that grows smoothly from a narrow-
 | `balance` | Evens out line lengths. On by default for headings. |
 | `lines` | Cuts the text off with "…" after that many lines. |
 
-The scale comes from six variables in `sable.css`: the body size at each end (`--sb-type-min`, `--sb-type-max`), how much each step multiplies it by at each end (`--sb-type-ratio-min`, `--sb-type-ratio-max`), and the widths between which text grows (`--sb-type-from`, `--sb-type-range`). Change those and every size follows.
+The scale comes from six variables in `ermine.css`: the body size at each end (`--er-type-min`, `--er-type-max`), how much each step multiplies it by at each end (`--er-type-ratio-min`, `--er-type-ratio-max`), and the widths between which text grows (`--er-type-from`, `--er-type-range`). Change those and every size follows.
 
-To size text to a box instead of the screen, put the class `sb-fluid-container` on the box (a card, a sidebar, a column): fluid text inside it then follows that box's width, so the same heading is smaller in a narrow column. `<Prose fluid="container">` does this for itself. To give any other element a fluid size, add the class `sb-fluid-type` and set `--sb-step` on it.
+To size text to a box instead of the screen, put the class `er-fluid-container` on the box (a card, a sidebar, a column): fluid text inside it then follows that box's width, so the same heading is smaller in a narrow column. `<Prose fluid="container">` does this for itself. To give any other element a fluid size, add the class `er-fluid-type` and set `--er-step` on it.
 
 **Alert dialog**
 
@@ -787,7 +787,7 @@ The value is a `'YYYY-MM-DD'` string, the same as `<input type="date">`, so it c
 </div>
 ```
 
-A skeleton is one line of text by default; size it with `width` and `height`. Each one is hidden from screen readers, so put `aria-busy` on the region that is loading. Set `--sb-skeleton` to change the colour and `--sb-skeleton-highlight` to change the shimmer band.
+A skeleton is one line of text by default; size it with `width` and `height`. Each one is hidden from screen readers, so put `aria-busy` on the region that is loading. Set `--er-skeleton` to change the colour and `--er-skeleton-highlight` to change the shimmer band.
 
 **Toast**
 
@@ -805,7 +805,7 @@ toast('Deployment archived', { action: { label: 'Undo', onClick: restore } })
 
 ```
 registry/
-  styles/sable.css     theme tokens, base styles, shared floating styles
+  styles/ermine.css     theme tokens, base styles, shared floating styles
   lib/                 behavior helpers (copied into the user's project)
     primitive.ts         Primitive (as / as-child) and Portal
     floating.ts          positioning: flip, shift, follow scroll and resize
@@ -814,16 +814,16 @@ registry/
     scroll-lock.ts       page scroll lock for modals
     context.ts           typed provide / inject for compound components
   ui/<name>/           one folder per component, with an index.ts
-cli/                   the `sable` command (no dependencies) and registry.json
+cli/                   the `ermine` command (no dependencies) and registry.json
 scripts/build-registry.mjs   packs registry/ into cli/registry.json
 playground/            Vite app showing every component
 ```
 
 ### Adding a component
 
-1. Create `registry/ui/<name>/` with the `.vue` files and an `index.ts` that exports them. Start `index.ts` with a `/** Name — one-line description. */` comment; `sable list` shows it.
+1. Create `registry/ui/<name>/` with the `.vue` files and an `index.ts` that exports them. Start `index.ts` with a `/** Name — one-line description. */` comment; `ermine list` shows it.
 2. Import helpers as `../../lib/<helper>`. The CLI rewrites these paths for each project.
-3. Put styles in a `<style>` block wrapped in `@layer components { ... }`, with classes prefixed `sb-`.
+3. Put styles in a `<style>` block wrapped in `@layer components { ... }`, with classes prefixed `er-`.
 4. Run `npm run registry`. Dependencies are read from the import statements, so there is no manifest to maintain.
 5. Add a demo to `playground/src/App.vue`.
 

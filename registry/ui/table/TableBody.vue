@@ -1,3 +1,3 @@
 <template>
-  <tbody class="sb-table-body"><slot /></tbody>
+  <tbody class="er-table-body"><slot /></tbody>
 </template>

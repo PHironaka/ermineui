@@ -11,50 +11,50 @@ withDefaults(
 
 <template>
   <!-- Hidden from screen readers: mark the region that is loading with aria-busy="true" instead. -->
-  <div class="sb-skeleton" aria-hidden="true" :data-animation="animation" :data-circle="circle ? '' : undefined" />
+  <div class="er-skeleton" aria-hidden="true" :data-animation="animation" :data-circle="circle ? '' : undefined" />
 </template>
 
 <style>
 @layer components {
   /* One line of text by default. Size it with width / height, in a style attribute or your own class. */
-  .sb-skeleton {
+  .er-skeleton {
     display: block;
     width: 100%;
     height: 1rem;
-    border-radius: var(--sb-radius-sm);
-    background-color: var(--sb-skeleton, color-mix(in oklab, var(--sb-foreground) 10%, transparent));
+    border-radius: var(--er-radius-sm);
+    background-color: var(--er-skeleton, color-mix(in oklab, var(--er-foreground) 10%, transparent));
   }
 
-  .sb-skeleton[data-circle] {
+  .er-skeleton[data-circle] {
     flex-shrink: 0;
     width: auto;
     aspect-ratio: 1;
     border-radius: 50%;
   }
 
-  .sb-skeleton[data-animation='pulse'] {
-    animation: sb-skeleton-pulse 1.6s ease-in-out infinite;
+  .er-skeleton[data-animation='pulse'] {
+    animation: er-skeleton-pulse 1.6s ease-in-out infinite;
   }
 
-  .sb-skeleton[data-animation='shimmer'] {
+  .er-skeleton[data-animation='shimmer'] {
     background-image: linear-gradient(
       100deg,
       transparent 30%,
-      var(--sb-skeleton-highlight, light-dark(oklch(1 0 0 / 65%), oklch(1 0 0 / 9%))) 50%,
+      var(--er-skeleton-highlight, light-dark(oklch(1 0 0 / 65%), oklch(1 0 0 / 9%))) 50%,
       transparent 70%
     );
     background-size: 250% 100%;
     background-repeat: no-repeat;
-    animation: sb-skeleton-shimmer 1.6s linear infinite;
+    animation: er-skeleton-shimmer 1.6s linear infinite;
   }
 
-  @keyframes sb-skeleton-pulse {
+  @keyframes er-skeleton-pulse {
     50% {
       opacity: 0.45;
     }
   }
 
-  @keyframes sb-skeleton-shimmer {
+  @keyframes er-skeleton-shimmer {
     from {
       background-position: 150% 0;
     }
@@ -64,7 +64,7 @@ withDefaults(
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .sb-skeleton {
+    .er-skeleton {
       animation: none !important;
       background-image: none !important;
     }

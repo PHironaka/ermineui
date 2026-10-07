@@ -9,13 +9,13 @@ const item = useAccordionItem()
   <div
     :id="item.contentId"
     role="region"
-    class="sb-accordion-content"
+    class="er-accordion-content"
     :aria-labelledby="item.triggerId"
     :data-state="item.open.value ? 'open' : 'closed'"
     :inert="!item.open.value"
   >
     <div>
-      <div class="sb-accordion-body"><slot /></div>
+      <div class="er-accordion-body"><slot /></div>
     </div>
   </div>
 </template>

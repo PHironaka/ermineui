@@ -1,3 +1,3 @@
 <template>
-  <div class="sb-sheet-header"><slot /></div>
+  <div class="er-sheet-header"><slot /></div>
 </template>

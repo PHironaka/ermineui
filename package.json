@@ -1,15 +1,15 @@
 {
-  "name": "sable-ui-workspace",
+  "name": "ermine-ui-workspace",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Sable UI — copy-in Vue 3 components styled with plain CSS variables.",
+  "description": "Ermine UI — copy-in Vue 3 components styled with plain CSS variables.",
   "scripts": {
     "dev": "vite playground",
     "build": "vite build playground",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "registry": "node scripts/build-registry.mjs",
-    "sable": "node cli/bin/sable.mjs",
+    "ermine": "node cli/bin/ermine.mjs",
     "check:registry": "node scripts/build-registry.mjs && node scripts/check-registry.mjs",
     "test:unit": "node --test \"tests/unit/*.test.ts\"",
     "test:e2e": "playwright test",

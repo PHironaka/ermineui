@@ -1,11 +1,11 @@
 /* While a circular reveal runs, the browser's default cross-fade is switched off: the new look is
    uncovered by a growing circle instead (see revealTransition). */
-html[data-sb-reveal]::view-transition-old(root),
-html[data-sb-reveal]::view-transition-new(root) {
+html[data-er-reveal]::view-transition-old(root),
+html[data-er-reveal]::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-html[data-sb-reveal]::view-transition-new(root) {
+html[data-er-reveal]::view-transition-new(root) {
   z-index: 1;
 }

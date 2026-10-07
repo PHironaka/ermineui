@@ -32,15 +32,15 @@ watch(
 
 <template>
   <Portal>
-    <Transition name="sb-alert-dialog">
-      <div v-if="dialog.open.value" class="sb-alert-dialog-overlay">
+    <Transition name="er-alert-dialog">
+      <div v-if="dialog.open.value" class="er-alert-dialog-overlay">
         <div
           ref="content"
           v-bind="$attrs"
           role="alertdialog"
           aria-modal="true"
           tabindex="-1"
-          class="sb-alert-dialog"
+          class="er-alert-dialog"
           :aria-labelledby="dialog.titleId"
           :aria-describedby="dialog.hasDescription.value ? dialog.descriptionId : undefined"
         >
@@ -53,46 +53,46 @@ watch(
 
 <style>
 @layer components {
-  .sb-alert-dialog-overlay {
+  .er-alert-dialog-overlay {
     position: fixed;
     inset: 0;
-    z-index: var(--sb-z-overlay);
+    z-index: var(--er-z-overlay);
     display: grid;
     place-items: center;
     padding: 1rem;
-    background: var(--sb-overlay);
+    background: var(--er-overlay);
     overflow-y: auto;
   }
 
-  .sb-alert-dialog {
+  .er-alert-dialog {
     display: grid;
     gap: 0.5rem;
     width: 100%;
     max-width: 28rem;
     padding: 1.5rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-background);
-    color: var(--sb-foreground);
-    box-shadow: var(--sb-shadow-lg);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-background);
+    color: var(--er-foreground);
+    box-shadow: var(--er-shadow-lg);
     outline: none;
   }
 
-  .sb-alert-dialog-title {
+  .er-alert-dialog-title {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.3;
   }
 
-  .sb-alert-dialog-description {
+  .er-alert-dialog-description {
     margin: 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.875rem;
     line-height: 1.5;
   }
 
-  .sb-alert-dialog-footer {
+  .er-alert-dialog-footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -100,22 +100,22 @@ watch(
     margin-top: 1rem;
   }
 
-  .sb-alert-dialog-enter-active,
-  .sb-alert-dialog-leave-active,
-  .sb-alert-dialog-enter-active .sb-alert-dialog,
-  .sb-alert-dialog-leave-active .sb-alert-dialog {
+  .er-alert-dialog-enter-active,
+  .er-alert-dialog-leave-active,
+  .er-alert-dialog-enter-active .er-alert-dialog,
+  .er-alert-dialog-leave-active .er-alert-dialog {
     transition:
-      opacity var(--sb-duration) var(--sb-ease),
-      transform var(--sb-duration) var(--sb-ease);
+      opacity var(--er-duration) var(--er-ease),
+      transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-alert-dialog-enter-from,
-  .sb-alert-dialog-leave-to {
+  .er-alert-dialog-enter-from,
+  .er-alert-dialog-leave-to {
     opacity: 0;
   }
 
-  .sb-alert-dialog-enter-from .sb-alert-dialog,
-  .sb-alert-dialog-leave-to .sb-alert-dialog {
+  .er-alert-dialog-enter-from .er-alert-dialog,
+  .er-alert-dialog-leave-to .er-alert-dialog {
     transform: scale(0.96);
   }
 }

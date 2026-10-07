@@ -69,22 +69,22 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <span ref="root" class="sb-count-up">
+  <span ref="root" class="er-count-up">
     <!-- Screen readers get the real number once, not a stream of every number on the way to it. -->
-    <span class="sb-count-up-value">{{ write(value) }}</span>
+    <span class="er-count-up-value">{{ write(value) }}</span>
     <span aria-hidden="true">{{ write(shown) }}</span>
   </span>
 </template>
 
 <style>
 @layer components {
-  .sb-count-up {
+  .er-count-up {
     position: relative;
     /* Every digit the same width, so the number does not jitter as it counts. */
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-count-up-value {
+  .er-count-up-value {
     position: absolute;
     width: 1px;
     height: 1px;

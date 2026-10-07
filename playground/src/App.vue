@@ -371,7 +371,7 @@ const lastMenu = ref('Nothing chosen yet')
 const installSnippet = `npx ermine-ui init
 npx ermine-ui add button dialog chart`
 const configSnippet = `export default defineNuxtConfig({
-  css: ['~/assets/css/sable.css'],
+  css: ['~/assets/css/ermine.css'],
   components: [
     { path: '~/components/ui', pathPrefix: false, extensions: ['.vue'] },
     '~/components',
@@ -428,7 +428,7 @@ const vibrates = ref(false)
 onMounted(() => (vibrates.value = canVibrate()))
 
 // Share button and QR code
-const shareUrl = ref('https://example.com/sable-ui')
+const shareUrl = ref('https://example.com/ermine-ui')
 const shareStatus = ref('Nothing shared yet')
 
 // Signature pad
@@ -621,14 +621,14 @@ function undoable() {
 
 <template>
   <Banner v-model:open="bannerOpen" variant="info" dismissible>
-    Sable now has 86 components.
+    Ermine now has 86 components.
     <template #action><a href="#navigation-menu">See what is new</a></template>
   </Banner>
   <OfflineBanner />
   <ScrollProgress />
   <div class="page">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark" aria-hidden="true" /> Sable UI</div>
+      <div class="brand"><span class="brand-mark" aria-hidden="true" /> Ermine UI</div>
       <div class="row">
         <Badge variant="outline">v0.1.0</Badge>
         <Tooltip>
@@ -778,7 +778,7 @@ function undoable() {
           <div class="row" style="align-items: flex-start">
             <QrCode :value="shareUrl" :size="132" label="QR code for the link above" />
             <div class="stack" style="flex: 1; gap: 0.5rem; justify-items: start">
-              <ShareButton :url="shareUrl" title="Sable UI" text="Vue components you copy in and own." @share="shareStatus = 'Shared'" @copy="shareStatus = `Copied ${$event}`" />
+              <ShareButton :url="shareUrl" title="Ermine UI" text="Vue components you copy in and own." @share="shareStatus = 'Shared'" @copy="shareStatus = `Copied ${$event}`" />
               <p class="readout">{{ shareStatus }}</p>
             </div>
           </div>
@@ -803,7 +803,7 @@ function undoable() {
             <Card v-reveal="120"><CardContent><Stat label="Uptime" value="99.98%" /></CardContent></Card>
           </div>
           <p class="hint">
-            Served <strong style="color: var(--sb-foreground)"><CountUp :value="1284306" /></strong> requests today.
+            Served <strong style="color: var(--er-foreground)"><CountUp :value="1284306" /></strong> requests today.
           </p>
         </div>
       </Demo>
@@ -1091,7 +1091,7 @@ function undoable() {
           <div class="field">
             <Label for="project-domain">Custom domain</Label>
             <Input id="project-domain" model-value="shop.northwind" aria-invalid="true" aria-describedby="domain-error" />
-            <p id="domain-error" class="hint" style="color: var(--sb-destructive)">Add a top-level domain, such as .com.</p>
+            <p id="domain-error" class="hint" style="color: var(--er-destructive)">Add a top-level domain, such as .com.</p>
           </div>
           <div class="field">
             <Label for="project-notes">Release notes</Label>
@@ -1864,7 +1864,7 @@ function undoable() {
           <Avatar size="sm" alt="Ines Kovač">IK</Avatar>
           <Avatar alt="Northwind Storefront">NS</Avatar>
           <Avatar size="lg" alt="Tomás Ortega">TO</Avatar>
-          <Avatar alt="Sable" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23475569'/%3E%3Cpath d='M0 40 20 14l20 26Z' fill='%2394a3b8'/%3E%3Ccircle cx='29' cy='11' r='5' fill='%23e2e8f0'/%3E%3C/svg%3E">SB</Avatar>
+          <Avatar alt="Ermine" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23475569'/%3E%3Cpath d='M0 40 20 14l20 26Z' fill='%2394a3b8'/%3E%3Ccircle cx='29' cy='11' r='5' fill='%23e2e8f0'/%3E%3C/svg%3E">SB</Avatar>
           <Avatar alt="Broken image" src="/missing-avatar.png">BI</Avatar>
         </div>
       </Demo>
@@ -1917,7 +1917,7 @@ function undoable() {
       </Demo>
     </main>
 
-    <footer class="footer">Every demo above is the unmodified source that <code>sable add</code> copies into a project.</footer>
+    <footer class="footer">Every demo above is the unmodified source that <code>ermine add</code> copies into a project.</footer>
     <Toaster />
   </div>
 </template>

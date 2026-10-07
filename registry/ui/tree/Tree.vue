@@ -129,13 +129,13 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="root" role="tree" class="sb-tree" :aria-label="label" @keydown="onKeydown">
+  <div ref="root" role="tree" class="er-tree" :aria-label="label" @keydown="onKeydown">
     <!-- A flat list of rows: each one says how deep it is, so screen readers still hear the nesting. -->
     <div
       v-for="row in rows"
       :key="row.node.id"
       role="treeitem"
-      class="sb-tree-item"
+      class="er-tree-item"
       :tabindex="row.node.id === tabStop ? 0 : -1"
       :aria-level="row.level"
       :aria-posinset="row.position"
@@ -144,16 +144,16 @@ function onKeydown(event: KeyboardEvent) {
       :aria-selected="selected === row.node.id"
       :aria-disabled="row.node.disabled || undefined"
       :data-id="row.node.id"
-      :style="{ '--sb-tree-level': row.level - 1 }"
+      :style="{ '--er-tree-level': row.level - 1 }"
       @click="activate(row)"
       @focus="focused = row.node.id"
     >
-      <svg v-if="row.folder" class="sb-tree-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg v-if="row.folder" class="er-tree-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="m9 18 6-6-6-6" />
       </svg>
-      <span v-else class="sb-tree-chevron" />
+      <span v-else class="er-tree-chevron" />
       <slot name="item" :node="row.node" :level="row.level" :expanded="row.open" :selected="selected === row.node.id">
-        <span class="sb-tree-label">{{ row.node.label }}</span>
+        <span class="er-tree-label">{{ row.node.label }}</span>
       </slot>
     </div>
   </div>
@@ -161,7 +161,7 @@ function onKeydown(event: KeyboardEvent) {
 
 <style>
 @layer components {
-  .sb-tree {
+  .er-tree {
     display: grid;
     gap: 1px;
     width: 100%;
@@ -169,59 +169,59 @@ function onKeydown(event: KeyboardEvent) {
     font-size: 0.875rem;
   }
 
-  .sb-tree-item {
+  .er-tree-item {
     display: flex;
     align-items: center;
     gap: 0.375rem;
     min-width: 0;
     height: 1.875rem;
-    padding: 0 0.5rem 0 calc(0.375rem + var(--sb-tree-level, 0) * 1rem);
-    border-radius: var(--sb-radius-sm);
+    padding: 0 0.5rem 0 calc(0.375rem + var(--er-tree-level, 0) * 1rem);
+    border-radius: var(--er-radius-sm);
     cursor: default;
     user-select: none;
     outline: none;
   }
 
-  .sb-tree-item:hover {
-    background: color-mix(in oklab, var(--sb-accent) 60%, transparent);
+  .er-tree-item:hover {
+    background: color-mix(in oklab, var(--er-accent) 60%, transparent);
   }
 
-  .sb-tree-item[aria-selected='true'] {
-    background: var(--sb-accent);
-    color: var(--sb-accent-foreground);
+  .er-tree-item[aria-selected='true'] {
+    background: var(--er-accent);
+    color: var(--er-accent-foreground);
     font-weight: 500;
   }
 
-  .sb-tree-item:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-tree-item:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: -2px;
   }
 
-  .sb-tree-item[aria-disabled='true'] {
+  .er-tree-item[aria-disabled='true'] {
     opacity: 0.5;
     pointer-events: none;
   }
 
-  .sb-tree-chevron {
+  .er-tree-chevron {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
-    transition: transform var(--sb-duration) var(--sb-ease);
+    color: var(--er-muted-foreground);
+    transition: transform var(--er-duration) var(--er-ease);
   }
 
-  .sb-tree-item[aria-expanded='true'] > .sb-tree-chevron {
+  .er-tree-item[aria-expanded='true'] > .er-tree-chevron {
     transform: rotate(90deg);
   }
 
-  .sb-tree-item svg:not(.sb-tree-chevron) {
+  .er-tree-item svg:not(.er-tree-chevron) {
     flex-shrink: 0;
     width: 1rem;
     height: 1rem;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
   }
 
-  .sb-tree-label {
+  .er-tree-label {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;

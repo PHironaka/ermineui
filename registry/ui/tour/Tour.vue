@@ -118,18 +118,18 @@ useLayer(card, open, {
 <template>
   <Portal>
     <template v-if="open && current">
-      <div ref="spotlight" class="sb-tour-spotlight" aria-hidden="true" />
-      <div ref="card" role="dialog" aria-modal="true" tabindex="-1" class="sb-floating sb-tour" :aria-labelledby="titleId">
-        <button type="button" class="sb-tour-close" :aria-label="closeLabel" @click="close">
+      <div ref="spotlight" class="er-tour-spotlight" aria-hidden="true" />
+      <div ref="card" role="dialog" aria-modal="true" tabindex="-1" class="er-floating er-tour" :aria-labelledby="titleId">
+        <button type="button" class="er-tour-close" :aria-label="closeLabel" @click="close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
         </button>
         <!-- Announced on every step, since the card stays put while its words change. -->
         <div aria-live="polite">
-          <p :id="titleId" class="sb-tour-title">{{ current.title }}</p>
-          <p v-if="current.description" class="sb-tour-description">{{ current.description }}</p>
+          <p :id="titleId" class="er-tour-title">{{ current.title }}</p>
+          <p v-if="current.description" class="er-tour-description">{{ current.description }}</p>
         </div>
-        <div class="sb-tour-footer">
-          <span class="sb-tour-count">{{ index + 1 }} of {{ steps.length }}</span>
+        <div class="er-tour-footer">
+          <span class="er-tour-count">{{ index + 1 }} of {{ steps.length }}</span>
           <Button v-if="index > 0" size="sm" variant="outline" @click="step = index">{{ backLabel }}</Button>
           <Button size="sm" @click="next">{{ isLast ? doneLabel : nextLabel }}</Button>
         </div>
@@ -141,58 +141,58 @@ useLayer(card, open, {
 <style>
 @layer components {
   /* One element does both jobs: its huge shadow dims the page, and the element itself is the hole. */
-  .sb-tour-spotlight {
+  .er-tour-spotlight {
     position: fixed;
-    z-index: var(--sb-z-overlay);
-    border-radius: var(--sb-radius-md);
-    box-shadow: 0 0 0 100vmax var(--sb-overlay);
+    z-index: var(--er-z-overlay);
+    border-radius: var(--er-radius-md);
+    box-shadow: 0 0 0 100vmax var(--er-overlay);
     pointer-events: none;
     transition:
-      left var(--sb-duration) var(--sb-ease),
-      top var(--sb-duration) var(--sb-ease),
-      width var(--sb-duration) var(--sb-ease),
-      height var(--sb-duration) var(--sb-ease);
+      left var(--er-duration) var(--er-ease),
+      top var(--er-duration) var(--er-ease),
+      width var(--er-duration) var(--er-ease),
+      height var(--er-duration) var(--er-ease);
   }
 
-  .sb-tour {
+  .er-tour {
     display: grid;
     gap: 0.75rem;
     width: 20rem;
     padding: 1rem;
-    border: 1px solid var(--sb-border);
-    border-radius: var(--sb-radius-lg);
-    background: var(--sb-popover);
-    color: var(--sb-popover-foreground);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-lg);
+    background: var(--er-popover);
+    color: var(--er-popover-foreground);
     font-size: 0.875rem;
-    box-shadow: var(--sb-shadow-lg);
+    box-shadow: var(--er-shadow-lg);
   }
 
-  .sb-tour-title {
+  .er-tour-title {
     margin: 0;
     padding-right: 1.5rem;
     font-weight: 600;
   }
 
-  .sb-tour-description {
+  .er-tour-description {
     margin: 0.25rem 0 0;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     line-height: 1.5;
   }
 
-  .sb-tour-footer {
+  .er-tour-footer {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
 
-  .sb-tour-count {
+  .er-tour-count {
     margin-right: auto;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
   }
 
-  .sb-tour-close {
+  .er-tour-close {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
@@ -202,22 +202,22 @@ useLayer(card, open, {
     height: 1.5rem;
     padding: 0;
     border: 0;
-    border-radius: var(--sb-radius-sm);
+    border-radius: var(--er-radius-sm);
     background: transparent;
-    color: var(--sb-muted-foreground);
+    color: var(--er-muted-foreground);
     cursor: pointer;
   }
 
-  .sb-tour-close:hover {
-    color: var(--sb-foreground);
+  .er-tour-close:hover {
+    color: var(--er-foreground);
   }
 
-  .sb-tour-close:focus-visible {
-    outline: 2px solid var(--sb-ring);
+  .er-tour-close:focus-visible {
+    outline: 2px solid var(--er-ring);
     outline-offset: 2px;
   }
 
-  .sb-tour-close svg {
+  .er-tour-close svg {
     width: 1rem;
     height: 1rem;
   }

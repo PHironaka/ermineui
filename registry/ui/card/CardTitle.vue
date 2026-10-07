@@ -1,3 +1,3 @@
 <template>
-  <h3 class="sb-card-title"><slot /></h3>
+  <h3 class="er-card-title"><slot /></h3>
 </template>
