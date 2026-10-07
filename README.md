@@ -7,7 +7,7 @@ Vue 3 components you copy into your project and own, in the spirit of shadcn/ui.
 - **Behavior written from scratch.** Positioning, focus trapping, dismissal, keyboard navigation and scroll locking live in six small helper files that are copied in alongside the components. The only dependency is Vue (3.5 or newer).
 - **Copy-in distribution.** A small command line copies component source into your project. Nothing is imported from `node_modules`, so every line is yours to edit.
 
-The npm package for the command line is `ermineui` (free on npm when checked on 7 October 2026, and not yet published). The project was called Sable until then; everything was renamed together, including the CSS prefix, which went from `sb-` to `er-`.
+The npm package for the command line is `ermineui` (published on 7 October 2026). The project was called Sable until then; everything was renamed together, including the CSS prefix, which went from `sb-` to `er-`.
 
 ## Components
 
@@ -85,6 +85,17 @@ The npm package for the command line is `ermineui` (free on npm when checked on 
 | `virtual-list` | Very long list that only draws the rows in view |
 | `empty-state` | Icon, heading, text and actions for when there is nothing to list |
 | `toast` | `toast()` from anywhere, with one `<Toaster />` mounted |
+| `icon` | 62 built-in line icons that take the size and colour of the text around them; add your own with `registerIcons()` |
+
+## Blocks
+
+A block is a section of a page, or a whole page, already put together from the components above. `ermine add <block>` copies it into a `blocks` folder beside your components, along with every component it uses. It is a starting point: open the file and change it.
+
+| | |
+|---|---|
+| `dashboard` | App page with a collapsing sidebar, a top bar with a user menu, headline numbers, an area chart, a bar list and a sortable table. `DashboardShell` is the frame on its own, for your other pages |
+| `sign-in` | Email and password on a card, checked before it is sent, with a loading state and a place for the server's error |
+| `settings` | Account settings in tabs: a profile form, notification switches, and a delete button behind a confirmation |
 
 ## Try it
 
@@ -95,25 +106,24 @@ npm run dev        # playground with every component, at http://localhost:5173
 
 ## Use it in a project
 
-Until the CLI is published, run it from this folder (or `npm link` inside `cli/`):
-
 ```sh
 # from your app's folder
-node /path/to/ermineui/cli/bin/ermine.mjs init
-node /path/to/ermineui/cli/bin/ermine.mjs add button dialog select
+npx ermineui init
+npx ermineui add button dialog select
+npx ermineui add dashboard          # a block, with the components it is built from
 ```
 
-Once published this becomes `npx ermineui init` and `npx ermineui add button`.
+To try changes that are not published yet, run the CLI from this folder: `node /path/to/ermineui/cli/bin/ermine.mjs add button`.
 
-`init` detects the framework, suggests folders, writes `ermine.json` and copies the theme stylesheet. `add` copies the components you name plus the helpers and components they depend on. Files that already exist are kept unless you pass `--overwrite`.
+`init` detects the framework, suggests folders, writes `ermine.json` and copies the theme stylesheet. `add` copies the components and blocks you name plus the helpers and components they depend on. Blocks go in a `blocks` folder beside the components folder; add a `"blocks"` path to `ermine.json` to put them somewhere else. Files that already exist are kept unless you pass `--overwrite`.
 
 The theme stylesheet is yours and is never overwritten, even with `--overwrite`. If a component you add later relies on variables your copy does not have yet (chart colours and the type scale arrived after the first release), `add` appends just those variables to the end of your file, says so, and leaves everything already there untouched.
 
 | Command | What it does |
 |---|---|
 | `ermine init` | Create `ermine.json` and the theme stylesheet (`-y` accepts the suggested folders) |
-| `ermine add <name...>` | Copy components and their dependencies (`--all` for everything) |
-| `ermine list` | Show available components and which are already installed |
+| `ermine add <name...>` | Copy components or blocks and their dependencies (`--all` for every component) |
+| `ermine list` | Show available components and blocks, and which are already installed |
 | `--registry <url or path>` | Read components from a different `registry.json`, such as your own fork |
 
 ### Vue + Vite
@@ -142,6 +152,8 @@ export default defineNuxtConfig({
   components: [
     // Auto-import the components by their own names: <Button>, <DialogContent>, ...
     { path: '~/components/ui', pathPrefix: false, extensions: ['.vue'] },
+    // The same for blocks, if you add any: <Dashboard>, <SignIn>, ...
+    { path: '~/components/blocks', pathPrefix: false, extensions: ['.vue'] },
     '~/components',
   ],
 })
@@ -188,6 +200,51 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 - **With Tailwind.** The layer is named `components`, the same layer Tailwind uses, so utility classes on a Ermine component override its defaults.
 
 ## Patterns
+
+**Icons.** `Icon` draws a named icon at the size and colour of the text around it. Beside text it is decoration and hidden from screen readers; on its own, give it a `label`.
+
+```vue
+<Button><Icon name="plus" /> New project</Button>
+<Button size="icon" aria-label="Delete"><Icon name="trash" /></Button>
+<Icon name="circle-check" label="Passed" :size="20" />
+```
+
+The set is small on purpose (`iconNames()` lists it, and the playground shows every one). Add your own once, when the app starts, with the `d` of a path drawn on a 24 by 24 grid; or pass a path straight in; or put any shapes in the slot:
+
+```ts
+import { registerIcons } from '@/components/ui/icon'
+registerIcons({ rocket: 'M5 19c0-2 1-4 3-5l3 3c-1 2-3 3-5 3Z' })
+```
+
+```vue
+<Icon name="rocket" />
+<Icon d="M4 12h16" />
+<Icon><circle cx="12" cy="12" r="9" /></Icon>
+```
+
+Icons from another library, such as `lucide-vue-next`, work in every slot that takes an icon; nothing here depends on `Icon`.
+
+**Blocks.** A block takes its content through props and reports back through events, so it works before you change a line, and the sample data lives in one file you can delete.
+
+```vue
+<script setup lang="ts">
+import { Dashboard, DashboardShell } from '@/components/blocks/dashboard'
+import { RouterLink } from 'vue-router'
+</script>
+
+<template>
+  <!-- The whole sample page, with your data. -->
+  <Dashboard :navigation="navigation" :user="user" :revenue="revenue" :orders="orders" :link-as="RouterLink" current="/" @sign-out="signOut" />
+
+  <!-- Or just the frame, around a page of your own. -->
+  <DashboardShell title="Customers" :navigation="navigation" :user="user" current="/customers">
+    <template #actions><Button size="sm">Add customer</Button></template>
+    <CustomerTable />
+  </DashboardShell>
+</template>
+```
+
+The dashboard fills the window; set `--er-dashboard-height` to fit it into a smaller space. Its grids follow the width of the page area (container queries), so they are right whether the sidebar is wide, shrunk or hidden.
 
 **`as` and `as-child`.** Buttons, triggers and menu items render any tag or component:
 
@@ -814,6 +871,7 @@ registry/
     scroll-lock.ts       page scroll lock for modals
     context.ts           typed provide / inject for compound components
   ui/<name>/           one folder per component, with an index.ts
+  blocks/<name>/       one folder per block; imports components as ../../ui/<name>
 cli/                   the `ermine` command (no dependencies) and registry.json
 scripts/build-registry.mjs   packs registry/ into cli/registry.json
 playground/            Vite app showing every component
@@ -843,7 +901,7 @@ The browser tests need the browsers once: `npx playwright install chromium firef
 - **Browser tests** (`tests/e2e`) build the playground and drive it with real keyboard and mouse input in Chromium, Firefox and WebKit, plus a phone-sized screen. They find things the way a person or a screen reader does (by role and name), so a missing label fails a test. Each test also fails if the page logs an error.
 - **Accessibility scan** (`tests/e2e/accessibility.spec.ts`) runs axe over the whole page and over open overlays, in light and dark themes. It checks what a machine can check (names, roles, ARIA usage, colour contrast); it is not a substitute for testing with a screen reader.
 - **Screen reader tests** (`tests/e2e/screen-reader.spec.ts`) run a simulated screen reader inside the page and check what would be spoken: each control's role, name and state, the order things are read in, and the announcements made when something changes (an error appearing, a toast, a chart value, a card moving). The simulator follows the same accessibility rules real screen readers do, but it is not one. It has no speech and none of the quirks of VoiceOver, NVDA or JAWS, so it catches a missing name or a silent change, not an awkward experience.
-- **Registry check** (`scripts/check-registry.mjs`) runs the real CLI once per component into an empty folder and confirms every import in what was copied points at a file that was also copied.
+- **Registry check** (`scripts/check-registry.mjs`) runs the real CLI once per component and block into an empty folder and confirms every import in what was copied points at a file that was also copied.
 
 ## What has been checked
 

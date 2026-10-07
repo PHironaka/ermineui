@@ -134,6 +134,10 @@ import { revealTransition, vTransitionName, viewTransition } from '../../registr
 import { WakeLockToggle } from '../../registry/ui/wake-lock'
 import { Prose, Typography } from '../../registry/ui/typography'
 import { VirtualList } from '../../registry/ui/virtual-list'
+import { Icon, iconNames, registerIcons } from '../../registry/ui/icon'
+import { Dashboard } from '../../registry/blocks/dashboard'
+import { SettingsPage } from '../../registry/blocks/settings'
+import { SignIn } from '../../registry/blocks/sign-in'
 import Demo from './Demo.vue'
 
 // Theme: follows the system until the visitor picks one. Read after mount, so the page can also be rendered on a server.
@@ -368,6 +372,23 @@ const zoom = ref('100')
 const lastMenu = ref('Nothing chosen yet')
 
 // Code block
+// An icon of our own, added beside the built-in set.
+registerIcons({ rocket: 'M5 19c0-2 1-4 3-5l3 3c-1 2-3 3-5 3ZM9 13c1-5 5-9 11-9 0 6-4 10-9 11ZM15 9v.01' })
+const iconSize = ref('24')
+const blockEvent = ref('nothing yet')
+const signInLoading = ref(false)
+const signInError = ref<string>()
+function signIn(values: { email: string; password: string }) {
+  signInError.value = undefined
+  signInLoading.value = true
+  // Stands in for a request to a server.
+  setTimeout(() => {
+    signInLoading.value = false
+    if (values.password === 'wrong') signInError.value = 'That email and password do not match.'
+    else blockEvent.value = `signed in as ${values.email}`
+  }, 600)
+}
+
 const installSnippet = `npx ermineui init
 npx ermineui add button dialog chart`
 const configSnippet = `export default defineNuxtConfig({
@@ -1914,6 +1935,48 @@ function undoable() {
           <Separator orientation="vertical" />
           <Badge variant="destructive">Failed</Badge>
         </div>
+      </Demo>
+
+      <Demo name="icon" title="Icon" description="A small built-in set of line icons. They take the size and colour of the text around them, and you can add your own." wide>
+        <div class="stack" style="max-width: none">
+          <div class="row">
+            <Button><Icon name="plus" /> New project</Button>
+            <Button variant="outline" size="icon" aria-label="Delete"><Icon name="trash" /></Button>
+            <span class="hint"><Icon name="circle-check" label="Passed" style="color: var(--er-success)" /> 512 checks</span>
+            <span class="hint"><Icon name="rocket" /> rocket was added with registerIcons()</span>
+          </div>
+          <div class="row">
+            <span class="hint">Size in px</span>
+            <ToggleGroup v-model="iconSize" aria-label="Icon size">
+              <ToggleGroupItem value="16">16</ToggleGroupItem>
+              <ToggleGroupItem value="24">24</ToggleGroupItem>
+              <ToggleGroupItem value="32">32</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <ul class="icon-grid">
+            <li v-for="name in iconNames()" :key="name"><Icon :name="name" :size="Number(iconSize)" /><code>{{ name }}</code></li>
+          </ul>
+        </div>
+      </Demo>
+
+      <Demo name="dashboard" title="Block: Dashboard" description="A whole app page put together from the components above: sidebar, top bar, headline numbers, charts and a table. Copy it, then swap in your own data." wide>
+        <div class="block-frame">
+          <Dashboard main-as="div" title-as="h3" style="--er-dashboard-height: 44rem" @sign-out="blockEvent = 'signed out'" @export="blockEvent = 'export pressed'" />
+        </div>
+        <p class="readout" data-readout="blocks">{{ blockEvent }}</p>
+      </Demo>
+
+      <Demo name="sign-in" title="Block: Sign in" description="Email and password on a card, checked before it is sent. Try the password “wrong” to see a server error.">
+        <SignIn :loading="signInLoading" :error="signInError" forgot-href="#sign-in" sign-up-href="#sign-in" @submit="signIn" />
+      </Demo>
+
+      <Demo name="settings" title="Block: Settings" description="Account settings in tabs: a profile form, notification switches, and a guarded delete.">
+        <SettingsPage
+          :profile="{ name: 'Ines Kovač', email: 'ines@example.com', timezone: 'Europe/Berlin' }"
+          @save-profile="blockEvent = `profile saved for ${$event.name}`"
+          @save-notifications="blockEvent = `notifications: ${$event.join(', ') || 'none'}`"
+          @delete-account="blockEvent = 'account deleted'"
+        />
       </Demo>
     </main>
 

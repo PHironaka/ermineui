@@ -109,6 +109,18 @@ function rewriteLibImports(content, componentDir, libDir) {
   return content.replaceAll("'../../lib/", `'${path}/`)
 }
 
+/** In the registry, blocks import components from "../../ui/<name>". Point those at this project's components. */
+function rewriteComponentImports(content, blockDir, componentsDir) {
+  let path = relative(blockDir, componentsDir).split(sep).join(posix.sep)
+  if (!path.startsWith('.')) path = `./${path}`
+  return content.replaceAll("'../../ui/", `'${path}/`)
+}
+
+/** Where blocks go: the "blocks" path in ermine.json, or a blocks folder beside the components folder. */
+function blocksDir(config) {
+  return typeof config.blocks === 'string' ? config.blocks : posix.join(posix.dirname(config.components), 'blocks')
+}
+
 /**
  * The theme stylesheet belongs to the project and is never overwritten. But components added later
  * may rely on variables that did not exist when that file was copied in (chart colours, the type
@@ -138,9 +150,10 @@ function addMissingVariables(cwd, path, registryCss) {
   return missing.length
 }
 
-/** The requested components plus every component and helper they depend on. */
+/** The requested components and blocks, plus every component and helper they depend on. */
 function resolveDependencies(registry, names) {
   const components = new Set()
+  const blocks = new Set()
   const lib = new Set()
 
   const addLib = (name) => {
@@ -155,8 +168,17 @@ function resolveDependencies(registry, names) {
     registry.components[name].components.forEach(addComponent)
   }
 
-  names.forEach(addComponent)
-  return { components: [...components].sort(), lib: [...lib].sort() }
+  for (const name of names) {
+    const block = registry.blocks?.[name]
+    if (!block) {
+      addComponent(name)
+      continue
+    }
+    blocks.add(name)
+    block.lib.forEach(addLib)
+    block.components.forEach(addComponent)
+  }
+  return { components: [...components].sort(), blocks: [...blocks].sort(), lib: [...lib].sort() }
 }
 
 function report(results) {
@@ -214,11 +236,11 @@ async function add({ cwd, flags, positional }) {
   const requested = flags.all ? available : positional
 
   if (requested.length === 0) {
-    throw new UserError('Name at least one component, e.g. "ermine add button", or use --all.')
+    throw new UserError('Name at least one component or block, e.g. "ermine add button", or use --all.')
   }
-  const unknown = requested.filter((name) => !registry.components[name])
+  const unknown = requested.filter((name) => !registry.components[name] && !registry.blocks?.[name])
   if (unknown.length > 0) {
-    throw new UserError(`Unknown component: ${unknown.join(', ')}. Run "ermine list" to see what is available.`)
+    throw new UserError(`Unknown component or block: ${unknown.join(', ')}. Run "ermine list" to see what is available.`)
   }
 
   const needed = resolveDependencies(registry, requested)
@@ -247,11 +269,24 @@ async function add({ cwd, flags, positional }) {
     }
   }
 
+  for (const name of needed.blocks) {
+    const dir = posix.join(blocksDir(config), name)
+    for (const file of registry.blocks[name].files) {
+      let content = rewriteLibImports(file.content, join(cwd, dir), join(cwd, config.lib))
+      content = rewriteComponentImports(content, join(cwd, dir), join(cwd, config.components))
+      const path = posix.join(dir, file.file)
+      results.push([path, writeFile(cwd, path, content, options)])
+    }
+  }
+
   report(results)
   const extra = needed.components.filter((name) => !requested.includes(name))
   const skipped = results.filter(([, status]) => status === 'skipped').length
+  const count = (number, word) => `${number} ${word}${number === 1 ? '' : 's'}`
   console.log(
-    `\n${green('Done.')} ${needed.components.length} component${needed.components.length === 1 ? '' : 's'}` +
+    `\n${green('Done.')} ` +
+      (needed.blocks.length > 0 ? `${count(needed.blocks.length, 'block')} and ` : '') +
+      count(needed.components.length, 'component') +
       (extra.length > 0 ? ` (including ${extra.join(', ')}, which the others need)` : '') +
       '.',
   )
@@ -265,23 +300,31 @@ async function list({ cwd, flags }) {
   const configPath = join(cwd, CONFIG_FILE)
   const config = existsSync(configPath) ? loadConfig(cwd) : null
   const registry = await loadRegistry(flags.registry ?? config?.registry)
-  const width = Math.max(...Object.keys(registry.components).map((name) => name.length))
-
-  for (const [name, component] of Object.entries(registry.components)) {
-    const installed = config && existsSync(join(cwd, config.components, name))
-    const summary = component.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
-    console.log(`  ${installed ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`)
+  const blocks = registry.blocks ?? {}
+  const width = Math.max(...[...Object.keys(registry.components), ...Object.keys(blocks)].map((name) => name.length))
+  const print = (entries, dir) => {
+    for (const [name, entry] of Object.entries(entries)) {
+      const installed = config && existsSync(join(cwd, dir, name))
+      const summary = entry.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
+      console.log(`  ${installed ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`)
+    }
   }
-  if (config) console.log(dim(`\n  ✓ already in ${config.components}`))
+
+  print(registry.components, config?.components)
+  if (Object.keys(blocks).length > 0) {
+    console.log(`\n${bold('Blocks')} ${dim('· sections of a page, built from the components above')}`)
+    print(blocks, config && blocksDir(config))
+  }
+  if (config) console.log(dim(`\n  ✓ already in ${config.components} or ${blocksDir(config)}`))
 }
 
 const HELP = `${bold('ermine')} — copy Ermine UI components into your project
 
 ${bold('Usage')}
   ermine init                 Create ermine.json and the theme stylesheet
-  ermine add <name...>        Copy components (and what they depend on) into your project
+  ermine add <name...>        Copy components or blocks (and what they depend on) into your project
   ermine add --all            Copy every component
-  ermine list                 Show available components
+  ermine list                 Show available components and blocks
 
 ${bold('Options')}
   -y, --yes                  Accept the suggested folders without asking

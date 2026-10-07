@@ -23,7 +23,7 @@ const problems = []
 
 // Nuxt can auto-import components by file name, so no two components may share one.
 const owners = new Map()
-for (const [name, component] of Object.entries(registry.components)) {
+for (const [name, component] of [...Object.entries(registry.components), ...Object.entries(registry.blocks)]) {
   for (const { file } of component.files) {
     if (!file.endsWith('.vue')) continue
     if (owners.has(file)) problems.push(`${file} exists in both "${owners.get(file)}" and "${name}"`)
@@ -32,7 +32,7 @@ for (const [name, component] of Object.entries(registry.components)) {
 }
 
 try {
-  for (const name of Object.keys(registry.components)) {
+  for (const name of [...Object.keys(registry.components), ...Object.keys(registry.blocks)]) {
     const project = join(work, name)
     mkdirSync(project)
     execFileSync('node', [cli, 'init', '-y', '--cwd', project], { stdio: 'pipe' })
@@ -55,5 +55,5 @@ try {
 }
 
 for (const problem of problems) console.error(problem)
-console.log(`${Object.keys(registry.components).length} components installed one at a time, ${owners.size} .vue files: ${problems.length} problems`)
+console.log(`${Object.keys(registry.components).length} components and ${Object.keys(registry.blocks).length} blocks installed one at a time, ${owners.size} .vue files: ${problems.length} problems`)
 process.exit(problems.length ? 1 : 0)

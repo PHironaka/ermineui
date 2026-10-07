@@ -5,7 +5,8 @@ Copy-in Vue 3 components styled with plain CSS variables. The command line copie
 ```sh
 npx ermineui init                 # creates ermine.json and the theme stylesheet
 npx ermineui add button dialog    # copies components, and anything they depend on
-npx ermineui list                 # shows every component
+npx ermineui add dashboard        # copies a block: a whole page built from the components
+npx ermineui list                 # shows every component and block
 ```
 
 Works in Vue 3.5+, Nuxt and Astro projects. Needs Node 18 or later.

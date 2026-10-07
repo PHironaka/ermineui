@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Packs everything under registry/ into cli/registry.json, the single file the CLI reads.
+// Packs everything under registry/ (helpers, components and blocks) into cli/registry.json, the single file the CLI reads.
 // Dependencies are worked out from the import statements, so there is no manifest to keep in sync.
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -43,7 +43,26 @@ for (const name of readdirSync(join(registryDir, 'ui')).sort()) {
   }
 }
 
-for (const [name, component] of Object.entries(components)) {
+// Blocks: registry/blocks/<name>/* — whole sections of a page, put together from the components above.
+const blocks = {}
+for (const name of readdirSync(join(registryDir, 'blocks')).sort()) {
+  const dir = join(registryDir, 'blocks', name)
+  const files = readdirSync(dir)
+    .sort()
+    .map((file) => ({ file, content: read(join(dir, file)) }))
+  const source = files.map((file) => file.content).join('\n')
+  const index = files.find((file) => file.file === 'index.ts')?.content ?? ''
+
+  if (components[name]) throw new Error(`"${name}" is both a component and a block; "ermine add" needs the names to differ`)
+  blocks[name] = {
+    description: index.match(/\/\*\*\s*(.+?)\s*\*\//s)?.[1] ?? '',
+    files,
+    lib: sorted(importsMatching(source, /from '\.\.\/\.\.\/lib\/([\w-]+)'/g)),
+    components: sorted(importsMatching(source, /from '\.\.\/\.\.\/ui\/([\w-]+)'/g)),
+  }
+}
+
+for (const [name, component] of [...Object.entries(components), ...Object.entries(blocks)]) {
   for (const dep of component.lib) if (!lib[dep]) throw new Error(`${name} imports unknown helper "${dep}"`)
   for (const dep of component.components) if (!components[dep]) throw new Error(`${name} imports unknown component "${dep}"`)
 }
@@ -55,9 +74,10 @@ const registry = {
   styles: { file: 'ermine.css', content: read(join(registryDir, 'styles', 'ermine.css')) },
   lib,
   components,
+  blocks,
 }
 
 writeFileSync(join(root, 'cli', 'registry.json'), `${JSON.stringify(registry, null, 2)}\n`)
 console.log(
-  `registry.json: ${Object.keys(components).length} components, ${Object.keys(lib).length} helpers, v${registry.version}`,
+  `registry.json: ${Object.keys(components).length} components, ${Object.keys(blocks).length} blocks, ${Object.keys(lib).length} helpers, v${registry.version}`,
 )

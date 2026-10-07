@@ -117,7 +117,7 @@ test('mistakes get a clear message and a failing exit code', () => {
   project((dir) => {
     assert.match(fails(dir, 'add', 'button'), /Run "ermine init" first/)
     ermine(dir, 'init', '-y')
-    assert.match(fails(dir, 'add', 'buton'), /Unknown component: buton/)
+    assert.match(fails(dir, 'add', 'buton'), /Unknown component or block: buton/)
     assert.match(fails(dir, 'add'), /Name at least one component/)
     assert.match(fails(dir, 'frobnicate'), /Unknown command/)
   })
@@ -130,5 +130,36 @@ test('list marks what is installed', () => {
     const lines = ermine(dir, 'list').split('\n')
     assert.ok(lines.find((line) => line.includes('badge'))!.includes('✓'))
     assert.ok(!lines.find((line) => /^\s+\S*\s*button\s/.test(line) || line.trim().startsWith('button'))!.includes('✓'))
+  })
+})
+
+test('add copies a block beside the components, with the components it is built from', () => {
+  project((dir) => {
+    ermine(dir, 'init', '-y')
+    const output = ermine(dir, 'add', 'sign-in')
+    assert.match(output, /1 block and \d+ components/)
+    assert.ok(existsSync(join(dir, 'src/components/blocks/sign-in/SignIn.vue')))
+    for (const name of ['card', 'field', 'input', 'input-group', 'button']) {
+      assert.ok(existsSync(join(dir, 'src/components/ui', name, 'index.ts')), `${name} was copied`)
+    }
+    const lines = ermine(dir, 'list').split('\n')
+    assert.ok(lines.some((line) => line.includes('Blocks')))
+    assert.ok(lines.find((line) => line.includes('sign-in'))!.includes('✓'))
+    assert.ok(!lines.find((line) => line.includes('dashboard'))!.includes('✓'))
+  })
+})
+
+test('a block’s imports follow the folders named in ermine.json', () => {
+  project((dir) => {
+    writeFileSync(
+      join(dir, 'ermine.json'),
+      JSON.stringify({ components: 'app/ui', lib: 'app/helpers', styles: 'app/ermine.css', blocks: 'app/pages/parts' }),
+    )
+    ermine(dir, 'add', 'dashboard')
+    const shell = readFileSync(join(dir, 'app/pages/parts/dashboard/DashboardShell.vue'), 'utf8')
+    assert.ok(shell.includes("from '../../../ui/sidebar'"), 'component imports are rewritten')
+    assert.ok(!shell.includes("'../../ui/"))
+    assert.ok(existsSync(join(dir, 'app/ui/sidebar/Sidebar.vue')))
+    assert.ok(existsSync(join(dir, 'app/ui/icon/icons.ts')))
   })
 })

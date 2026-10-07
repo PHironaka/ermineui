@@ -341,3 +341,34 @@ body {
   color: var(--er-muted-foreground);
   font-size: 0.8125rem;
 }
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.25rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-grid li {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.5rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.icon-grid code {
+  color: var(--er-muted-foreground);
+  font-size: 0.75rem;
+}
+
+/* A block is a whole page; the frame shows it at a size that fits the demo. */
+.block-frame {
+  width: 100%;
+  border: 1px solid var(--er-border);
+  border-radius: var(--er-radius-lg);
+  overflow: hidden;
+}
