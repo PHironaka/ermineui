@@ -1,7 +1,7 @@
 {
   "name": "ermineui-workspace",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Ermine UI — copy-in Vue 3 components styled with plain CSS variables.",
   "scripts": {
