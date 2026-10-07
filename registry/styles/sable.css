@@ -1,0 +1,157 @@
+/*
+ * Sable UI — design tokens and base styles.
+ *
+ * Every component reads from the variables below, so this file is the theme.
+ * Change a value here and the whole library follows.
+ *
+ * Dark mode follows the operating system by default. To force a theme, put
+ * class="dark" / class="light" (or data-theme="dark" / "light") on <html>,
+ * or on any element to theme just that subtree.
+ *
+ * Layers: component styles live in `@layer components`, so any CSS you write
+ * outside a layer wins without needing !important or extra specificity.
+ */
+@layer base, components;
+
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces and text */
+  --sb-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));
+  --sb-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --sb-card: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  --sb-card-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --sb-popover: light-dark(oklch(1 0 0), oklch(0.225 0 0));
+  --sb-popover-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+
+  /* Actions */
+  --sb-primary: light-dark(oklch(0.205 0 0), oklch(0.922 0 0));
+  --sb-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.205 0 0));
+  --sb-secondary: light-dark(oklch(0.965 0 0), oklch(0.269 0 0));
+  --sb-secondary-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));
+  --sb-muted: light-dark(oklch(0.965 0 0), oklch(0.269 0 0));
+  --sb-muted-foreground: light-dark(oklch(0.5 0 0), oklch(0.708 0 0));
+  --sb-accent: light-dark(oklch(0.965 0 0), oklch(0.3 0 0));
+  --sb-accent-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));
+  /* Used both as a fill (buttons, badges) and as text (errors). In the dark theme it is light enough
+     to read as text on dark surfaces, so what sits on top of it is dark, as with the primary colour. */
+  --sb-destructive: light-dark(oklch(0.55 0.22 27), oklch(0.71 0.18 24));
+  --sb-destructive-foreground: light-dark(oklch(0.985 0 0), oklch(0.16 0.02 25));
+
+  /* Status (toasts, validation) */
+  --sb-success: light-dark(oklch(0.55 0.15 150), oklch(0.72 0.17 150));
+  --sb-warning: light-dark(oklch(0.62 0.15 70), oklch(0.8 0.15 80));
+  --sb-info: light-dark(oklch(0.55 0.16 250), oklch(0.72 0.14 245));
+
+  /* Chart series, in the order they are handed out. The order is what keeps neighbours
+     distinguishable for colour-blind readers, so re-check it if you change these. */
+  --sb-chart-1: light-dark(#2a78d6, #3987e5);
+  --sb-chart-2: light-dark(#eb6834, #d95926);
+  --sb-chart-3: light-dark(#1baf7a, #199e70);
+  --sb-chart-4: light-dark(#eda100, #c98500);
+  --sb-chart-5: light-dark(#e87ba4, #d55181);
+  --sb-chart-6: light-dark(#008300, #008300);
+  --sb-chart-7: light-dark(#4a3aa7, #9085e9);
+  --sb-chart-8: light-dark(#e34948, #e66767);
+
+  /* Lines and focus */
+  --sb-border: light-dark(oklch(0.915 0 0), oklch(1 0 0 / 12%));
+  --sb-input: light-dark(oklch(0.87 0 0), oklch(1 0 0 / 18%));
+  --sb-input-background: light-dark(transparent, oklch(1 0 0 / 4%));
+  --sb-ring: light-dark(oklch(0.45 0 0), oklch(0.75 0 0));
+  --sb-overlay: oklch(0 0 0 / 55%);
+
+  /* Shape */
+  --sb-radius: 0.625rem;
+  --sb-radius-sm: calc(var(--sb-radius) - 4px);
+  --sb-radius-md: calc(var(--sb-radius) - 2px);
+  --sb-radius-lg: var(--sb-radius);
+  --sb-radius-xl: calc(var(--sb-radius) + 4px);
+
+  /* Type */
+  --sb-font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --sb-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Fluid type (the typography component). Text grows smoothly between a narrow screen and a wide one,
+     with no breakpoints. Each size is the body size multiplied by the ratio once per step up the scale.
+     Sizes are in rem, so they still follow the reader's own browser text-size setting. */
+  --sb-type-min: 1; /* body size in rem at the narrow end (1 = 16px by default) */
+  --sb-type-max: 1.125; /* body size in rem at the wide end */
+  --sb-type-ratio-min: 1.2; /* how much bigger each step is at the narrow end */
+  --sb-type-ratio-max: 1.3; /* and at the wide end: headings grow more than body text does */
+  --sb-type-from: 20rem; /* the width at which text starts growing (320px) */
+  --sb-type-range: 60; /* how many rem wider than that it stops (60 = stops at 1280px) */
+
+  /* Elevation */
+  --sb-shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 5%);
+  --sb-shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 10%), 0 1px 2px -1px oklch(0 0 0 / 10%);
+  --sb-shadow-md: 0 4px 6px -1px oklch(0 0 0 / 10%), 0 2px 4px -2px oklch(0 0 0 / 10%);
+  --sb-shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 12%), 0 4px 6px -4px oklch(0 0 0 / 12%);
+
+  /* Motion and stacking */
+  --sb-duration: 150ms;
+  --sb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sb-z-overlay: 50;
+  --sb-z-toast: 100;
+}
+
+.light,
+[data-theme='light'] {
+  color-scheme: light;
+}
+
+.dark,
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sb-duration: 0ms;
+  }
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--sb-background);
+    color: var(--sb-foreground);
+    font-family: var(--sb-font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  /* Shared by everything that floats next to a trigger: popover, menu, select, tooltip.
+     The position (left/top) and the custom properties are written by lib/floating.ts. */
+  .sb-floating {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--sb-z-overlay);
+    width: max-content;
+    max-width: calc(100vw - 1rem);
+    transform-origin: var(--sb-transform-origin, center);
+    outline: none;
+  }
+
+  .sb-pop-enter-active,
+  .sb-pop-leave-active {
+    transition:
+      opacity var(--sb-duration) var(--sb-ease),
+      transform var(--sb-duration) var(--sb-ease);
+  }
+
+  .sb-pop-enter-from,
+  .sb-pop-leave-to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}

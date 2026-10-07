@@ -1,0 +1,25 @@
+{
+  "name": "sable-ui",
+  "version": "0.1.0",
+  "description": "Copy-in Vue 3 components styled with plain CSS variables. You own the code.",
+  "type": "module",
+  "bin": {
+    "sable": "bin/sable.mjs"
+  },
+  "files": [
+    "bin",
+    "registry.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "vue",
+    "nuxt",
+    "astro",
+    "components",
+    "ui",
+    "css"
+  ],
+  "license": "MIT"
+}

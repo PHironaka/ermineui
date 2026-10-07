@@ -1,0 +1,10 @@
+node_modules
+dist
+*.log
+
+# Pipelog
+.claude/.pipeline-sessions/
+.claude/pipeline.env
+.claude/pipeline.log
+test-results
+playwright-report
