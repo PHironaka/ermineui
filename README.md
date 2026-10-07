@@ -7,7 +7,7 @@ Vue 3 components you copy into your project and own, in the spirit of shadcn/ui.
 - **Behavior written from scratch.** Positioning, focus trapping, dismissal, keyboard navigation and scroll locking live in six small helper files that are copied in alongside the components. The only dependency is Vue (3.5 or newer).
 - **Copy-in distribution.** A small command line copies component source into your project. Nothing is imported from `node_modules`, so every line is yours to edit.
 
-"Sable" is a placeholder name. The npm package name `sable-ui` is already taken by an unrelated project (checked 7 October 2026), so the CLI needs a different name in `cli/package.json` before it can be published.
+The npm package for the command line is `ermine-ui` (free on npm when checked on 7 October 2026, and not yet published). The project itself is still called Sable throughout: the `sable` command, `sable.json`, `sable.css` and the `sb-` prefix.
 
 ## Components
 
@@ -103,7 +103,7 @@ node /path/to/sable-ui/cli/bin/sable.mjs init
 node /path/to/sable-ui/cli/bin/sable.mjs add button dialog select
 ```
 
-Once published this becomes `npx sable-ui init` and `npx sable-ui add button`.
+Once published this becomes `npx ermine-ui init` and `npx ermine-ui add button`.
 
 `init` detects the framework, suggests folders, writes `sable.json` and copies the theme stylesheet. `add` copies the components you name plus the helpers and components they depend on. Files that already exist are kept unless you pass `--overwrite`.
 

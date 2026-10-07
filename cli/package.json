@@ -1,5 +1,5 @@
 {
-  "name": "sable-ui",
+  "name": "ermine-ui",
   "version": "0.1.0",
   "description": "Copy-in Vue 3 components styled with plain CSS variables. You own the code.",
   "type": "module",
