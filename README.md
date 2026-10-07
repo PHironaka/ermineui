@@ -905,11 +905,13 @@ The browser tests need the browsers once: `npx playwright install chromium firef
 
 ## What has been checked
 
-- The suite above passes: 55 unit tests and 512 browser tests (191 in Chromium, 158 each in Firefox and WebKit, 5 on the phone profile). Firefox and WebKit skip the axe scans and the simulated screen reader tests, which read the page's structure and so do not differ by browser, and two tests that need clipboard access only Chromium grants.
+- The suite above passes: 60 unit tests and 549 browser tests (203 in Chromium, 170 each in Firefox and WebKit, 6 on the phone profile). Firefox and WebKit skip the axe scans and the simulated screen reader tests, which read the page's structure and so do not differ by browser, and two tests that need clipboard access only Chromium grants.
 - On 6 October 2026 the CLI was run in three fresh projects with the 72 components that existed then (the 14 added since have been through the per-component registry check, not this run): `init`, `add --all`, `list`, then the project's own type-check and production build, with a page that renders every component.
   - Vue 3.5 + Vite 8 + TypeScript 6 (`npm create vite`, `vue-ts` template): `vue-tsc -b` and build pass; the built page runs with no console errors.
   - Nuxt 4.6: `nuxt typecheck` and `nuxt build` pass, with the `components` auto-import setting shown above. The page renders on the server and hydrates with no hydration warnings in development mode, and components used by auto-import alone (no import statements) work.
   - Astro 7.3 with `@astrojs/vue`: `astro check` and `astro build` pass. The page hydrates as one island with no warnings, and `Button`, `Badge` and `Card` render straight from an `.astro` file with no client directive.
+
+- On 7 October 2026 the three blocks and the icon component were installed from the packed 0.2.0 CLI into a fresh Vue + Vite project (`npm create vite`, `vue-ts` template); `vue-tsc -b` and the build pass. Blocks have not been tried in Nuxt or Astro.
 
 ## Known limits
 
