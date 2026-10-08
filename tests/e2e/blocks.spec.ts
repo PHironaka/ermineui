@@ -125,3 +125,31 @@ test.describe('settings block', () => {
     await expect(readout(page, 'dashboard')).toHaveText('account deleted')
   })
 })
+
+test.describe('image fan', () => {
+  test('pictures overlap, tilt outward from the middle, and the middle one is on top', async ({ page }) => {
+    const items = demo(page, 'image-fan').locator('.er-image-fan-item')
+    await expect(items).toHaveCount(5)
+    const boxes = await items.evaluateAll((list) =>
+      list.map((item) => ({ left: item.getBoundingClientRect().left, right: item.getBoundingClientRect().right, layer: Number(getComputedStyle(item).zIndex), transform: getComputedStyle(item).transform })),
+    )
+    for (let index = 1; index < boxes.length; index++) {
+      expect(boxes[index].left).toBeGreaterThan(boxes[index - 1].left)
+      expect(boxes[index].left).toBeLessThan(boxes[index - 1].right)
+    }
+    expect(boxes.map((box) => box.layer)).toEqual([3, 4, 5, 4, 3])
+    // The middle picture is level: its matrix has no rotation in it.
+    expect(boxes[2].transform).toBe('matrix(1, 0, 0, 1, 0, 0)')
+    expect(boxes[0].transform).not.toBe(boxes[4].transform)
+  })
+
+  test('a picture comes to the front when pointed at or focused, and each link is named by its picture', async ({ page }) => {
+    const card = demo(page, 'image-fan')
+    const first = card.locator('.er-image-fan-item').first()
+    await first.hover({ position: { x: 10, y: 40 } })
+    await expect(first).toHaveCSS('z-index', '99')
+    await card.getByRole('link', { name: 'Notes home page' }).focus()
+    await expect(card.locator('.er-image-fan-item').last()).toHaveCSS('z-index', '99')
+    await expect(card.getByRole('link')).toHaveCount(5)
+  })
+})

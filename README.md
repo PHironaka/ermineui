@@ -85,6 +85,7 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `virtual-list` | Very long list that only draws the rows in view |
 | `empty-state` | Icon, heading, text and actions for when there is nothing to list |
 | `toast` | `toast()` from anywhere, with one `<Toaster />` mounted |
+| `image-fan` | A few framed pictures overlapping like a hand of cards, tilted outward from the middle; each lifts to the front on hover or focus, and the whole fan shrinks to fit |
 | `icon` | 62 built-in line icons that take the size and colour of the text around them; add your own with `registerIcons()` |
 
 ## Blocks

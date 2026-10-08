@@ -64,3 +64,15 @@ test('the dashboard block hides its sidebar and slides it in from the top bar', 
   expect(new Set(tiles).size).toBe(1)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
 })
+
+test('the image fan shrinks to fit instead of spilling out of its card', async ({ page }) => {
+  const card = demo(page, 'image-fan')
+  await card.scrollIntoViewIfNeeded()
+  const stage = await card.locator('.er-image-fan').boundingBox()
+  const boxes = await card.locator('.er-image-fan-item').evaluateAll((list) => list.map((item) => item.getBoundingClientRect().width))
+  expect(Math.max(...boxes)).toBeLessThan(210)
+  const first = await card.locator('.er-image-fan-card').first().boundingBox()
+  const last = await card.locator('.er-image-fan-card').last().boundingBox()
+  expect(first!.x).toBeGreaterThanOrEqual(stage!.x - 12)
+  expect(last!.x + last!.width).toBeLessThanOrEqual(stage!.x + stage!.width + 12)
+})

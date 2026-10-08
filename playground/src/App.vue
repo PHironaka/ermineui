@@ -135,6 +135,7 @@ import { WakeLockToggle } from '../../registry/ui/wake-lock'
 import { Prose, Typography } from '../../registry/ui/typography'
 import { VirtualList } from '../../registry/ui/virtual-list'
 import { Icon, iconNames, registerIcons } from '../../registry/ui/icon'
+import { ImageFan, type ImageFanImage } from '../../registry/ui/image-fan'
 import { Dashboard } from '../../registry/blocks/dashboard'
 import { SettingsPage } from '../../registry/blocks/settings'
 import { SignIn } from '../../registry/blocks/sign-in'
@@ -372,6 +373,21 @@ const zoom = ref('100')
 const lastMenu = ref('Nothing chosen yet')
 
 // Code block
+// Stand-in screenshots drawn as SVG, so the demo needs no image files and no network.
+const fanImages: ImageFanImage[] = [
+  ['Journal', '#f4f1ea', '#1c1c1c', '#c9b79c'],
+  ['Studio', '#1f2430', '#f5f5f5', '#5b8def'],
+  ['Portfolio', '#ffffff', '#111111', '#e5484d'],
+  ['Archive', '#0b0b0c', '#fafafa', '#f5a524'],
+  ['Notes', '#13241c', '#eafff3', '#3ecf8e'],
+].map(([name, background, ink, accent]) => ({
+  alt: `${name} home page`,
+  href: '#image-fan',
+  src: `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="${background}"/><rect x="20" y="18" width="46" height="8" rx="4" fill="${ink}"/><rect x="236" y="18" width="64" height="8" rx="4" fill="${ink}" opacity=".35"/><rect x="20" y="58" width="150" height="14" rx="3" fill="${ink}"/><rect x="20" y="80" width="110" height="14" rx="3" fill="${ink}"/><rect x="20" y="108" width="120" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="20" y="120" width="90" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="196" y="52" width="104" height="92" rx="8" fill="${accent}"/><rect x="20" y="160" width="84" height="40" rx="6" fill="${accent}" opacity=".5"/><rect x="118" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/><rect x="216" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/></svg>`,
+  )}`,
+}))
+
 // An icon of our own, added beside the built-in set.
 registerIcons({ rocket: 'M5 19c0-2 1-4 3-5l3 3c-1 2-3 3-5 3ZM9 13c1-5 5-9 11-9 0 6-4 10-9 11ZM15 9v.01' })
 const iconSize = ref('24')
@@ -1957,6 +1973,10 @@ function undoable() {
             <li v-for="name in iconNames()" :key="name"><Icon :name="name" :size="Number(iconSize)" /><code>{{ name }}</code></li>
           </ul>
         </div>
+      </Demo>
+
+      <Demo name="image-fan" title="Image fan" description="Framed pictures overlapping like a hand of cards. Point at one, or tab to it, and it comes to the front. The fan shrinks to fit a narrow space." wide>
+        <ImageFan :images="fanImages" />
       </Demo>
 
       <Demo name="dashboard" title="Block: Dashboard" description="A whole app page put together from the components above: sidebar, top bar, headline numbers, charts and a table. Copy it, then swap in your own data." wide>
