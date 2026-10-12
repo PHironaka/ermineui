@@ -155,6 +155,13 @@ function toggleTheme(event?: MouseEvent) {
   }, event && event.clientX ? event : undefined)
 }
 
+// Button: loading
+const saving = ref(false)
+function save() {
+  saving.value = true
+  setTimeout(() => (saving.value = false), 1500)
+}
+
 // Form controls
 const projectName = ref('northwind-storefront')
 const notes = ref('')
@@ -699,7 +706,7 @@ function undoable() {
     </section>
 
     <main class="demos">
-      <Demo name="button" title="Button" description="Six variants, four sizes. Renders as any tag or component." wide>
+      <Demo name="button" title="Button" description="Six variants, four sizes, and a loading state. Renders as any tag or component." wide>
         <Button>Deploy</Button>
         <Button variant="secondary">Secondary</Button>
         <Button variant="outline">Outline</Button>
@@ -709,6 +716,8 @@ function undoable() {
         <Button size="sm" variant="outline">Small</Button>
         <Button size="lg">Large</Button>
         <Button disabled>Disabled</Button>
+        <Button :loading="saving" @click="save">{{ saving ? 'Saving' : 'Save' }}</Button>
+        <Button variant="outline" size="icon" aria-label="Refresh" :loading="saving" @click="save"><Icon name="refresh" /></Button>
       </Demo>
 
       <Demo name="navigation-menu" title="Navigation menu and Menubar" description="A site's main links with panels that open on hover or click, and an application-style menu bar." wide>
@@ -1888,7 +1897,7 @@ function undoable() {
             <Progress aria-labelledby="queue-label" />
           </div>
           <div class="row">
-            <Button :disabled="building" @click="runBuild"><Spinner v-if="building" label="" /> {{ building ? 'Building' : 'Run build' }}</Button>
+            <Button :loading="building" @click="runBuild">{{ building ? 'Building' : 'Run build' }}</Button>
             <Spinner size="sm" />
             <Spinner />
             <Spinner size="lg" />

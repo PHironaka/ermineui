@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { Primitive } from '../../lib/primitive'
+import { Spinner } from '../spinner'
 
 withDefaults(
   defineProps<{
@@ -10,6 +11,9 @@ withDefaults(
     as?: string | Component
     /** Pass the button's styling and behavior to the single child instead of rendering a tag. */
     asChild?: boolean
+    disabled?: boolean
+    /** Set while the action is running: shows a spinner and stops the button being pressed again. */
+    loading?: boolean
   }>(),
   { variant: 'default', size: 'md', as: 'button' },
 )
@@ -23,8 +27,14 @@ withDefaults(
     class="er-button"
     :data-variant="variant"
     :data-size="size"
+    :disabled="(as === 'button' || asChild) && (disabled || loading) ? true : undefined"
+    :aria-disabled="as !== 'button' && (disabled || loading) ? true : undefined"
+    :aria-busy="loading || undefined"
   >
-    <slot />
+    <!-- With as-child the content belongs to the child, so there is nowhere to put a spinner. -->
+    <Spinner v-if="loading && !asChild" label="" />
+    <!-- An icon button has room for one thing, so the spinner stands in for the icon. -->
+    <slot v-if="!loading || asChild || size !== 'icon'" />
   </Primitive>
 </template>
 

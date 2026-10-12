@@ -1,5 +1,25 @@
 import { demo, expect, readout, test } from './helpers'
 
+test.describe('button', () => {
+  test('while loading it shows a spinner, cannot be pressed, and then comes back', async ({ page }) => {
+    const card = demo(page, 'button')
+    const save = card.getByRole('button', { name: 'Save' })
+    const refresh = card.getByRole('button', { name: 'Refresh' })
+    await expect(save.locator('.er-spinner')).toHaveCount(0)
+    await save.click()
+    const saving = card.getByRole('button', { name: 'Saving' })
+    await expect(saving).toBeDisabled()
+    await expect(saving).toHaveAttribute('aria-busy', 'true')
+    await expect(saving.locator('.er-spinner')).toBeVisible()
+    // The icon button swaps its icon for the spinner and keeps its size.
+    await expect(refresh.locator('svg')).toHaveCount(1)
+    await expect(refresh.locator('.er-spinner')).toBeVisible()
+    await expect(save).toBeEnabled()
+    await expect(save).not.toHaveAttribute('aria-busy')
+    await expect(refresh.locator('.er-spinner')).toHaveCount(0)
+  })
+})
+
 test.describe('tabs', () => {
   test('arrow keys move and select; the panel follows; disabled tabs are skipped', async ({ page }) => {
     const card = demo(page, 'tabs')

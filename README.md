@@ -13,7 +13,7 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 
 | | |
 |---|---|
-| `button` | Six variants, four sizes; renders as any tag or component |
+| `button` | Six variants, four sizes, a loading state; renders as any tag or component |
 | `input`, `textarea`, `label` | Native fields with `v-model` and invalid styling |
 | `input-group` | Input with a prefix or suffix, plus password (show / hide) and search (clear) fields |
 | `tags-input` | Free-form values typed in and shown as removable tags |
@@ -345,7 +345,8 @@ Typing filters on each item's text (or its `text-value`). Emptying the field and
 <Avatar src="/people/ines.jpg" alt="Ines Kovač">IK</Avatar>
 
 <Progress :value="35" aria-label="Upload" />  <!-- leave value out when the amount is unknown -->
-<Button disabled><Spinner label="" /> Saving</Button>
+<Spinner />
+<Button :loading="saving" @click="save">Save</Button>  <!-- a spinner, and no second press, while saving is true -->
 ```
 
 **Chart**

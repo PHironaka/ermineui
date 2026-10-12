@@ -8,7 +8,6 @@ import { Field, email, required, useValidation } from '../../ui/field'
 import { Input } from '../../ui/input'
 import { PasswordInput } from '../../ui/input-group'
 import { Label } from '../../ui/label'
-import { Spinner } from '../../ui/spinner'
 
 withDefaults(
   defineProps<{
@@ -70,8 +69,7 @@ function submit() {
       </CardContent>
 
       <CardFooter class="er-sign-in-footer">
-        <Button type="submit" :disabled="loading">
-          <Spinner v-if="loading" size="sm" label="" />
+        <Button type="submit" :loading="loading">
           {{ loading ? 'Signing in…' : 'Sign in' }}
         </Button>
         <slot />
