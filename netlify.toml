@@ -1,0 +1,9 @@
+# Deploys the website in site/. Its build also builds the playground, which lives at the top of the
+# repository and uses the packages installed there, so those are installed first.
+[build]
+  base = "site"
+  command = "npm ci --prefix .. && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
