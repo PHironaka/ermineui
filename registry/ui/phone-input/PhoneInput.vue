@@ -22,7 +22,7 @@ const model = defineModel<string>({ default: '' })
 
 const byCode = (code: string) => props.countries.find((country) => country.code === code)
 
-const country = ref<PhoneCountry>(parsePhone(model.value, props.countries, props.defaultCountry).country ?? byCode(props.defaultCountry) ?? props.countries[0])
+const country = ref<PhoneCountry>(parsePhone(model.value, props.countries, props.defaultCountry).country ?? byCode(props.defaultCountry) ?? props.countries[0]!)
 const national = ref(parsePhone(model.value, props.countries).national)
 
 // A value set from outside (a saved number arriving) is taken apart again; one that came from typing here already matches.

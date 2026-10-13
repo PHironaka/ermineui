@@ -17,7 +17,7 @@ export interface CommentNode {
 /** A name's initials, for the avatar of someone without a picture. */
 export function initials(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean)
-  return ((words[0]?.[0] ?? '') + (words.length > 1 ? words[words.length - 1][0] : '')).toUpperCase()
+  return ((words[0]?.[0] ?? '') + (words.length > 1 ? words[words.length - 1]![0] : '')).toUpperCase()
 }
 
 /** How many comments there are, counting every reply. */

@@ -61,13 +61,13 @@ function onKeydown(event: KeyboardEvent) {
   else if (event.key === 'End') next = buttons.length - 1
   else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
     // Up and down go to whichever emoji in the next row sits closest to straight above or below, even across groups.
-    const from = buttons[index].getBoundingClientRect()
+    const from = buttons[index]!.getBoundingClientRect()
     const direction = event.key === 'ArrowDown' ? 1 : -1
     let rowTop: number | undefined
     let best = index
     let bestGap = Infinity
     for (let other = index + direction; other >= 0 && other < buttons.length; other += direction) {
-      const box = buttons[other].getBoundingClientRect()
+      const box = buttons[other]!.getBoundingClientRect()
       if (Math.abs(box.top - from.top) < 2) continue
       rowTop ??= box.top
       if (Math.abs(box.top - rowTop) > 2) break
@@ -77,7 +77,7 @@ function onKeydown(event: KeyboardEvent) {
     next = best
   } else return
   event.preventDefault()
-  const target = buttons[Math.max(0, Math.min(next, buttons.length - 1))]
+  const target = buttons[Math.max(0, Math.min(next, buttons.length - 1))]!
   stop.value = target.dataset.key
   void nextTick(() => target.focus())
 }

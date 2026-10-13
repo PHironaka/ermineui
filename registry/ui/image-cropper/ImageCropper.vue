@@ -57,6 +57,7 @@ let observer: ResizeObserver | undefined
 onMounted(() => {
   if (!frame.value) return
   observer = new ResizeObserver(([entry]) => {
+    if (!entry) return
     // The offset is in px of the frame, so it is scaled along with the frame when the layout changes.
     const ratio = frameSize.width ? entry.contentRect.width / frameSize.width : 1
     frameSize.width = entry.contentRect.width
@@ -75,7 +76,7 @@ let pinchStart: { distance: number; zoom: number } | undefined
 
 const spread = () => {
   const [a, b] = [...pointers.values()]
-  return Math.hypot(a.x - b.x, a.y - b.y)
+  return Math.hypot(a!.x - b!.x, a!.y - b!.y)
 }
 
 function onPointerDown(event: PointerEvent) {
@@ -114,7 +115,7 @@ function onKeydown(event: KeyboardEvent) {
   }
   if (!moves[event.key]) return
   event.preventDefault()
-  set(moves[event.key])
+  set(moves[event.key]!)
 }
 
 /**

@@ -39,7 +39,7 @@ export function diffLines(before: string, after: string): DiffLine[] {
   const lengths = Array.from({ length: rows + 1 }, () => new Uint32Array(columns + 1))
   for (let i = rows - 1; i >= 0; i--) {
     for (let j = columns - 1; j >= 0; j--) {
-      lengths[i][j] = middleA[i] === middleB[j] ? lengths[i + 1][j + 1] + 1 : Math.max(lengths[i + 1][j], lengths[i][j + 1])
+      lengths[i]![j] = middleA[i] === middleB[j] ? lengths[i + 1]![j + 1]! + 1 : Math.max(lengths[i + 1]![j]!, lengths[i]![j + 1]!)
     }
   }
 
@@ -48,22 +48,22 @@ export function diffLines(before: string, after: string): DiffLine[] {
   let afterNumber = 1
   const same = (text: string) => lines.push({ type: 'same', text, before: beforeNumber++, after: afterNumber++ })
 
-  for (let index = 0; index < head; index++) same(a[index])
+  for (let index = 0; index < head; index++) same(a[index]!)
   let i = 0
   let j = 0
   while (i < rows || j < columns) {
     if (i < rows && j < columns && middleA[i] === middleB[j]) {
-      same(middleA[i])
+      same(middleA[i]!)
       i++
       j++
-    } else if (i < rows && (j === columns || lengths[i + 1][j] >= lengths[i][j + 1])) {
+    } else if (i < rows && (j === columns || lengths[i + 1]![j]! >= lengths[i]![j + 1]!)) {
       // Removals are listed before the additions that replace them, as readers expect.
-      lines.push({ type: 'removed', text: middleA[i++], before: beforeNumber++ })
+      lines.push({ type: 'removed', text: middleA[i++]!, before: beforeNumber++ })
     } else {
-      lines.push({ type: 'added', text: middleB[j++], after: afterNumber++ })
+      lines.push({ type: 'added', text: middleB[j++]!, after: afterNumber++ })
     }
   }
-  for (let index = a.length - tail; index < a.length; index++) same(a[index])
+  for (let index = a.length - tail; index < a.length; index++) same(a[index]!)
 
   return lines
 }
@@ -82,7 +82,7 @@ export function diffHunks(lines: readonly DiffLine[], context = 3): DiffHunk[] {
   let afterNext = 1
   lines.forEach((line, index) => {
     if (keep[index]) {
-      current ??= hunks[hunks.push({ beforeStart: line.before ?? beforeNext, afterStart: line.after ?? afterNext, lines: [] }) - 1]
+      current ??= hunks[hunks.push({ beforeStart: line.before ?? beforeNext, afterStart: line.after ?? afterNext, lines: [] }) - 1]!
       current.lines.push(line)
     } else {
       current = undefined

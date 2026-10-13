@@ -6,7 +6,7 @@ const DROPPED = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'TEMPLA
 /** An address that is safe to link to. Anything with a scheme other than these, such as javascript:, is refused. */
 export function safeHref(href: string): string | undefined {
   const trimmed = href.trim()
-  const scheme = trimmed.match(/^([a-z][a-z\d+.-]*):/i)?.[1].toLowerCase()
+  const scheme = trimmed.match(/^([a-z][a-z\d+.-]*):/i)?.[1]!.toLowerCase()
   return trimmed && (!scheme || ['http', 'https', 'mailto', 'tel'].includes(scheme)) ? trimmed : undefined
 }
 

@@ -31,7 +31,7 @@ let observer: ResizeObserver | undefined
 onMounted(() => {
   if (!group.value || !('ResizeObserver' in window)) return
   observer = new ResizeObserver(([entry]) => {
-    if (entry.contentRect.width > 0) duration.value = entry.contentRect.width / Math.max(1, props.speed)
+    if (entry && entry.contentRect.width > 0) duration.value = entry.contentRect.width / Math.max(1, props.speed)
   })
   observer.observe(group.value)
 })

@@ -15,7 +15,7 @@ export const escapeHtml = (text: string) => text.replace(/&/g, '&amp;').replace(
 /** An address that is safe to link to: an ordinary web, mail or phone link, or one within the site. Anything else, such as javascript:, is refused. */
 export function safeUrl(url: string): string | undefined {
   const trimmed = url.trim()
-  const scheme = trimmed.match(/^([a-z][a-z\d+.-]*):/i)?.[1].toLowerCase()
+  const scheme = trimmed.match(/^([a-z][a-z\d+.-]*):/i)?.[1]!.toLowerCase()
   return !scheme || ['http', 'https', 'mailto', 'tel'].includes(scheme) ? trimmed : undefined
 }
 
@@ -58,7 +58,7 @@ function inline(text: string): string {
     .replace(/(?: {2,}|\\)\n/g, '<br>\n')
 
   // Put back what was set aside. A picture's description can itself hold a marker, hence the loop.
-  while (/\u0000\d+\u0000/.test(out)) out = out.replace(/\u0000(\d+)\u0000/g, (_match, index: string) => held[Number(index)])
+  while (/\u0000\d+\u0000/.test(out)) out = out.replace(/\u0000(\d+)\u0000/g, (_match, index: string) => held[Number(index)]!)
   return out
 }
 
@@ -70,13 +70,13 @@ const cells = (row: string) =>
     .map((cell) => cell.trim().replace(/\\\|/g, '|'))
 
 function table(lines: string[], start: number): [string, number] {
-  const aligns = cells(lines[start + 1]).map((cell) => (cell.startsWith(':') && cell.endsWith(':') ? 'center' : cell.endsWith(':') ? 'right' : undefined))
+  const aligns = cells(lines[start + 1]!).map((cell) => (cell.startsWith(':') && cell.endsWith(':') ? 'center' : cell.endsWith(':') ? 'right' : undefined))
   const attribute = (index: number) => (aligns[index] ? ` data-align="${aligns[index]}"` : '')
-  const head = cells(lines[start]).map((cell, index) => `<th scope="col"${attribute(index)}>${inline(cell)}</th>`)
+  const head = cells(lines[start]!).map((cell, index) => `<th scope="col"${attribute(index)}>${inline(cell)}</th>`)
   const rows: string[] = []
   let i = start + 2
-  for (; i < lines.length && lines[i].trim() && lines[i].includes('|'); i++) {
-    const row = cells(lines[i])
+  for (; i < lines.length && lines[i]!.trim() && lines[i]!.includes('|'); i++) {
+    const row = cells(lines[i]!)
     // A short row is padded and a long one cut, so every row has as many cells as the header.
     rows.push(`<tr>${head.map((_cell, index) => `<td${attribute(index)}>${inline(row[index] ?? '')}</td>`).join('')}</tr>`)
   }
@@ -85,9 +85,9 @@ function table(lines: string[], start: number): [string, number] {
 }
 
 function list(lines: string[], start: number, options: MarkdownOptions): [string, number] {
-  const first = lines[start].match(ITEM)!
-  const indent = first[1].length
-  const ordered = /\d/.test(first[2])
+  const first = lines[start]!.match(ITEM)!
+  const indent = first[1]!.length
+  const ordered = /\d/.test(first[2]!)
   const items: string[][] = []
   // A blank line between items makes the list "loose": each item's text is then a paragraph of its own.
   let loose = false
@@ -95,28 +95,28 @@ function list(lines: string[], start: number, options: MarkdownOptions): [string
   let i = start
 
   while (i < lines.length) {
-    const line = lines[i]
+    const line = lines[i]!
     const match = line.match(ITEM)
     const spaces = line.match(/^\s*/)![0].length
 
-    if (match && match[1].length <= indent + 1 && !RULE.test(line)) {
+    if (match && match[1]!.length <= indent + 1 && !RULE.test(line)) {
       // A marker of the other kind, or one further out, belongs to a different list.
-      if (match[1].length < indent || /\d/.test(match[2]) !== ordered) break
-      contentIndent = indent + match[2].length + 1
-      items.push([match[3]])
+      if (match[1]!.length < indent || /\d/.test(match[2]!) !== ordered) break
+      contentIndent = indent + match[2]!.length + 1
+      items.push([match[3]!])
     } else if (!line.trim()) {
       // A blank line ends the list unless what follows still belongs to it.
       let next = i + 1
-      while (next < lines.length && !lines[next].trim()) next++
+      while (next < lines.length && !lines[next]!.trim()) next++
       const after = lines[next]
       const afterItem = after?.match(ITEM)
-      const continues = after !== undefined && ((afterItem && afterItem[1].length >= indent && afterItem[1].length <= indent + 1 && /\d/.test(afterItem[2]) === ordered) || after.match(/^\s*/)![0].length >= indent + 2)
+      const continues = after !== undefined && ((afterItem && afterItem[1]!.length >= indent && afterItem[1]!.length <= indent + 1 && /\d/.test(afterItem[2]!) === ordered) || after.match(/^\s*/)![0].length >= indent + 2)
       if (!continues) break
-      loose = loose || Boolean(afterItem && afterItem[1].length <= indent + 1)
-      items[items.length - 1].push('')
+      loose = loose || Boolean(afterItem && afterItem[1]!.length <= indent + 1)
+      items[items.length - 1]!.push('')
     } else if (spaces >= indent + 2 || lines[i - 1]?.trim()) {
       // Indented under the item, or simply carrying its paragraph on to another line.
-      items[items.length - 1].push(line.slice(Math.min(spaces, contentIndent)))
+      items[items.length - 1]!.push(line.slice(Math.min(spaces, contentIndent)))
     } else {
       break
     }
@@ -124,14 +124,14 @@ function list(lines: string[], start: number, options: MarkdownOptions): [string
   }
 
   const html = items.map((item) => {
-    const task = item[0].match(/^\[([ xX])\]\s+(.*)$/)
-    if (task) item[0] = task[2]
+    const task = item[0]!.match(/^\[([ xX])\]\s+(.*)$/)
+    if (task) item[0] = task[2]!
     let body = blocks(item, options)
     if (!loose) body = body.replace(/^<p>([\s\S]*?)<\/p>/, '$1')
     const box = task ? `<input type="checkbox" disabled aria-label="${task[1] === ' ' ? 'Not done' : 'Done'}"${task[1] === ' ' ? '' : ' checked'}> ` : ''
     return `<li${task ? ' data-task' : ''}>${box}${body}</li>`
   })
-  const number = Number.parseInt(first[2], 10)
+  const number = Number.parseInt(first[2]!, 10)
   const tag = ordered ? 'ol' : 'ul'
   return [`<${tag}${ordered && number !== 1 ? ` start="${number}"` : ''}>${html.join('')}</${tag}>`, i]
 }
@@ -141,7 +141,7 @@ function blocks(lines: string[], options: MarkdownOptions): string {
   let i = 0
 
   while (i < lines.length) {
-    const line = lines[i]
+    const line = lines[i]!
     if (!line.trim()) {
       i++
       continue
@@ -149,9 +149,9 @@ function blocks(lines: string[], options: MarkdownOptions): string {
 
     const fence = line.match(FENCE)
     if (fence) {
-      const closing = new RegExp(`^ {0,3}${fence[1][0]}{${fence[1].length},}\\s*$`)
+      const closing = new RegExp(`^ {0,3}${fence[1]![0]}{${fence[1]!.length},}\\s*$`)
       const body: string[] = []
-      for (i++; i < lines.length && !closing.test(lines[i]); i++) body.push(lines[i])
+      for (i++; i < lines.length && !closing.test(lines[i]!); i++) body.push(lines[i]!)
       i++
       out.push(`<pre><code${fence[2] ? ` class="language-${escapeHtml(fence[2])}"` : ''}>${escapeHtml(body.join('\n'))}\n</code></pre>`)
       continue
@@ -159,8 +159,8 @@ function blocks(lines: string[], options: MarkdownOptions): string {
 
     const heading = line.match(HEADING)
     if (heading) {
-      const level = Math.min(6, heading[1].length + (options.headingOffset ?? 0))
-      out.push(`<h${level}>${inline(heading[2])}</h${level}>`)
+      const level = Math.min(6, heading[1]!.length + (options.headingOffset ?? 0))
+      out.push(`<h${level}>${inline(heading[2]!)}</h${level}>`)
       i++
       continue
     }
@@ -173,7 +173,7 @@ function blocks(lines: string[], options: MarkdownOptions): string {
 
     if (QUOTE.test(line)) {
       const inner: string[] = []
-      for (; i < lines.length && QUOTE.test(lines[i]); i++) inner.push(lines[i].match(QUOTE)![1])
+      for (; i < lines.length && QUOTE.test(lines[i]!); i++) inner.push(lines[i]!.match(QUOTE)![1]!)
       out.push(`<blockquote>${blocks(inner, options)}</blockquote>`)
       continue
     }
@@ -185,7 +185,7 @@ function blocks(lines: string[], options: MarkdownOptions): string {
       continue
     }
 
-    if (line.includes('|') && lines[i + 1]?.includes('-') && TABLE_RULE.test(lines[i + 1])) {
+    if (line.includes('|') && lines[i + 1]?.includes('-') && TABLE_RULE.test(lines[i + 1]!)) {
       const [html, next] = table(lines, i)
       out.push(html)
       i = next
@@ -194,9 +194,9 @@ function blocks(lines: string[], options: MarkdownOptions): string {
 
     // Anything else is a paragraph, running on until a blank line or the start of another kind of block.
     const paragraph: string[] = []
-    for (; i < lines.length && lines[i].trim(); i++) {
-      if (paragraph.length && (FENCE.test(lines[i]) || HEADING.test(lines[i]) || RULE.test(lines[i]) || QUOTE.test(lines[i]) || ITEM.test(lines[i]))) break
-      paragraph.push(lines[i].replace(/^\s+/, ''))
+    for (; i < lines.length && lines[i]!.trim(); i++) {
+      if (paragraph.length && (FENCE.test(lines[i]!) || HEADING.test(lines[i]!) || RULE.test(lines[i]!) || QUOTE.test(lines[i]!) || ITEM.test(lines[i]!))) break
+      paragraph.push(lines[i]!.replace(/^\s+/, ''))
     }
     out.push(`<p>${inline(paragraph.join('\n'))}</p>`)
   }

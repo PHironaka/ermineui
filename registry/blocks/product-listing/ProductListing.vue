@@ -45,7 +45,7 @@ const facets = computed<FilterBarFacet[]>(() => [
 ])
 
 const filtered = computed(() =>
-  props.products.filter((product) => facets.value.every((facet) => !filters.value[facet.key]?.length || filters.value[facet.key].includes(product[facet.key as 'brand' | 'category']))),
+  props.products.filter((product) => facets.value.every((facet) => !filters.value[facet.key]?.length || filters.value[facet.key]!.includes(product[facet.key as 'brand' | 'category']))),
 )
 
 const sorted = computed(() => {

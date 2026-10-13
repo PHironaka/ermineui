@@ -41,13 +41,13 @@ function scrolledToTop() {
 
 function onTouchStart(event: TouchEvent) {
   if (props.disabled || refreshing.value || !scrolledToTop()) return
-  startY = event.touches[0].clientY
+  startY = event.touches[0]!.clientY
   pulling.value = true
 }
 
 function onTouchMove(event: TouchEvent) {
   if (!pulling.value) return
-  const dy = event.touches[0].clientY - startY
+  const dy = event.touches[0]!.clientY - startY
   if (dy <= 0) {
     distance.value = 0
     return

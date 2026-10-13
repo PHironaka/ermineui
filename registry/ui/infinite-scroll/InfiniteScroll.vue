@@ -43,6 +43,7 @@ onMounted(() => {
   if (!sentinel.value || !('IntersectionObserver' in window)) return
   observer = new IntersectionObserver(
     ([entry]) => {
+      if (!entry) return
       inView.value = entry.isIntersecting
       if (entry.isIntersecting && !props.manual && idle()) emit('load')
     },

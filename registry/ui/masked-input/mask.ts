@@ -30,7 +30,7 @@ export function unmask(text: string, mask: string): string {
   for (const character of text) {
     const slot = wanted[raw.length]
     if (!slot) break
-    if (slots[slot].test(character)) raw += character
+    if (slots[slot]!.test(character)) raw += character
   }
   return raw
 }
@@ -54,7 +54,7 @@ export function caretAfter(masked: string, mask: string, count: number): number 
   if (count <= 0) return 0
   let seen = 0
   for (let index = 0; index < masked.length; index++) {
-    if (mask[index] in slots && ++seen === count) return index + 1
+    if (mask[index]! in slots && ++seen === count) return index + 1
   }
   return masked.length
 }
