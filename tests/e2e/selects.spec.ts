@@ -113,7 +113,7 @@ test.describe('multi-select', () => {
     await expect(input).toHaveAttribute('aria-expanded', 'true')
     await expect(input).toHaveValue('')
     // Three is the maximum here: a fourth cannot be added.
-    await page.getByRole('option', { name: 'Singapore' }).click({ force: true })
+    await page.getByRole('option', { name: 'Singapore', exact: true }).click({ force: true })
     await expect(readout(page, 'multi-select')).toContainText('regions: fra1, iad1, lhr1 ·')
     await expect(card.locator('input[name="regions"]')).toHaveCount(3)
   })

@@ -224,7 +224,7 @@ test.describe('checkout block', () => {
     await card.getByLabel('Town or city').fill('Osaka')
     await card.getByLabel('Postcode').fill('530-0001')
     await card.getByRole('combobox', { name: 'Country' }).click()
-    await page.getByRole('option', { name: 'Japan' }).click()
+    await page.getByRole('option', { name: 'Japan', exact: true }).click()
     await card.getByRole('radio', { name: /Express/ }).check()
     await expect(card.locator('.er-order-summary-total dd')).toHaveText('$167.52')
     await card.getByLabel('Name on card').fill('Ines Kovac')

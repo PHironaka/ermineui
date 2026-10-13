@@ -91,7 +91,8 @@ test.describe('rich text editor', () => {
     await expect(card.getByRole('button', { name: 'Italic' })).toHaveAttribute('aria-pressed', 'true')
     await page.keyboard.type('slanted')
     await expect(box.locator('i, em')).toHaveText('slanted')
-    await expect(readout(page, 'rich-text-editor')).toContainText('Plain <')
+    // Browsers differ in the HTML they write: Firefox keeps the space before the italics as a non-breaking one.
+    await expect(readout(page, 'rich-text-editor')).toContainText(/Plain(&nbsp;| )</)
 
     await page.keyboard.press('ControlOrMeta+a')
     await card.getByRole('button', { name: 'Bulleted list' }).click()
@@ -117,7 +118,9 @@ test.describe('rich text editor', () => {
     await expect(address).toBeHidden()
   })
 
-  test('what is pasted loses everything but the formatting on the toolbar', async ({ page }) => {
+  test('what is pasted loses everything but the formatting on the toolbar', async ({ page, browserName }) => {
+    // The paste is made up by a script, and Firefox does not let a script-made paste event carry any data.
+    test.skip(browserName === 'firefox', 'a synthetic paste carries no data in Firefox')
     const card = demo(page, 'rich-text-editor')
     const box = card.getByRole('textbox', { name: 'Product description' })
     await box.click()
