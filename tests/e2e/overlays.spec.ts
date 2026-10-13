@@ -157,7 +157,7 @@ test.describe('toast', () => {
     const card = demo(page, 'toast')
     await card.getByRole('button', { name: 'With action' }).click()
     await expect(page.getByText('Deployment archived')).toBeVisible()
-    await page.getByRole('button', { name: 'Undo' }).click()
+    await page.locator('.er-toast-action', { hasText: 'Undo' }).click()
     await expect(page.getByText('Deployment restored')).toBeVisible()
     await expect(page.getByText('Deployment archived')).toBeHidden()
   })
