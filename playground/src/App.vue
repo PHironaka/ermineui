@@ -781,7 +781,7 @@ function undoable() {
     <header class="topbar">
       <div class="brand"><span class="brand-mark" aria-hidden="true" /> Ermine UI</div>
       <div class="row">
-        <Badge variant="outline">v0.1.0</Badge>
+        <Badge variant="outline">v0.3.0</Badge>
         <Tooltip>
           <TooltipTrigger as-child>
             <Button variant="outline" size="icon" :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`" @click="toggleTheme">
@@ -802,7 +802,7 @@ function undoable() {
     <section class="intro" aria-label="Introduction">
       <h1>Vue components you copy in and own.</h1>
       <p>
-        Eighty-six accessible components for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
+        141 accessible components and 12 blocks for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
         runtime dependencies beyond Vue. The command line copies the source into your project, so every line is
         yours to change.
       </p>
