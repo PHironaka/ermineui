@@ -152,6 +152,10 @@ import { Dashboard } from '../../registry/blocks/dashboard'
 import { SettingsPage } from '../../registry/blocks/settings'
 import { SignIn } from '../../registry/blocks/sign-in'
 import Demo from './Demo.vue'
+import BlockDemos from './demos/BlockDemos.vue'
+import GeneralDemos from './demos/GeneralDemos.vue'
+import MobileDemos from './demos/MobileDemos.vue'
+import ShopDemos from './demos/ShopDemos.vue'
 
 // Theme: follows the system until the visitor picks one. Read after mount, so the page can also be rendered on a server.
 const theme = ref<'light' | 'dark'>('light')
@@ -768,7 +772,7 @@ function undoable() {
 
 <template>
   <Banner v-model:open="bannerOpen" variant="info" dismissible>
-    Ermine now has 86 components.
+    Ermine now has 141 components and 12 blocks.
     <template #action><a href="#navigation-menu">See what is new</a></template>
   </Banner>
   <OfflineBanner />
@@ -2219,6 +2223,11 @@ function undoable() {
         </div>
       </Demo>
 
+      <!-- The newer demos live in files of their own, a group to a file, so this one stays readable. -->
+      <ShopDemos />
+      <MobileDemos />
+      <GeneralDemos />
+
       <Demo name="dashboard" title="Block: Dashboard" description="A whole app page put together from the components above: sidebar, top bar, headline numbers, charts and a table. Copy it, then swap in your own data." wide>
         <div class="block-frame">
           <Dashboard main-as="div" title-as="h3" style="--er-dashboard-height: 44rem" @sign-out="blockEvent = 'signed out'" @export="blockEvent = 'export pressed'" />
@@ -2262,6 +2271,8 @@ function undoable() {
           <p class="readout">{{ checkoutEvent }}</p>
         </div>
       </Demo>
+
+      <BlockDemos />
     </main>
 
     <footer class="footer">Every demo above is the unmodified source that <code>ermine add</code> copies into a project.</footer>

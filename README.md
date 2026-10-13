@@ -62,6 +62,14 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `product-gallery` | One large picture with thumbnails to switch between; swipe, arrow keys and hover zoom |
 | `cart-line-item` | One product in a cart: picture, name, variant, quantity, line total and a remove button |
 | `order-summary` | Subtotal, discount, shipping and tax added up to a total |
+| `quantity-stepper` | A compact minus, count and plus; at one, the minus can become a bin that removes the item |
+| `wishlist-button` | A heart that fills when something is saved for later, alone or with its words |
+| `shipping-method` | Ways to deliver as cards to pick one from, each with when it arrives and what it costs |
+| `mini-cart` | The cart as a panel from the side: items, quantities, subtotal and the way to the checkout |
+| `order-tracker` | Where a parcel has got to, as a line that fills, with the date of each stage |
+| `comparison-table` | Products or plans side by side, one row per property, with ticks for what each has |
+| `pricing-table` | Plans with what each costs and includes, a monthly / yearly switch, and one plan marked out |
+| `size-guide` | Measurements for each size, in centimetres or inches, with one size marked |
 | `pagination`, `breadcrumb` | Numbered pages with gaps shortened; trail of links to the current page |
 | `chart` | Line, area, bar, donut, scatter and heatmap charts, a ranked bar list and a gauge; hover readouts, keyboard support, table views |
 | `skeleton` | Loading placeholder with pulse or shimmer; still under reduced motion |
@@ -97,6 +105,30 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `toast` | `toast()` from anywhere, with one `<Toaster />` mounted |
 | `image-fan` | A few framed pictures overlapping like a hand of cards, tilted outward from the middle; each lifts to the front on hover or focus, and the whole fan shrinks to fit |
 | `icon` | 62 built-in line icons that take the size and colour of the text around them; add your own with `registerIcons()` |
+| `segmented-control` | One choice from two to five, side by side in a single track |
+| `toolbar` | A row of controls that takes one stop in the tab order; arrow keys move between them |
+| `meter` | A bar for a reading in a known range, changing colour past the levels you call low and high |
+| `phone-input` | A calling code and a number as one international value, laid out the way that country writes it |
+| `password-strength` | A four-step bar and a word for how strong a password is, with the rules ticked off |
+| `rich-text-editor` | Bold, italic, headings, lists, quotes and links, giving back clean HTML; no editor library |
+| `markdown` | Markdown shown as styled content; safe for text written by other people |
+| `emoji-picker` | Emoji in groups with a search box, arrow-key movement and a name for each |
+| `image-cropper` | Drag and zoom a picture behind a fixed frame, then cut it out as a file |
+| `chat` | A conversation as bubbles that stays scrolled to the newest message, and a box that sends on Enter |
+| `comment-thread` | Comments with replies nested under them and a reply box that opens under any one |
+| `notification-center` | A bell with an unread count, opening a list that is marked read as it is pressed |
+| `json-viewer` | Any value as a tree to open and close, each kind of value in its own colour |
+| `diff-viewer` | Two versions of a text compared line by line, in one column or side by side |
+| `media-player` | Video or audio with its own controls: play, seek, volume, captions, speed, full screen |
+| `marquee` | Items drifting sideways in a loop, with a pause button; still under reduced motion |
+| `app-bar` | A phone's top bar: back button, the name of the screen and a few actions |
+| `bottom-nav` | A phone's tab bar: a few destinations along the bottom edge, with an optional count |
+| `fab` | A round button over the corner of the screen that can open into a short stack of actions |
+| `action-sheet` | A short list of things to do, sliding up from the bottom with Cancel underneath |
+| `swipe-actions` | A row that slides aside under a finger to uncover buttons; the keyboard reaches them by tabbing |
+| `pull-to-refresh` | Drag the top of a list down to load it again, with a `refresh` function for everyone else |
+| `infinite-scroll` | Asks for the next page as the end of a list comes into view, with a retry and an end line |
+| `install-prompt`, `update-prompt` | Offer to add the app to the home screen; say a new version is ready and reload into it |
 
 ## Blocks
 
@@ -109,6 +141,13 @@ A block is a section of a page, or a whole page, already put together from the c
 | `settings` | Account settings in tabs: a profile form, notification switches, and a delete button behind a confirmation |
 | `cart` | The items in a cart with quantities to change, a discount code field, the sums and a checkout button; an empty state when there is nothing in it |
 | `checkout` | Contact, delivery address, delivery choice and card details in one checked form, beside a summary of the order |
+| `product-detail` | A product's page: pictures, price, stock, options, quantity and "Add to cart", then details and reviews |
+| `product-listing` | A grid of products with filters, a way to sort, a wishlist heart on each, and pages |
+| `order-confirmation` | The page after paying: the order number, where it has got to, where it is going and what was bought |
+| `order-history` | Past orders with their status and contents; ones still on their way show how far they have got |
+| `sign-up` | Name, email and a password with a strength meter, terms to agree to, and a link to sign in |
+| `forgot-password` | Asks for an email to send a reset link to, then says to check the inbox |
+| `not-found` | The page for a wrong address or an error: what happened, a search box and the way home |
 
 ## Try it
 
@@ -888,6 +927,169 @@ An option card goes inside a `RadioGroup` and is that group's radio button with 
 
 The cart emits `applyCode` and leaves the checking to you: set `discount` when the code is good, `codeError` when it is not. The checkout emits `submit` only once every field passes. Its built-in card fields are for prototypes and for providers that take card details from you; with the `#payment` slot filled they are not shown or checked, and `submit` carries no card.
 
+**Quantity stepper, wishlist button, segmented control**
+
+```vue
+<QuantityStepper v-model="quantity" :max="stock" removable label="Quantity of Wool throw" @remove="remove(item)" />
+<WishlistButton v-model="saved" label="Save Wool throw for later" />
+
+<SegmentedControl v-model="view" label="View">
+  <SegmentedControlItem value="grid">Grid</SegmentedControlItem>
+  <SegmentedControlItem value="list">List</SegmentedControlItem>
+</SegmentedControl>
+```
+
+`QuantityStepper` is for counts that are pressed, not typed; use `number-input` where typing a number makes sense. A segmented control is a radio group underneath, so it works in forms and with the arrow keys.
+
+**Shipping method, order tracker, mini cart**
+
+```vue
+<ShippingMethod v-model="method" :methods="[{ id: 'standard', title: 'Standard', eta: '3 to 5 working days', price: 0 }]" />
+
+<OrderTracker :current="3" :stages="[{ label: 'Ordered', date: 'Oct 12' }, 'Packed', 'Shipped', 'Delivered']">Arriving Friday.</OrderTracker>
+
+<MiniCart v-model:open="open" v-model:items="items" cart-href="/cart" @checkout="goToCheckout">
+  <template #trigger="{ count }"><Button variant="outline">Cart ({{ count }})</Button></template>
+</MiniCart>
+```
+
+`current` counts stages from 1; one past the last shows them all as done. Set `problem` and say what is wrong in the slot when an order is held up.
+
+**Comparison table, pricing table, size guide**
+
+```vue
+<ComparisonTable caption="Mugs compared" :columns="[{ key: 'mug', title: 'Mug' }, { key: 'travel', title: 'Travel mug', highlight: true }]" :rows="[{ label: 'Lid included', values: { mug: false, travel: true } }]" />
+
+<PricingTable v-model:billing="billing" :plans="plans" current="hobby" @select="(plan, billing) => choose(plan, billing)" />
+
+<SizeGuide v-model:unit="unit" :measures="[{ key: 'chest', label: 'Chest' }]" :sizes="[{ size: 'M', measurements: { chest: [96, 101] } }]" selected="M" />
+```
+
+In a comparison, `true` and `false` are drawn as a tick and a dash and read out as "Yes" and "No". A plan's `price` is a number, or `{ monthly, yearly }` to offer both; leave it out for "Contact us". Size measurements are given in centimetres and converted to the nearest half inch.
+
+**Phone input, password strength, toolbar, meter**
+
+```vue
+<PhoneInput v-model="phone" default-country="GB" />   <!-- "+447700900123" -->
+<PasswordStrength :password="password" />
+
+<Toolbar label="Text alignment">
+  <ToolbarButton label="Align left" :pressed="align === 'left'" @click="align = 'left'"><Icon name="menu" /></ToolbarButton>
+  <ToolbarSeparator />
+  <ToolbarButton @click="copy">Copy</ToolbarButton>
+</Toolbar>
+
+<Meter label="Storage used" :value="42" :max="64" :low="32" :high="56" optimum="low" :format="(value, max) => `${value} GB of ${max} GB`" />
+```
+
+`PasswordStrength` is a nudge for the person typing, not a check: pass `requirements` that match what your server enforces, or a `score` function to use a library such as zxcvbn. `phoneCountries` in `phone.ts` is a starting list of 28 countries; add the ones you need.
+
+**Rich text editor and Markdown**
+
+```vue
+<RichTextEditor v-model="html" label="Description" placeholder="Describe the product" />
+<Markdown :source="text" :heading-offset="1" />
+```
+
+The editor gives back HTML limited to the formatting on its toolbar, and strips what is pasted in down to the same. Clean it again on your server before storing it (`cleanHtml` needs a browser). `Markdown` escapes everything in its source and writes only its own tags, so it is safe for text from strangers; it is a small renderer, not full CommonMark, and takes a `render` function if you would rather use a library.
+
+**Emoji picker and image cropper**
+
+```vue
+<EmojiPicker v-model:recent="recent" @select="(emoji) => (message += emoji)" />
+
+<ImageCropper ref="cropper" v-model="crop" :src="pictureUrl" round />
+<Button @click="async () => upload(await cropper.crop({ width: 512 }))">Save</Button>
+```
+
+`crop()` resolves to a `Blob`, or to `null` if the picture has not loaded or comes from a site that does not allow it (set `crossorigin` for those). Put the picker in a `Popover` to open it from a button.
+
+**Chat, comment thread, notification centre**
+
+```vue
+<ChatThread label="Chat with support" :typing="typing">
+  <ChatMessage v-for="message in messages" :key="message.id" :mine="message.mine" author="Support" :time="message.time">{{ message.text }}</ChatMessage>
+</ChatThread>
+<ChatComposer @send="send" />
+
+<CommentThread :comments="comments" @submit="add" @reply="(text, parent) => reply(text, parent)" @delete="remove" />
+
+<NotificationCenter v-model:items="notifications" @select="open" />
+```
+
+Give `ChatThread` a height (it fills a flex column); it stays at the newest message unless the reader has scrolled up, and then offers a "New messages" button instead. Comments and replies are plain text.
+
+**JSON viewer, diff viewer, media player, marquee**
+
+```vue
+<JsonViewer :value="payload" :expand-depth="2" />
+<DiffViewer :before="oldText" :after="newText" view="split" title="config.ts" />
+
+<MediaPlayer title="Product tour" src="/tour.mp4" poster="/tour.jpg">
+  <track kind="captions" src="/tour.vtt" srclang="en" label="English" />
+</MediaPlayer>
+
+<Marquee label="Customers"><img v-for="logo in logos" :key="logo.name" :src="logo.src" :alt="logo.name" /></Marquee>
+```
+
+**App bar, FAB, action sheet, swipe actions**
+
+```vue
+<AppBar title="Orders" back @back="router.back()">
+  <template #end><button class="er-app-bar-button" aria-label="Search"><Icon name="search" /></button></template>
+</AppBar>
+
+<Fab label="New"><template #actions><FabAction @select="newOrder">New order</FabAction></template></Fab>
+
+<ActionSheet title="Wool throw">
+  <template #trigger><Button>Options</Button></template>
+  <ActionSheetItem @select="share">Share</ActionSheetItem>
+  <ActionSheetItem destructive @select="remove">Remove</ActionSheetItem>
+</ActionSheet>
+
+<SwipeActions>
+  <div class="row">…</div>
+  <template #actions><button data-destructive @click="remove">Delete</button></template>
+</SwipeActions>
+```
+
+Without the `actions` slot a `Fab` is a plain button that emits `click`. Set `--er-fab-offset` to lift it above a bottom nav.
+
+**Pull to refresh, infinite scroll, install and update prompts**
+
+```vue
+<PullToRefresh v-slot="{ refresh }" :on-refresh="reload">
+  <Button @click="refresh">Refresh</Button>
+  <InfiniteScroll :loading="loading" :done="!hasMore" :error="error" @load="loadNextPage">…your list…</InfiniteScroll>
+</PullToRefresh>
+
+<InstallPrompt description="Opens straight to your orders, and works offline." />
+<UpdatePrompt />
+```
+
+A pull cannot be done with a keyboard or a mouse, so keep a button that calls `refresh`. `InstallPrompt` shows only when the browser offers installing (or, on iPhones, with the steps to do it by hand) and remembers "Not now" for 14 days. `UpdatePrompt` watches your service worker and posts `{ type: 'SKIP_WAITING' }` to the waiting one; the worker has to call `skipWaiting()` when it gets that.
+
+**Shop blocks**
+
+```vue
+<ProductDetail :product="product" v-model:saved="saved" :loading="adding" @add-to-cart="add" />
+<ProductListing :products="products" v-model:saved="wishlist" :page-size="12" @add-to-cart="add" />
+<OrderConfirmation :order="order" track-href="/orders/10482" />
+<OrderHistory :orders="orders" @view="open" @reorder="buyAgain" />
+```
+
+`ProductListing` filters, sorts and pages the products you give it in the browser; for a large catalogue, do that on your server and build the page from `filter-bar`, `product-card` and `pagination` directly.
+
+**Sign up, forgot password, not found**
+
+```vue
+<SignUp :loading="loading" :error="error" terms-href="/terms" sign-in-href="/sign-in" @submit="createAccount" />
+<ForgotPassword v-model:sent="sent" :loading="loading" @submit="sendLink" />
+<NotFound search @search="(query) => router.push({ path: '/search', query: { q: query } })" />
+```
+
+Set `sent` whether or not the address has an account, so the form does not tell a stranger who is a customer. `NotFound` takes a `code`, `title` and `description`, so the same block serves a 500 or an offline page; `retry` adds a "Try again" button.
+
 **Pagination, breadcrumb, slider, toggle group**
 
 ```vue
@@ -1037,4 +1239,8 @@ The browser tests need the browsers once: `npx playwright install chromium firef
 - Sounds are synthesized tones, not recordings, so they are simple by nature. They were checked by recipe (length, loudness, pitch) and by confirming the right tones are requested; nobody has listened to them on a range of speakers. A browser tab muted by the user stays silent, as it should.
 - Fluid type uses the CSS `pow()` function and container query units, which need browsers from late 2023 onward.
 - The kanban board's dragging uses the browser's built-in drag and drop, which does not work on touch screens; the keyboard moves do. The event calendar lists a multi-day event on each of its days instead of drawing one bar across them, and has no week or day view. The colour picker has no transparency. The time picker has no free typing.
+- The rich text editor is built on `document.execCommand`, which browsers still support but mark as obsolete; it has no tables, images or collaborative editing, and the HTML it produces differs a little between browsers. The Markdown renderer covers the common syntax only: no raw HTML, footnotes, reference-style links or bare-URL autolinking.
+- The password strength score is a rough heuristic, not an estimate of cracking time. The phone input lays numbers out by one fixed pattern per country and does not check that a number is valid; use a library such as libphonenumber for that. The emoji picker has about 350 emoji and no skin tones.
+- Swipe actions, pull to refresh and the image cropper's pinch are driven by touch and have only been exercised through their keyboard and button paths in the tests, never with a finger. The install and update prompts were tested with the browser's part faked: no real install prompt or service worker update was involved. The media player was tested with audio only; video, captions and full screen are untested.
+- `ProductListing` and the comparison, pricing and size tables hold everything in the page; none of them fetches or pages on a server.
 - The tree selects one node and has no checkboxes, drag-and-drop or lazy loading. The carousel does not loop or autoplay. Resizable panels cannot be collapsed to nothing.
