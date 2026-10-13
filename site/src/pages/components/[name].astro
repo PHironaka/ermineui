@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Entry from '../../components/Entry.astro'
+import { components, type CatalogEntry } from '../../data/catalog'
+
+export function getStaticPaths() {
+  return components.map((entry) => ({ params: { name: entry.name }, props: { entry } }))
+}
+interface Props {
+  entry: CatalogEntry
+}
+const { entry } = Astro.props
+---
+
+<Layout title={`${entry.title}. Ermine UI`} description={entry.summary}>
+  <Entry entry={entry} />
+</Layout>

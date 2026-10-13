@@ -1,0 +1,150 @@
+{
+  "baseline": {
+    "js": 68132,
+    "jsGzip": 26462,
+    "jsBrotli": 24051,
+    "css": 0,
+    "cssGzip": 0,
+    "cssBrotli": 0,
+    "load": {
+      "fcp": 64,
+      "script": 18.4,
+      "style": 13.6,
+      "layout": 7,
+      "heap": 2.1,
+      "nodes": 48
+    },
+    "stress": {
+      "mount": 50.4,
+      "update": 5.9,
+      "unmount": 3.8,
+      "nodes": 6000,
+      "heap": 2.9,
+      "spread": {
+        "mount": [
+          29.4,
+          56.3
+        ],
+        "update": [
+          5.7,
+          6.3
+        ]
+      }
+    },
+    "checks": {
+      "rows": 1000,
+      "buttons": 1000
+    }
+  },
+  "ermine": {
+    "js": 107247,
+    "jsGzip": 37937,
+    "jsBrotli": 34575,
+    "css": 21052,
+    "cssGzip": 4121,
+    "cssBrotli": 3603,
+    "load": {
+      "fcp": 116,
+      "script": 37,
+      "style": 8.1,
+      "layout": 26.6,
+      "heap": 2.9,
+      "nodes": 78
+    },
+    "stress": {
+      "mount": 119.7,
+      "update": 90.4,
+      "unmount": 26,
+      "nodes": 6000,
+      "heap": 18.5,
+      "spread": {
+        "mount": [
+          113.1,
+          125.4
+        ],
+        "update": [
+          88.6,
+          95.6
+        ]
+      }
+    },
+    "checks": {
+      "rows": 1000,
+      "buttons": 1000
+    }
+  },
+  "shadcn": {
+    "js": 332876,
+    "jsGzip": 99773,
+    "jsBrotli": 86852,
+    "css": 58561,
+    "cssGzip": 9567,
+    "cssBrotli": 8471,
+    "load": {
+      "fcp": 176,
+      "script": 92.6,
+      "style": 8.4,
+      "layout": 20.2,
+      "heap": 4.9,
+      "nodes": 72
+    },
+    "stress": {
+      "mount": 394.4,
+      "update": 395.5,
+      "unmount": 45.1,
+      "nodes": 7000,
+      "heap": 70.4,
+      "spread": {
+        "mount": [
+          389.5,
+          403.7
+        ],
+        "update": [
+          385,
+          405.2
+        ]
+      }
+    },
+    "checks": {
+      "rows": 1000,
+      "buttons": 3000
+    }
+  },
+  "nuxtui": {
+    "js": 550266,
+    "jsGzip": 156507,
+    "jsBrotli": 131065,
+    "css": 197307,
+    "cssGzip": 24920,
+    "cssBrotli": 19914,
+    "load": {
+      "fcp": 288,
+      "script": 184.7,
+      "style": 19,
+      "layout": 22.7,
+      "heap": 6.2,
+      "nodes": 92
+    },
+    "stress": {
+      "mount": 834.9,
+      "update": 591.2,
+      "unmount": 57,
+      "nodes": 12000,
+      "heap": 163.5,
+      "spread": {
+        "mount": [
+          822.6,
+          854.9
+        ],
+        "update": [
+          579.6,
+          604.4
+        ]
+      }
+    },
+    "checks": {
+      "rows": 1000,
+      "buttons": 3000
+    }
+  }
+}

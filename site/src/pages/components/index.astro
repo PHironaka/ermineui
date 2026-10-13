@@ -1,0 +1,277 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Command from '../../components/Command.astro'
+import { blocks, categories, components } from '../../data/catalog'
+
+const groups = categories.map((category) => ({ category, items: components.filter((item) => item.category === category) })).filter((group) => group.items.length)
+---
+
+<Layout title="Components. Ermine UI" description={`All ${components.length} Ermine UI components and ${blocks.length} blocks, with what each one does and the command to add it.`}>
+  <div class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">Directory</p>
+      <h1 class="headline">Every component.</h1>
+      <p class="lede">{components.length} components and {blocks.length} blocks. Each has a page with the command to add it, the files it copies, and its source.</p>
+    </header>
+
+    <div class="finder">
+      <label class="search">
+        <span class="sr">Search components</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input type="search" id="search" placeholder="Search by name or by what it does" autocomplete="off" />
+      </label>
+      <div class="chips" role="group" aria-label="Show a group">
+        <button type="button" class="chip" data-group="" aria-pressed="true">All</button>
+        {groups.map((group) => <button type="button" class="chip" data-group={group.category} aria-pressed="false">{group.category}</button>)}
+        <button type="button" class="chip" data-group="Blocks" aria-pressed="false">Blocks</button>
+      </div>
+      <p class="count muted" id="count" role="status" aria-live="polite"></p>
+    </div>
+
+    {
+      groups.map((group) => (
+        <section class="group" data-group={group.category}>
+          <h2 class="title">
+            {group.category} <span class="muted">{group.items.length}</span>
+          </h2>
+          <ul class="grid">
+            {group.items.map((item) => (
+              <li data-search={`${item.name} ${item.title} ${item.summary}`.toLowerCase()}>
+                <a href={item.href}>
+                  <strong>{item.title}</strong>
+                  <span>{item.summary}</span>
+                  <code>{item.name}</code>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <section class="group" data-group="Blocks" id="blocks">
+      <h2 class="title">Blocks <span class="muted">{blocks.length}</span></h2>
+      <p class="group-note muted">A block is a section of a page, or a whole page, already put together. Adding one also adds every component it is built from.</p>
+      <ul class="grid">
+        {
+          blocks.map((item) => (
+            <li data-search={`${item.name} ${item.title} ${item.summary} block`.toLowerCase()}>
+              <a href={item.href}>
+                <strong>{item.title}</strong>
+                <span>{item.summary}</span>
+                <code>{item.name}</code>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <p class="empty muted" id="empty" hidden>Nothing matches that. Try a shorter word.</p>
+
+    <section class="all">
+      <h2 class="title">Or take all of them</h2>
+      <p class="muted">Files you already have are kept unless you pass <code>--overwrite</code>.</p>
+      <Command args={['init', 'add --all']} />
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>('#search')!
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('.chip')]
+  const groups = [...document.querySelectorAll<HTMLElement>('.group')]
+  const count = document.querySelector<HTMLElement>('#count')!
+  const empty = document.querySelector<HTMLElement>('#empty')!
+  let chosen = new URLSearchParams(location.search).get('group') ?? ''
+  if (!chips.some((chip) => chip.dataset.group === chosen)) chosen = ''
+
+  function apply() {
+    const words = search.value.toLowerCase().split(/\s+/).filter(Boolean)
+    let shown = 0
+    for (const group of groups) {
+      const inGroup = !chosen || group.dataset.group === chosen
+      let any = false
+      for (const item of group.querySelectorAll<HTMLElement>('li')) {
+        const match = inGroup && words.every((word) => item.dataset.search!.includes(word))
+        item.hidden = !match
+        if (match) {
+          any = true
+          shown++
+        }
+      }
+      group.hidden = !any
+    }
+    for (const chip of chips) chip.setAttribute('aria-pressed', String(chip.dataset.group === chosen))
+    empty.hidden = shown > 0
+    count.textContent = words.length || chosen ? `${shown} shown` : ''
+  }
+
+  search.addEventListener('input', apply)
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      chosen = chip.dataset.group ?? ''
+      const url = new URL(location.href)
+      if (chosen) url.searchParams.set('group', chosen)
+      else url.searchParams.delete('group')
+      history.replaceState(null, '', url)
+      apply()
+    })
+  }
+  // "/" jumps to the search box, as it does on most documentation sites.
+  document.addEventListener('keydown', (event) => {
+    if (event.key === '/' && !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+      event.preventDefault()
+      search.focus()
+    }
+  })
+  apply()
+</script>
+
+<style>
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .finder {
+    position: sticky;
+    top: var(--site-nav-height);
+    z-index: 10;
+    display: grid;
+    gap: 0.9rem;
+    margin-inline: calc(var(--site-gutter) * -1);
+    padding: 1rem var(--site-gutter);
+    background: color-mix(in oklch, var(--er-background) 88%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    background: var(--site-soft);
+  }
+  .search:focus-within {
+    outline: 2px solid var(--site-accent);
+    outline-offset: 2px;
+  }
+  .search svg {
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--er-muted-foreground);
+  }
+  .search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 1.0625rem;
+  }
+  .chips {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chip {
+    flex: none;
+    padding: 0.4rem 0.9rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--er-muted-foreground);
+    font: 500 0.875rem var(--er-font-sans);
+    cursor: pointer;
+  }
+  .chip:hover {
+    background: var(--site-soft);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--site-ink);
+    color: var(--er-background);
+  }
+  .count {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: 0.8125rem;
+  }
+  .count:empty {
+    display: none;
+  }
+  .group {
+    margin-top: 3rem;
+  }
+  .group .title span {
+    font-weight: 400;
+    font-size: 0.7em;
+  }
+  .group-note {
+    max-width: 40rem;
+    margin: 0.5rem 0 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+    gap: 0.9rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .grid a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 1.25rem 1.35rem;
+    border-radius: 1.25rem;
+    background: var(--site-soft);
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+  .grid a:hover {
+    background: var(--er-accent);
+    transform: translateY(-2px);
+  }
+  .grid strong {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .grid span {
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--er-muted-foreground);
+  }
+  .grid code {
+    margin-top: 0.35rem;
+    font-family: var(--er-font-mono);
+    font-size: 0.75rem;
+    color: var(--er-muted-foreground);
+  }
+  .empty {
+    margin-top: 3rem;
+    text-align: center;
+  }
+  .all {
+    max-width: 44rem;
+    margin-top: 5rem;
+  }
+  .all p {
+    margin: 0.5rem 0 1.25rem;
+  }
+  .all code {
+    font-family: var(--er-font-mono);
+    font-size: 0.9em;
+  }
+</style>

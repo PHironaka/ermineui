@@ -1,0 +1,322 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Bars from '../components/Bars.astro'
+import CodeBlock from '../components/CodeBlock.astro'
+import BlockShowcase from '../components/BlockShowcase.vue'
+import Showcase from '../components/Showcase.vue'
+import { blocks, categories, components, version } from '../data/catalog'
+import { format, metricById, times } from '../data/benchmarks'
+
+const shipped = metricById('shipped')
+const mount = metricById('mount')
+const heap = metricById('heap')
+const figures = [
+  { metric: shipped, title: 'to ship the page', note: `shadcn-vue ships ${times(shipped, 'shadcn')}× as much, Nuxt UI ${times(shipped, 'nuxtui')}×.` },
+  { metric: mount, title: 'to draw 1,000 rows', note: `shadcn-vue takes ${times(mount, 'shadcn')}× as long, Nuxt UI ${times(mount, 'nuxtui')}×.` },
+  { metric: heap, title: 'of memory to hold them', note: `shadcn-vue uses ${times(heap, 'shadcn')}× as much, Nuxt UI ${times(heap, 'nuxtui')}×.` },
+]
+const counts = categories.map((category) => ({ category, count: components.filter((item) => item.category === category).length }))
+
+const terminal = `npx ermineui init
+npx ermineui add button dialog select
+npx ermineui add dashboard`
+const usage = `<script setup lang="ts">
+import { Button } from '@/components/ui/button'
+</script>
+
+<template>
+  <Button variant="outline">Save</Button>
+</template>`
+---
+
+<Layout title="Ermine UI. Vue components you copy in and own." description={`${components.length} accessible Vue components and ${blocks.length} blocks in plain CSS. No Tailwind, no runtime dependencies beyond Vue. Copied into your project, so every line is yours.`}>
+  <section class="hero center">
+    <div class="wrap">
+      <p class="eyebrow">Ermine UI {version}</p>
+      <h1 class="display">Light. Fast. Yours.</h1>
+      <p class="lede">
+        {components.length} accessible Vue components and {blocks.length} blocks, written in plain CSS. No Tailwind. No runtime dependencies beyond Vue. Copied into your project, so every line is yours to change.
+      </p>
+      <div class="pills">
+        <a class="pill" href="/components/">Browse the components</a>
+        <a class="pill quiet" href="/docs/installation/">Install</a>
+      </div>
+      <p class="hero-command">
+        <span class="command"><code>npx ermineui init</code><button class="copy" type="button" data-copy="npx ermineui init">Copy</button></span>
+      </p>
+    </div>
+    <div class="wrap wide" id="blocks" data-reveal>
+      <BlockShowcase client:load />
+      <p class="caption muted">These are the real blocks, running on their sample data. <a href="/components/#blocks">See all {blocks.length}</a></p>
+    </div>
+  </section>
+
+  <section class="section dark" aria-labelledby="numbers-title">
+    <div class="wrap center">
+      <p class="eyebrow">Performance</p>
+      <h2 class="headline" id="numbers-title">A fraction of the weight.</h2>
+      <p class="lede">We built the same page with Ermine, shadcn-vue and Nuxt UI, then measured what reached the browser and how fast it drew.</p>
+    </div>
+    <div class="wrap figures">
+      {
+        figures.map((figure) => (
+          <article class="figure" data-reveal>
+            <p class="figure-number">{format(figure.metric.values.ermine, figure.metric)}</p>
+            <h3 class="figure-title">{figure.title}</h3>
+            <Bars metric={figure.metric.id} />
+            <p class="figure-note">{figure.note}</p>
+          </article>
+        ))
+      }
+    </div>
+    <div class="wrap center">
+      <p class="fineprint">
+        One settings page using 13 components, built with Vite and run in Chromium on one machine. Shipped size is JavaScript and CSS, gzipped. Your results will differ.
+      </p>
+      <div class="pills"><a class="pill quiet" href="/benchmarks/">How we measured, and what it leaves out</a></div>
+    </div>
+  </section>
+
+  <section class="section soft" aria-labelledby="showcase-title">
+    <div class="wrap center">
+      <p class="eyebrow">Components</p>
+      <h2 class="headline" id="showcase-title">{components.length} components.<br />Try a few.</h2>
+      <p class="lede">Everything below is live. Open the dialog, drag a card, press Tab. Then switch your system to dark and watch it follow.</p>
+    </div>
+    <div class="wrap wide showcase" data-reveal>
+      <Showcase client:visible />
+    </div>
+    <div class="wrap center">
+      <div class="pills"><a class="pill" href="/components/">See all {components.length}</a></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="own-title">
+    <div class="wrap own">
+      <div data-reveal>
+        <p class="eyebrow">Ownership</p>
+        <h2 class="headline" id="own-title">Not a dependency. Your code.</h2>
+        <p class="lede left">
+          The command line copies each component's source into your project, with the helpers it needs. Nothing is imported from <code>node_modules</code>, so there is no version to wait for and nothing you cannot change.
+        </p>
+        <div class="pills left"><a class="pill quiet" href="/docs/installation/">Read the installation guide</a></div>
+      </div>
+      <div class="own-code" data-reveal>
+        <CodeBlock code={terminal} lang="sh" label="Terminal" />
+        <CodeBlock code={usage} lang="vue" label="App.vue" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" aria-labelledby="built-title">
+    <div class="wrap center">
+      <h2 class="headline" id="built-title">Built to be depended on,<br />without the dependency.</h2>
+    </div>
+    <div class="wrap cards">
+      <article class="card" data-reveal>
+        <h3 class="title">Plain CSS.</h3>
+        <p>Every colour, radius and shadow is a CSS variable in one stylesheet. Change a value and the whole library follows. There is no styling framework to configure, and it sits happily beside Tailwind if you use it.</p>
+      </article>
+      <article class="card" data-reveal>
+        <h3 class="title">Accessible by test.</h3>
+        <p>771 browser tests drive every component by keyboard and mouse in Chromium, Firefox and WebKit, with axe scans in both themes and a simulated screen reader checking what would be spoken.</p>
+      </article>
+      <article class="card" data-reveal>
+        <h3 class="title">Vue, Nuxt and Astro.</h3>
+        <p>Every component and block has been installed into a fresh project in each, then type-checked, built and run. Server rendering and hydration included.</p>
+      </article>
+      <article class="card" data-reveal>
+        <h3 class="title">Light and dark.</h3>
+        <p>Dark mode follows the system through <code>light-dark()</code>. Force a theme on the page, or on any element to theme only what is inside it. The black band above is done that way.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="directory-title">
+    <div class="wrap center">
+      <p class="eyebrow">Directory</p>
+      <h2 class="headline" id="directory-title">Find the one you need.</h2>
+      <p class="lede">Each component has its own page with the command to add it, the files it copies and its source.</p>
+      <ul class="groups" data-reveal>
+        {
+          counts.map((group) => (
+            <li>
+              <a href={`/components/?group=${encodeURIComponent(group.category)}`}>
+                {group.category} <span>{group.count}</span>
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="/components/#blocks">Blocks <span>{blocks.length}</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section soft closing">
+    <div class="wrap center">
+      <h2 class="display">Start with one.</h2>
+      <p class="lede">Add a button. Read its source. Decide from there.</p>
+      <p class="hero-command">
+        <span class="command"><code>npx ermineui add button</code><button class="copy" type="button" data-copy="npx ermineui add button">Copy</button></span>
+      </p>
+      <div class="pills">
+        <a class="pill" href="/docs/installation/">Get started</a>
+        <a class="pill quiet" href="https://github.com/PHironaka/ermineui">View on GitHub</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding-block: clamp(4rem, 10vw, 7.5rem) clamp(4rem, 9vw, 7rem);
+    overflow: hidden;
+  }
+  .hero-command {
+    margin: 2.25rem 0 0;
+  }
+  .wrap.wide {
+    max-width: 78rem;
+  }
+  .hero .wide {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+  .caption {
+    margin: 1.5rem 0 0;
+    font-size: 0.875rem;
+  }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-block: clamp(3rem, 7vw, 5rem) 3rem;
+  }
+  @media (max-width: 54rem) {
+    .figures {
+      grid-template-columns: 1fr;
+    }
+  }
+  .figure {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: 1.75rem;
+    background: oklch(0.17 0 0);
+  }
+  .figure-number {
+    margin: 0;
+    font-size: clamp(2.75rem, 5.5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .figure-title {
+    margin: 0.5rem 0 2rem;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .figure-note {
+    margin: 1.75rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--er-muted-foreground);
+  }
+  .fineprint {
+    max-width: 38rem;
+    margin: 0 auto;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--er-muted-foreground);
+  }
+  .fineprint + .pills {
+    margin-top: 1rem;
+  }
+
+  .showcase {
+    margin-block: clamp(3rem, 7vw, 5rem) 1rem;
+  }
+
+  .own {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+  }
+  @media (max-width: 54rem) {
+    .own {
+      grid-template-columns: 1fr;
+    }
+  }
+  .own-code {
+    display: grid;
+    gap: 1rem;
+  }
+  .lede.left {
+    margin-inline: 0;
+  }
+  .pills.left {
+    justify-content: flex-start;
+  }
+  .lede code {
+    font-family: var(--er-font-mono);
+    font-size: 0.9em;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+  @media (max-width: 46rem) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  .card {
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: 1.75rem;
+    background: var(--er-background);
+  }
+  .card p {
+    margin: 0.9rem 0 0;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--er-muted-foreground);
+  }
+  .card code {
+    font-family: var(--er-font-mono);
+    font-size: 0.9em;
+  }
+
+  .groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    max-width: 52rem;
+    margin: 3rem auto 0;
+    padding: 0;
+    list-style: none;
+  }
+  .groups a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    background: var(--site-soft);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .groups a:hover {
+    background: var(--er-accent);
+  }
+  .groups span {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--er-muted-foreground);
+  }
+</style>

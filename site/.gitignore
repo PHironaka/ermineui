@@ -1,0 +1,5 @@
+node_modules
+dist
+.astro
+# Built from ../playground by `npm run playground`
+public/playground

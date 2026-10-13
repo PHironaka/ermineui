@@ -1,0 +1,25 @@
+---
+// A command shown for each package manager, with the reader's choice remembered across the site.
+import { Code } from 'astro:components'
+
+interface Props {
+  /** What comes after "npx ermineui", e.g. "add button". Several lines are allowed. */
+  args: string | string[]
+}
+const lines = [Astro.props.args].flat()
+const runners = { npm: 'npx ermineui', pnpm: 'pnpm dlx ermineui', yarn: 'yarn dlx ermineui', bun: 'bunx ermineui' }
+---
+
+<div class="pm">
+  <div class="pm-tabs" role="group" aria-label="Package manager">
+    {Object.keys(runners).map((pm) => <button type="button" data-pm={pm}>{pm}</button>)}
+  </div>
+  {
+    Object.entries(runners).map(([pm, runner]) => (
+      <div class="code" data-pm-panel={pm}>
+        <button class="copy" type="button" data-copy>Copy</button>
+        <Code code={lines.map((line) => `${runner} ${line}`).join('\n')} lang="sh" themes={{ light: 'github-light-high-contrast', dark: 'github-dark-high-contrast' }} defaultColor={false} />
+      </div>
+    ))
+  }
+</div>

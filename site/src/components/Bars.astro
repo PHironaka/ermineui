@@ -1,0 +1,95 @@
+---
+// One measurement as three bars, Ermine first. Shorter is better in every one of them.
+import { format, libraries, metricById, times } from '../data/benchmarks'
+
+interface Props {
+  metric: string
+  /** Show the bare-Vue floor as a fourth, faint bar. */
+  floor?: boolean
+}
+const item = metricById(Astro.props.metric)
+const rows = [
+  ...libraries.map((library) => ({ ...library, value: item.values[library.key] })),
+  ...(Astro.props.floor ? [{ key: 'baseline' as const, name: 'No library', version: 'bare elements', value: item.values.baseline, ours: false }] : []),
+]
+const max = Math.max(...rows.map((row) => row.value))
+---
+
+<dl class="bars">
+  {
+    rows.map((row) => (
+      <div class:list={['bar-row', { ours: 'ours' in row && row.ours, floor: row.key === 'baseline' }]}>
+        <dt>{row.name}</dt>
+        <dd>
+          <span class="bar" style={`--size: ${((row.value / max) * 100).toFixed(1)}%`} />
+          <span class="bar-value">
+            {format(row.value, item)}
+            {row.key !== 'ermine' && row.key !== 'baseline' && <span class="bar-times">{times(item, row.key)}×</span>}
+          </span>
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .bars {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0;
+  }
+  .bar-row {
+    display: grid;
+    gap: 0.3rem;
+  }
+  dt {
+    font-size: 0.8125rem;
+    color: var(--er-muted-foreground);
+  }
+  .ours dt {
+    color: inherit;
+    font-weight: 600;
+  }
+  dd {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .bar {
+    flex: none;
+    width: calc(var(--size) * 0.62);
+    min-width: 0.25rem;
+    height: 0.75rem;
+    border-radius: 999px;
+    background: color-mix(in oklch, currentColor 26%, transparent);
+    transform-origin: left;
+  }
+  .ours .bar {
+    background: var(--site-accent);
+  }
+  .floor .bar {
+    background: color-mix(in oklch, currentColor 12%, transparent);
+  }
+  .bar-value {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ours .bar-value {
+    font-weight: 600;
+  }
+  .bar-times {
+    margin-inline-start: 0.4rem;
+    color: var(--er-muted-foreground);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js [data-reveal]) .bar {
+      transform: scaleX(0);
+      transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+    }
+    :global(.js [data-reveal].seen) .bar {
+      transform: none;
+    }
+  }
+</style>

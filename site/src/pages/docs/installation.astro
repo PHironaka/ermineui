@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Command from '../../components/Command.astro'
+import CodeBlock from '../../components/CodeBlock.astro'
+import { blocks, components } from '../../data/catalog'
+
+const vueMain = `// src/main.ts
+import './styles/ermine.css'`
+const vueUse = `<script setup lang="ts">
+import { Button } from '@/components/ui/button'
+</script>
+
+<template>
+  <Button variant="outline">Save</Button>
+</template>`
+const nuxtConfig = `// nuxt.config.ts
+export default defineNuxtConfig({
+  css: ['~/assets/css/ermine.css'],
+  components: [
+    // Auto-import the components by their own names: <Button>, <DialogContent>, ...
+    { path: '~/components/ui', pathPrefix: false, extensions: ['.vue'] },
+    // The same for blocks, if you add any: <Dashboard>, <SignIn>, ...
+    { path: '~/components/blocks', pathPrefix: false, extensions: ['.vue'] },
+    '~/components',
+  ],
+})`
+const astroPage = `---
+import '../styles/ermine.css'
+import SettingsForm from '../components/SettingsForm.vue'
+---
+<SettingsForm client:load />`
+const theme = `:root {
+  --er-primary: light-dark(oklch(0.5 0.2 265), oklch(0.75 0.15 265));
+  --er-radius: 0.375rem;
+}`
+const override = `.er-button[data-variant='outline'] { border-style: dashed; }`
+const config = `{
+  "components": "src/components/ui",
+  "lib": "src/lib/ermine",
+  "styles": "src/styles/ermine.css"
+}`
+---
+
+<Layout title="Installation. Ermine UI" description="Add Ermine UI to a Vue, Nuxt or Astro project: set up once, then copy in the components you want.">
+  <div class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">Installation</p>
+      <h1 class="headline">Two commands.</h1>
+      <p class="lede">Set up once, then add the components you want. Their source is copied into your project; nothing is imported from <code>node_modules</code>.</p>
+    </header>
+
+    <div class="prose">
+      <p>You need a Vue 3.5, Nuxt 4 or Astro project and Node 18 or later. The browsers need to be from 2024 onward, because the CSS uses <code>light-dark()</code>, <code>@layer</code>, <code>color-mix()</code> and <code>oklch()</code>.</p>
+
+      <h2 id="set-up">1. Set up</h2>
+      <p>Run this in your project's folder. It detects the framework, suggests folders, writes <code>ermine.json</code> and copies the theme stylesheet. Add <code>-y</code> to accept the suggested folders without being asked.</p>
+      <Command args="init" />
+      <CodeBlock code={config} lang="json" label="ermine.json" />
+
+      <h2 id="add">2. Add components</h2>
+      <p>Name as many as you like. Each brings the helpers and other components it depends on. Files that already exist are kept unless you pass <code>--overwrite</code>.</p>
+      <Command args={['add button dialog select', 'add dashboard']} />
+      <p>
+        The second line adds a block: a section of a page, already put together, along with every component it uses. Blocks go in a <code>blocks</code> folder beside your components. Browse{' '}
+        <a href="/components/">all {components.length} components and {blocks.length} blocks</a>.
+      </p>
+
+      <h2 id="frameworks">3. Load the stylesheet and use them</h2>
+
+      <h3 id="vue">Vue with Vite</h3>
+      <CodeBlock code={vueMain} lang="ts" />
+      <CodeBlock code={vueUse} lang="vue" />
+
+      <h3 id="nuxt">Nuxt</h3>
+      <CodeBlock code={nuxtConfig} lang="ts" />
+      <p>Components are then available in templates without imports. <code>toast</code> is a function, so import it: <code>import {'{ toast }'} from '~/components/ui/toast'</code>.</p>
+
+      <h3 id="astro">Astro</h3>
+      <p>Add the Vue integration with <code>npx astro add vue</code>, import the stylesheet in a layout, and use the components inside a Vue island.</p>
+      <CodeBlock code={astroPage} lang="astro" />
+      <p>
+        Compound components such as dialog, select and tabs share state between their parts, so compose them inside one <code>.vue</code> file and not across separate islands. Static ones such as <code>Button</code>, <code>Badge</code> and <code>Card</code> can be used directly in{' '}
+        <code>.astro</code> files with no client directive.
+      </p>
+
+      <h2 id="commands">Commands</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>ermine init</code></td><td>Create <code>ermine.json</code> and the theme stylesheet. <code>-y</code> accepts the suggested folders.</td></tr>
+            <tr><td><code>ermine add &lt;name...&gt;</code></td><td>Copy components or blocks and what they depend on. <code>--all</code> copies every component.</td></tr>
+            <tr><td><code>ermine list</code></td><td>Show what is available and which you already have.</td></tr>
+            <tr><td><code>--overwrite</code></td><td>Replace files that already exist.</td></tr>
+            <tr><td><code>--cwd &lt;dir&gt;</code></td><td>Run as if started in another folder.</td></tr>
+            <tr><td><code>--registry &lt;url or path&gt;</code></td><td>Read components from a different <code>registry.json</code>, such as your own fork.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="theming">Theming</h2>
+      <p><code>ermine.css</code> defines every colour, radius, shadow and duration as a CSS variable. Edit the values and every component follows. The file is yours and is never overwritten, even with <code>--overwrite</code>.</p>
+      <CodeBlock code={theme} lang="css" />
+      <ul>
+        <li><strong>Dark mode</strong> follows the operating system. To force a theme, put <code>class="dark"</code> or <code>class="light"</code> on <code>&lt;html&gt;</code>, or on any element to theme only what is inside it.</li>
+        <li><strong>Overriding a component.</strong> Component styles sit in <code>@layer components</code>, so any rule you write outside a layer wins without <code>!important</code>. Or edit the component's own <code>&lt;style&gt;</code> block; it is your code.</li>
+        <li><strong>With Tailwind.</strong> The layer has the same name Tailwind uses, so utility classes on an Ermine component override its defaults.</li>
+      </ul>
+      <CodeBlock code={override} lang="css" />
+
+      <h2 id="by-hand">Installing by hand</h2>
+      <p>The command line is a convenience. Every <a href="/components/">component page</a> shows the source of each file and where it goes, so you can create them yourself.</p>
+    </div>
+  </div>
+</Layout>

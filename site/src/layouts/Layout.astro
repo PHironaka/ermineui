@@ -1,0 +1,138 @@
+---
+import '@registry/styles/ermine.css'
+import '../styles/site.css'
+import { version } from '../data/catalog'
+
+interface Props {
+  title: string
+  description: string
+}
+const { title, description } = Astro.props
+const path = Astro.url.pathname
+const github = 'https://github.com/PHironaka/ermineui'
+const links = [
+  { href: '/components/', label: 'Components' },
+  { href: '/components/#blocks', label: 'Blocks', optional: true },
+  { href: '/benchmarks/', label: 'Benchmarks' },
+  { href: '/docs/installation/', label: 'Install' },
+  { href: github, label: 'GitHub', optional: true },
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Before anything is drawn: apply a theme chosen on an earlier visit, and note that scripting is on.
+      ;(function () {
+        var root = document.documentElement
+        root.classList.add('js')
+        try {
+          var theme = localStorage.getItem('ermine-theme')
+          if (theme === 'dark' || theme === 'light') root.classList.add(theme)
+          var pm = localStorage.getItem('ermine-pm')
+          if (pm) root.dataset.pm = pm
+        } catch (error) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <div class="wrap">
+        <a class="nav-brand" href="/"><span class="nav-mark" aria-hidden="true"></span> Ermine UI</a>
+        <nav class="nav-links" aria-label="Site">
+          {
+            links.map((link) => (
+              <a href={link.href} class={link.optional ? 'optional' : undefined} aria-current={path.startsWith(link.href) && link.href !== '/' ? 'page' : undefined}>
+                {link.label}
+              </a>
+            ))
+          }
+        </nav>
+        <button class="nav-theme" type="button" data-theme-toggle aria-label="Switch between light and dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a9 9 0 1 0 9 9a7 7 0 0 1-9-9Z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main"><slot /></main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <p>Ermine UI {version}. MIT licensed. The components are copied into your project, so they are yours.</p>
+        <nav aria-label="Footer">
+          <a href="/components/">Components</a>
+          <a href="/benchmarks/">Benchmarks</a>
+          <a href="/docs/installation/">Installation</a>
+          <a href="/playground/">Playground</a>
+          <a href={github}>GitHub</a>
+          <a href="https://www.npmjs.com/package/ermineui">npm</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      const root = document.documentElement
+
+      // Light and dark: start from what is showing now, and remember the choice.
+      document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+        const dark = root.classList.contains('dark') || (!root.classList.contains('light') && matchMedia('(prefers-color-scheme: dark)').matches)
+        root.classList.remove('dark', 'light')
+        root.classList.add(dark ? 'light' : 'dark')
+        try {
+          localStorage.setItem('ermine-theme', dark ? 'light' : 'dark')
+        } catch {}
+      })
+
+      document.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target : null
+
+        // Copy buttons copy the text of the element they point at, or of the code beside them.
+        const copy = target?.closest<HTMLButtonElement>('[data-copy]')
+        if (copy) {
+          const source = copy.parentElement?.querySelector('pre, code')
+          const text = copy.dataset.copy || source?.textContent || ''
+          void navigator.clipboard?.writeText(text.trim()).then(() => {
+            const label = copy.textContent
+            copy.textContent = 'Copied'
+            setTimeout(() => (copy.textContent = label), 1600)
+          })
+        }
+
+        // Choosing a package manager changes every command on the page, and is remembered.
+        const pm = target?.closest<HTMLButtonElement>('button[data-pm]')?.dataset.pm
+        if (pm) {
+          root.dataset.pm = pm
+          try {
+            localStorage.setItem('ermine-pm', pm)
+          } catch {}
+        }
+      })
+
+      // Sections rise into place the first time they are scrolled to.
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue
+            entry.target.classList.add('seen')
+            observer.unobserve(entry.target)
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px' },
+      )
+      document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element))
+    </script>
+  </body>
+</html>

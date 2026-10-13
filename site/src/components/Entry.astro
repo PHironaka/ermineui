@@ -1,0 +1,184 @@
+---
+// The page for one component or block: what it is, how to add it, how to use it, and its source.
+import Command from './Command.astro'
+import CodeBlock from './CodeBlock.astro'
+import { type CatalogEntry, blocks, components, find } from '../data/catalog'
+
+interface Props {
+  entry: CatalogEntry
+}
+const { entry } = Astro.props
+const isBlock = entry.kind === 'block'
+const folder = isBlock ? 'blocks' : 'ui'
+const target = `src/components/${folder}/${entry.name}`
+const importPath = `@/components/${folder}/${entry.name}`
+const tags = entry.exports.filter((name) => /^[A-Z]/.test(name))
+const importLine = entry.exports.length
+  ? entry.exports.join(', ').length > 70
+    ? `import {\n${entry.exports.map((name) => `  ${name},`).join('\n')}\n} from '${importPath}'`
+    : `import { ${entry.exports.join(', ')} } from '${importPath}'`
+  : undefined
+const starter = tags.length ? `<script setup lang="ts">\nimport { ${tags[0]} } from '${importPath}'\n</script>\n\n<template>\n  <${tags[0]} />\n</template>` : undefined
+const github = `https://github.com/PHironaka/ermineui/tree/main/registry/${folder}/${entry.name}`
+
+const list = isBlock ? blocks : components
+const index = list.findIndex((item) => item.name === entry.name)
+const previous = list[index - 1]
+const next = list[index + 1]
+const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`
+const copied =
+  `That copies ${plural(entry.files.length, 'file')} into <code>${target}/</code>` +
+  (entry.lib.length ? `, ${plural(entry.lib.length, 'helper')} into <code>src/lib/ermine/</code>` : '') +
+  (entry.components.length ? `, and the ${plural(entry.components.length, 'component')} it is built from` : '') +
+  '. Files you already have are kept.'
+---
+
+<div class="wrap doc">
+  <nav class="crumbs muted" aria-label="Breadcrumb">
+    <a href="/components/">Components</a>
+    <span aria-hidden="true">/</span>
+    <a href={isBlock ? '/components/#blocks' : `/components/?group=${encodeURIComponent(entry.category)}`}>{entry.category}</a>
+  </nav>
+
+  <header class="doc-head">
+    <h1 class="headline">{entry.title}</h1>
+    <p class="lede">{entry.summary}</p>
+    <div class="pills left">
+      {entry.demo && <a class="pill" href={entry.demo}>See it live</a>}
+      <a class="pill quiet" href={github}>Source on GitHub</a>
+    </div>
+  </header>
+
+  <div class="prose">
+    <h2 id="install">Install</h2>
+    <p>
+      If this is the first component in the project, set up once. This writes <code>ermine.json</code> and copies the theme stylesheet. The{' '}
+      <a href="/docs/installation/">installation guide</a> covers Vue, Nuxt and Astro.
+    </p>
+    <Command args="init" />
+    <p>Then add {isBlock ? 'the block' : 'the component'}:</p>
+    <Command args={`add ${entry.name}`} />
+    <p set:html={copied} />
+
+    <h2 id="usage">Use</h2>
+    {importLine && <CodeBlock code={importLine} lang="ts" />}
+    {entry.example ? <CodeBlock code={entry.example} lang="vue" /> : starter && <CodeBlock code={starter} lang="vue" />}
+    <p>
+      In Nuxt, with the <a href="/docs/installation/#nuxt">auto-import setting</a>, the tags work in templates without the import. In Astro, use it inside a Vue island.
+      {!entry.example && ' The props are documented in the source below, on each one.'}
+    </p>
+
+    <h2 id="files">What gets copied</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>File</th><th>Where it goes</th></tr></thead>
+        <tbody>
+          {entry.files.map((file) => <tr><td><code>{file.file}</code></td><td><code>{target}/{file.file}</code></td></tr>)}
+          {entry.lib.map((name) => <tr><td><code>{name}.ts</code> <span class="muted">helper</span></td><td><code>src/lib/ermine/{name}.ts</code></td></tr>)}
+        </tbody>
+      </table>
+    </div>
+    {
+      entry.components.length > 0 && (
+        <p>
+          It is built from:{' '}
+          {entry.components.map((name, position) => (
+            <Fragment>
+              {position > 0 && ', '}
+              <a href={find(name)?.href}>{find(name)?.title ?? name}</a>
+            </Fragment>
+          ))}
+          . These are added with it.
+        </p>
+      )
+    }
+    <p class="muted">The folders are the suggested ones. <code>ermine.json</code> says where yours are.</p>
+
+    <h2 id="source">Source</h2>
+    <p>This is exactly what the command copies. To install by hand, create each file below and the helpers listed above.</p>
+    {
+      entry.files.map((file, position) => (
+        <details class="file" open={position === 0 && entry.files.length <= 3}>
+          <summary>
+            <code>{file.file}</code> <span class="muted">{file.content.split('\n').length} lines</span>
+          </summary>
+          <CodeBlock code={file.content.trimEnd()} lang={file.file.endsWith('.vue') ? 'vue' : 'ts'} />
+        </details>
+      ))
+    }
+  </div>
+
+  <nav class="pager" aria-label="More components">
+    {previous ? <a href={previous.href}><span class="muted">Previous</span>{previous.title}</a> : <span />}
+    {next && <a href={next.href} class="next"><span class="muted">Next</span>{next.title}</a>}
+  </nav>
+</div>
+
+<style>
+  .crumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+  }
+  .crumbs a {
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    text-decoration: underline;
+  }
+  .pills.left {
+    justify-content: flex-start;
+    margin-top: 1.5rem;
+  }
+  .prose {
+    max-width: 48rem;
+  }
+  .file {
+    margin-bottom: 0.6rem;
+    border-radius: 0.875rem;
+    background: var(--site-soft);
+  }
+  .file summary {
+    padding: 0.8rem 1.1rem;
+    cursor: pointer;
+    font-size: 0.9375rem;
+  }
+  .file summary span {
+    margin-inline-start: 0.5rem;
+    font-size: 0.8125rem;
+  }
+  .file :global(.code) {
+    margin: 0;
+    border-width: 1px 0 0;
+    border-radius: 0 0 0.875rem 0.875rem;
+  }
+  .file :global(pre) {
+    max-height: 32rem;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 48rem;
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--er-border);
+  }
+  .pager a {
+    display: grid;
+    gap: 0.2rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .pager a:hover {
+    color: var(--site-accent);
+  }
+  .pager span {
+    font-size: 0.8125rem;
+    font-weight: 400;
+  }
+  .pager .next {
+    text-align: end;
+  }
+</style>

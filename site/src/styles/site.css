@@ -1,0 +1,450 @@
+/*
+ * The website's own styles. Colours, radii and fonts come from the Ermine theme (registry/styles/ermine.css),
+ * so the page and the components on it share one set of variables, in light and dark.
+ */
+:root {
+  --site-width: 68rem;
+  --site-gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --site-soft: light-dark(oklch(0.972 0 0), oklch(0.19 0 0));
+  --site-ink: light-dark(oklch(0.2 0 0), oklch(0.96 0 0));
+  --site-accent: light-dark(oklch(0.52 0.19 258), oklch(0.72 0.15 250));
+  --site-nav-height: 3rem;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--site-nav-height) + 1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--er-background);
+  color: var(--site-ink);
+  font-family: var(--er-font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--site-width);
+  margin-inline: auto;
+  padding-inline: var(--site-gutter);
+  box-sizing: border-box;
+}
+
+.skip {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--er-primary);
+  color: var(--er-primary-foreground);
+}
+.skip:focus {
+  top: 0.5rem;
+}
+
+/* Navigation: a thin translucent bar that stays put. */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--site-nav-height);
+  background: color-mix(in oklch, var(--er-background) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid color-mix(in oklch, var(--er-border) 70%, transparent);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 100%;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-mark {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 0.3rem;
+  background: var(--site-ink);
+  clip-path: polygon(0 0, 62% 0, 100% 38%, 100% 100%, 0 100%);
+}
+.nav-links {
+  display: flex;
+  gap: clamp(0.75rem, 2.5vw, 1.75rem);
+  margin-inline-start: auto;
+  font-size: 0.8125rem;
+}
+.nav-links a {
+  text-decoration: none;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+.nav-links a:hover,
+.nav-links a[aria-current='page'] {
+  opacity: 1;
+}
+.nav-theme {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.nav-theme:hover {
+  background: var(--er-accent);
+}
+.nav-theme svg {
+  width: 1rem;
+  height: 1rem;
+}
+@media (max-width: 34rem) {
+  .nav-links .optional {
+    display: none;
+  }
+}
+
+/* Type */
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--site-accent);
+}
+.display {
+  margin: 0;
+  font-size: clamp(2.75rem, 8.5vw, 6rem);
+  font-weight: 600;
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.headline {
+  margin: 0;
+  font-size: clamp(2.1rem, 5.6vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.lede {
+  margin: 1.25rem auto 0;
+  max-width: 40rem;
+  font-size: clamp(1.125rem, 2.1vw, 1.4375rem);
+  line-height: 1.4;
+  color: var(--er-muted-foreground);
+  text-wrap: pretty;
+}
+.muted {
+  color: var(--er-muted-foreground);
+}
+.center {
+  text-align: center;
+}
+
+/* Sections */
+.section {
+  padding-block: clamp(4.5rem, 11vw, 9rem);
+}
+.section.soft {
+  background: var(--site-soft);
+}
+/* A black band. The class "dark" comes from the theme and turns everything inside to its dark colours. */
+.section.dark {
+  background: #000;
+  color: oklch(0.96 0 0);
+}
+
+/* Pills: links that look like the rounded buttons on a product page. */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 999px;
+  background: var(--site-accent);
+  color: light-dark(#fff, #000);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.pill:hover {
+  filter: brightness(1.08);
+}
+.pill.quiet {
+  background: none;
+  color: var(--site-accent);
+  padding-inline: 0.25rem;
+}
+.pill.quiet::after {
+  content: '›';
+  font-size: 1.2em;
+  line-height: 1;
+}
+.pill.quiet:hover {
+  text-decoration: underline;
+  filter: none;
+}
+
+/* A one-line command with a button to copy it. */
+.command {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 100%;
+  padding: 0.6rem 0.6rem 0.6rem 1.1rem;
+  border: 1px solid var(--er-border);
+  border-radius: 999px;
+  background: var(--er-card);
+  font-family: var(--er-font-mono);
+  font-size: 0.9375rem;
+}
+.command code {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.command code::before {
+  content: '$ ';
+  color: var(--er-muted-foreground);
+}
+.copy {
+  flex: none;
+  padding: 0.3rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--er-secondary);
+  color: var(--er-secondary-foreground);
+  font: 500 0.75rem var(--er-font-sans);
+  cursor: pointer;
+}
+.copy:hover {
+  background: var(--er-accent);
+}
+
+/* Code blocks */
+.code {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--er-border);
+  border-radius: 0.875rem;
+  background: var(--er-card);
+  overflow: hidden;
+}
+.code > .copy {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+}
+.code pre {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  font-family: var(--er-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  background: none !important;
+  tab-size: 2;
+}
+.code pre,
+.code pre span {
+  color: light-dark(var(--shiki-light), var(--shiki-dark));
+}
+.code-label {
+  padding: 0.55rem 1.15rem;
+  border-bottom: 1px solid var(--er-border);
+  font: 500 0.75rem var(--er-font-mono);
+  color: var(--er-muted-foreground);
+}
+
+/* Package manager tabs: every variant is in the page, and the chosen one is shown. */
+.pm-tabs {
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  margin-bottom: 0.6rem;
+  border-radius: 999px;
+  background: var(--er-muted);
+}
+.pm-tabs button {
+  padding: 0.3rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--er-muted-foreground);
+  font: 500 0.8125rem var(--er-font-sans);
+  cursor: pointer;
+}
+:root:not([data-pm]) .pm-tabs button[data-pm='npm'],
+:root[data-pm='npm'] .pm-tabs button[data-pm='npm'],
+:root[data-pm='pnpm'] .pm-tabs button[data-pm='pnpm'],
+:root[data-pm='yarn'] .pm-tabs button[data-pm='yarn'],
+:root[data-pm='bun'] .pm-tabs button[data-pm='bun'] {
+  background: var(--er-background);
+  color: var(--site-ink);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+}
+.pm [data-pm-panel] {
+  display: none;
+}
+:root:not([data-pm]) .pm [data-pm-panel='npm'],
+:root[data-pm='npm'] .pm [data-pm-panel='npm'],
+:root[data-pm='pnpm'] .pm [data-pm-panel='pnpm'],
+:root[data-pm='yarn'] .pm [data-pm-panel='yarn'],
+:root[data-pm='bun'] .pm [data-pm-panel='bun'] {
+  display: block;
+}
+
+/* Things that rise into place as they are scrolled to. Without scripting, or with reduced motion, they are simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .js [data-reveal].seen {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Footer */
+.footer {
+  padding-block: 2.5rem 3.5rem;
+  border-top: 1px solid var(--er-border);
+  background: var(--site-soft);
+  font-size: 0.8125rem;
+  color: var(--er-muted-foreground);
+}
+.footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+}
+.footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+.footer a {
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Plain documents: installation, benchmarks, and the pages for each component. */
+.doc {
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(4rem, 9vw, 7rem);
+}
+.doc-head {
+  max-width: 44rem;
+  margin-bottom: 3rem;
+}
+.doc-head .lede {
+  margin-inline: 0;
+}
+.prose {
+  max-width: 44rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+.prose h2 {
+  margin: 3.5rem 0 1rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.prose h3 {
+  margin: 2.25rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1rem;
+}
+.prose li {
+  margin-bottom: 0.4rem;
+}
+/* Links inside running text are underlined, so they do not depend on colour alone. */
+.prose a,
+.caption a {
+  color: var(--site-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+.prose :not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 0.35rem;
+  background: var(--er-muted);
+  font-family: var(--er-font-mono);
+  font-size: 0.875em;
+}
+.prose .code,
+.prose .pm {
+  margin-bottom: 1.25rem;
+}
+.prose table {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.prose th,
+.prose td {
+  padding: 0.6rem 0.75rem 0.6rem 0;
+  border-bottom: 1px solid var(--er-border);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
+}
+.table-scroll {
+  overflow-x: auto;
+}

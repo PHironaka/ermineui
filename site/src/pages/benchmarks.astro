@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Bars from '../components/Bars.astro'
+import { format, libraries, metrics } from '../data/benchmarks'
+
+const columns = [...libraries.map((library) => ({ key: library.key, name: library.name })), { key: 'baseline' as const, name: 'No library' }]
+---
+
+<Layout title="Benchmarks. Ermine UI" description="The same page built with Ermine, shadcn-vue and Nuxt UI: what each ships to the browser, how fast it loads and draws, and how the test was run.">
+  <div class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">Benchmarks</p>
+      <h1 class="headline">Same page. Three libraries.</h1>
+      <p class="lede">We built one settings page with Ermine, shadcn-vue and Nuxt UI, and measured what reached the browser and how fast it drew. Here are the numbers, how we got them, and what they do not show.</p>
+    </header>
+
+    <div class="charts">
+      {
+        metrics.filter((item) => item.id !== 'js' && item.id !== 'css').map((item) => (
+          <article class="chart" data-reveal>
+            <h2>{item.label}</h2>
+            <p class="muted">{item.detail}</p>
+            <Bars metric={item.id} floor />
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="prose">
+      <h2 id="table">Every number</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Measurement</th>{columns.map((column) => <th>{column.name}</th>)}</tr>
+          </thead>
+          <tbody>
+            {
+              metrics.map((item) => (
+                <tr>
+                  <td>{item.label}<br /><span class="muted small">{item.detail}</span></td>
+                  {columns.map((column) => <td class="number">{format(item.values[column.key], item)}</td>)}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="muted small">"No library" is the same page in bare, unstyled HTML elements. It is the floor: what Vue itself costs before any component library.</p>
+
+      <h2 id="method">How it was measured</h2>
+      <ul>
+        <li><strong>The page.</strong> A settings form using 13 components: button, input, label, card, badge, checkbox, switch, tabs, accordion, dialog, select, dropdown menu and tooltip. The same content in each library, written the way that library's documentation shows.</li>
+        <li><strong>The projects.</strong> Four fresh Vite 8 and Vue 3.5 projects from <code>npm create vite</code>, built for production with default settings. {libraries.map((library) => `${library.name} ${library.version}`).join('; ')}.</li>
+        <li><strong>Size.</strong> Every JavaScript and CSS file in the build, gzipped at the highest level.</li>
+        <li><strong>Loading.</strong> A cold page in Chromium with the processor slowed four times, to stand in for a mid-range phone. The median of 15 loads.</li>
+        <li><strong>Drawing.</strong> 1,000 rows, each with a badge, an input, a checkbox, a switch and a button, are mounted, then every checkbox and switch is flipped. Timed at full speed from the change until the browser has finished layout. The median of 10 runs, each on a new page. Runs varied by a few percent.</li>
+        <li><strong>When.</strong> 13 October 2026, on one Apple laptop.</li>
+      </ul>
+
+      <h2 id="why">Why the gap</h2>
+      <p>Ermine's checkbox, switch and input are native elements with styles. The other two build theirs on reka-ui, which gives each control its own JavaScript, its own memory and, in Nuxt UI's case, twice the elements. Neither choice is wrong; they buy different things. But it is most of the difference you see here.</p>
+
+      <h2 id="limits">What this does not show</h2>
+      <ul>
+        <li><strong>It is one page, one browser and one machine.</strong> The pages were served from the same computer, so the paint times leave out the network. The sizes are the better guide to how a real visit loads.</li>
+        <li><strong>The drawing test plays to Ermine's strength.</strong> It is all form controls and buttons. Opening dialogs, menus and selects was not timed, and there all three run comparable JavaScript.</li>
+        <li><strong>CSS grows differently.</strong> Ermine's CSS grows with each component you add; all {'141'} together come to about 30 kB gzipped. Tailwind's utility CSS levels off, so on a large app the gap in CSS narrows.</li>
+        <li><strong>Two choices favoured the others.</strong> Nuxt UI was built without a router, though its own setup guide adds one. The web font that shadcn-vue's default theme loads was removed.</li>
+        <li><strong>Ermine has its own gap to close.</strong> Updating 1,000 rows takes far longer than the bare-element floor. That is on our list.</li>
+      </ul>
+      <p>These libraries do more than this test measures, and are good at it. If size and speed are not what you are short of, choose on other grounds.</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .chart {
+    padding: 1.6rem 1.75rem 1.9rem;
+    border-radius: 1.5rem;
+    background: var(--site-soft);
+  }
+  .chart h2 {
+    margin: 0;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .chart p {
+    margin: 0.25rem 0 1.5rem;
+    font-size: 0.875rem;
+  }
+  .prose {
+    max-width: 52rem;
+  }
+  .number {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .small {
+    font-size: 0.8125rem;
+  }
+</style>
