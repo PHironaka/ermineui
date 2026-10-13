@@ -372,3 +372,11 @@ body {
   border-radius: var(--er-radius-lg);
   overflow: hidden;
 }
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
+  gap: 1.5rem 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}

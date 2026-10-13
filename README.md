@@ -31,6 +31,10 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `multi-select` | Several choices from a filterable list, shown as removable tags |
 | `combobox` | Select you can type in to filter; keyboard navigation, form support |
 | `slider` | Native range input, restyled, with a filled track |
+| `range-slider` | Two thumbs on one track for a lowest and a highest value, such as a price range |
+| `masked-input` | Field that lays out what is typed in a fixed shape: card numbers, expiry dates, phone numbers |
+| `swatch` | One choice from a few as colour dots or small labelled boxes; unavailable ones struck through |
+| `option-card` | A radio button as a whole card with a title, a line of detail and a price |
 | `toggle-group` | Row of buttons with one, or several, switched on |
 | `date-picker` | Field that opens a calendar; min / max, disabled dates, form support |
 | `date-range-picker` | Field for a start and end date, with quick presets beside the calendar |
@@ -51,7 +55,13 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `progress`, `spinner` | Bar for known or unknown amounts; ring for short waits |
 | `stat` | Headline number with change since last period and optional sparkline |
 | `table` | Styled HTML table in parts |
-| `data-table` | Table from rows and columns, with sorting, row selection and pages |
+| `data-table` | Table from rows and columns, with sorting, search, filters, row selection and bulk actions, rows that open, columns to hide, a fixed heading and pages; or all of that done by your server |
+| `filter-bar` | A menu of tick boxes per property, the choices in use as removable tags, and one button to clear them |
+| `price` | An amount as money, with the old price struck through and the saving when it is reduced |
+| `product-card` | A product's picture, name, score and price as one link, with room for a badge and actions |
+| `product-gallery` | One large picture with thumbnails to switch between; swipe, arrow keys and hover zoom |
+| `cart-line-item` | One product in a cart: picture, name, variant, quantity, line total and a remove button |
+| `order-summary` | Subtotal, discount, shipping and tax added up to a total |
 | `pagination`, `breadcrumb` | Numbered pages with gaps shortened; trail of links to the current page |
 | `chart` | Line, area, bar, donut, scatter and heatmap charts, a ranked bar list and a gauge; hover readouts, keyboard support, table views |
 | `skeleton` | Loading placeholder with pulse or shimmer; still under reduced motion |
@@ -97,6 +107,8 @@ A block is a section of a page, or a whole page, already put together from the c
 | `dashboard` | App page with a collapsing sidebar, a top bar with a user menu, headline numbers, an area chart, a bar list and a sortable table. `DashboardShell` is the frame on its own, for your other pages |
 | `sign-in` | Email and password on a card, checked before it is sent, with a loading state and a place for the server's error |
 | `settings` | Account settings in tabs: a profile form, notification switches, and a delete button behind a confirmation |
+| `cart` | The items in a cart with quantities to change, a discount code field, the sums and a checkout button; an empty state when there is nothing in it |
+| `checkout` | Contact, delivery address, delivery choice and card details in one checked form, beside a summary of the order |
 
 ## Try it
 
@@ -778,6 +790,104 @@ A number `value` is shortened (1.8M); a string is shown as given. `delta` is in 
 
 Sorting and paging happen in the browser, on the rows you pass. Pressing a heading sorts ascending, then descending, then back to the given order. `v-model:sort`, `v-model:page` and `v-model:selected` are all optional. For a table you lay out yourself, use the `table` parts (`Table`, `TableHeader`, `TableRow`, `TableHead`, `TableCell` ...) directly.
 
+The rest is switched on a piece at a time:
+
+```vue
+<DataTable
+  v-model:selected="selected"
+  v-model:filters="filters"
+  :rows="deployments"
+  :columns="columns"
+  row-key="id"
+  selectable
+  searchable
+  column-toggle
+  max-height="24rem"
+  label="Deployments"
+>
+  <template #toolbar>
+    <FilterBar v-model="filters" :facets="[{ key: 'status', label: 'Status', options: facetOptions(deployments, 'status') }]" />
+  </template>
+  <template #bulk="{ selected, clear }">
+    <Button size="sm" variant="outline" @click="redeploy(selected).then(clear)">Redeploy</Button>
+  </template>
+  <template #expanded="{ row }">Deployed from {{ row.branch }} by {{ row.author }}.</template>
+</DataTable>
+```
+
+- `searchable` adds a search field that looks through the text of every column (`v-model:search`).
+- `v-model:filters` is an object of column key to the values to keep, which is exactly what `FilterBar` produces; `facetOptions(rows, key)` lists a column's different values with a count of each. `FilterBar` works on its own too, above a chart or a grid of cards.
+- `column-toggle` adds a "Columns" menu (`v-model:hidden`); give a column `hideable: false` to keep it out of the menu.
+- The `#bulk` slot is shown above the table while any row is ticked. The `#expanded` slot adds a button to each row that opens it underneath (`v-model:expanded`).
+- `max-height` scrolls the rows inside a box with the headings staying in view. On a surface other than the page, set `--er-data-table-surface` to that surface's colour.
+- `manual` is for rows that come from a server already searched, filtered, sorted and cut into pages: the table shows `rows` as given and takes its page count from `total`. Watch `sort`, `page`, `search` and `filters`, fetch to match, and set `loading` while you wait.
+
+**Price, swatch, product card, product gallery**
+
+```vue
+<Price :amount="96" :compare-at="120" show-saving />   <!-- $96.00, $120.00 struck through, "Save 20%" -->
+<Price :amount="9" unit="/ month" currency="EUR" locale="de-DE" />
+
+<SwatchGroup v-model="colour" label="Colour">
+  <Swatch value="sand" color="#c9b79c" label="Sand" />
+  <Swatch value="chalk" color="#f5f3ee" label="Chalk" unavailable />
+</SwatchGroup>
+<SwatchGroup v-model="size" label="Size">
+  <Swatch value="s">S</Swatch>
+  <Swatch value="m">M</Swatch>
+</SwatchGroup>
+
+<ProductCard title="Wool throw" href="/products/wool-throw" image="/img/throw.jpg" brand="Fell & Co" :price="96" :compare-at="120" :rating="4.8" :reviews="64" badge="Sale">
+  <template #action><Button variant="secondary" size="icon" aria-label="Save for later"><Icon name="heart" /></Button></template>
+  <Button variant="outline" size="sm" @click="add">Add to cart</Button>
+</ProductCard>
+
+<ProductGallery v-model="picture" :images="[{ src: '/img/mug-1.jpg', alt: 'Front of the mug' }, …]" thumbnails="left" zoom />
+```
+
+Amounts are in whole units of the currency (24.5 is $24.50), and `formatMoney(amount, currency, locale)` from the same folder writes one as text. A reduced price is read to screen readers as "Now … Was …". Swatches are real radio buttons; one with a `color` is a round dot and needs a `label` to name it. The product card's title is its link and the whole card is the press area; what goes in the `#action` slot and the default slot stays pressable on top. The gallery is built on the carousel, so it swipes and takes the arrow keys; `zoom` magnifies under a mouse pointer only.
+
+**Range slider and masked input**
+
+```vue
+<RangeSlider v-model="priceRange" :min="0" :max="200" :step="5" :min-gap="10" low-label="Lowest price" high-label="Highest price" />
+
+<MaskedInput v-model="card" :mask="masks.card" autocomplete="cc-number" />
+<MaskedInput v-model="code" mask="AA-####" />
+```
+
+The range slider's value is a pair, `[low, high]`, and the thumbs stop short of each other by `min-gap`. It is two native range inputs on one track, so each thumb has its own keyboard support and label; with a `name`, a form gets `<name>-min` and `<name>-max`. In a mask, `#` is a digit, `A` a letter and `*` either; anything else is put in for the typist. The value you get is what was typed, without those extras (`4242424242424242`, not `4242 4242 …`). `masks` has `card`, `amex`, `expiry`, `cvc`, `phoneUS` and `zipUS`.
+
+**Option card, cart line item, order summary**
+
+```vue
+<RadioGroup v-model="delivery" aria-label="Delivery">
+  <OptionCard value="standard" title="Standard" description="3 to 5 working days"><template #end>Free</template></OptionCard>
+  <OptionCard value="express" title="Express" description="1 to 2 working days"><template #end>$12.00</template></OptionCard>
+</RadioGroup>
+
+<CartLineItem v-model:quantity="item.quantity" :title="item.title" :image="item.image" options="Sand / 350 ml" :price="24" :max="6" @remove="remove(item)" />
+
+<OrderSummary :subtotal="144" :discount="10" discount-label="SAVE10" :shipping="0" :tax="11.52">
+  <template #footer><Button size="lg">Checkout</Button></template>
+</OrderSummary>
+```
+
+An option card goes inside a `RadioGroup` and is that group's radio button with a card for a label. `CartLineItem` with `readonly` shows the quantity as text, for an order being paid for or already placed. `OrderSummary` works out the total unless you pass one; a `shipping` of 0 reads "Free", and leaving it out reads "Calculated at checkout".
+
+**Cart and checkout blocks**
+
+```vue
+<Cart v-model:items="items" :shipping="shipping" :discount="discount" :code-error="codeError" @apply-code="checkCode" @checkout="goToCheckout" />
+
+<Checkout :items="items" :shipping-methods="methods" :tax="tax" :loading="paying" :error="paymentError" @submit="placeOrder">
+  <!-- For real payments: your provider's own card fields, so card numbers never touch your pages. -->
+  <template #payment><div id="card-element" /></template>
+</Checkout>
+```
+
+The cart emits `applyCode` and leaves the checking to you: set `discount` when the code is good, `codeError` when it is not. The checkout emits `submit` only once every field passes. Its built-in card fields are for prototypes and for providers that take card details from you; with the `#payment` slot filled they are not shown or checked, and `submit` carries no card.
+
 **Pagination, breadcrumb, slider, toggle group**
 
 ```vue
@@ -921,7 +1031,7 @@ The browser tests need the browsers once: `npx playwright install chromium firef
 - Native controls keep their browser's own keyboard habits. Radio groups, for example, wrap round at the ends in Chrome and Firefox and stop in Safari, and Safari only tabs to buttons and links with Option held unless the reader has changed that setting.
 - No testing with a real screen reader yet. Roles, labels and keyboard behavior follow the WAI-ARIA authoring patterns, pass an automated axe scan, and are checked with a simulated screen reader, but none of those is a substitute for VoiceOver, NVDA or JAWS in the hands of someone who uses one.
 - Overlays render after mount, not on the server. A `Select` with a value shows that raw value in server HTML and swaps in the item's label on hydration; pass the label through the trigger's slot if that flash matters.
-- No right-to-left layout handling, and the select is single-choice. Submenus go one level deep in testing; deeper nesting is untried. The slider has one thumb. The data table sorts and pages in the browser only. The combobox is single-choice too and filters only the items you give it (no remote search). The line, area and bar chart has a category axis only (no time or number scale along the bottom), one value axis, and at most eight coloured series. The date pickers have no typed entry and no month or year dropdowns, and the range picker shows one month at a time.
+- No right-to-left layout handling, and the select is single-choice. Submenus go one level deep in testing; deeper nesting is untried. The range slider cannot be turned on its side. The filter bar has tick-box facets only, with no date or number ranges and no saved views. The combobox is single-choice too and filters only the items you give it (no remote search). The line, area and bar chart has a category axis only (no time or number scale along the bottom), one value axis, and at most eight coloured series. The date pickers have no typed entry and no month or year dropdowns, and the range picker shows one month at a time.
 - The multi-select filters only the items you give it. The file upload does not upload. The command palette searches item text and keywords by plain word match, with no fuzzy matching or ranking.
 - Several components depend on browser features that vary: vibration works on Android only, the share sheet mainly on phones, the eyedropper in Chrome and Edge on desktop, wake lock and view transitions in recent browsers. Each was tested against a stand-in for the feature, which shows the component calls it correctly, not how it feels on a real device.
 - Sounds are synthesized tones, not recordings, so they are simple by nature. They were checked by recipe (length, loudness, pitch) and by confirming the right tones are requested; nobody has listened to them on a range of speakers. A browser tab muted by the user stays silent, as it should.

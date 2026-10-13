@@ -9,6 +9,8 @@ export interface DataTableColumn<T = object> {
   align?: 'left' | 'center' | 'right'
   /** How the value is written. Sorting still uses the raw value. */
   format?: (value: unknown, row: T) => string
+  /** Set to false to keep this column out of the "Columns" menu, so it can never be hidden. */
+  hideable?: boolean
 }
 
 export interface DataTableSort {

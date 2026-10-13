@@ -19,6 +19,7 @@ import { Breadcrumb, BreadcrumbItem } from '../../registry/ui/breadcrumb'
 import { Button } from '../../registry/ui/button'
 import { Calendar, addDays, today } from '../../registry/ui/calendar'
 import { Carousel, CarouselSlide } from '../../registry/ui/carousel'
+import { CartLineItem } from '../../registry/ui/cart-line-item'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../registry/ui/card'
 import { BarList, Chart, DonutChart, Gauge, Heatmap, ScatterChart } from '../../registry/ui/chart'
 import { Checkbox } from '../../registry/ui/checkbox'
@@ -30,7 +31,7 @@ import { CommandGroup, CommandItem, CommandPalette } from '../../registry/ui/com
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '../../registry/ui/context-menu'
 import { CountUp } from '../../registry/ui/count-up'
 import { CopyButton } from '../../registry/ui/copy-button'
-import { DataTable, type DataTableColumn } from '../../registry/ui/data-table'
+import { DataTable, type DataTableColumn, type DataTableSort } from '../../registry/ui/data-table'
 import { DatePicker } from '../../registry/ui/date-picker'
 import { DateRangePicker, type DateRange } from '../../registry/ui/date-range-picker'
 import { DateTimePicker } from '../../registry/ui/date-time-picker'
@@ -64,6 +65,7 @@ import { EmptyState } from '../../registry/ui/empty-state'
 import { EventCalendar, type CalendarEvent } from '../../registry/ui/event-calendar'
 import { Field, email, min, required, useValidation } from '../../registry/ui/field'
 import { FileUpload } from '../../registry/ui/file-upload'
+import { FilterBar, facetOptions, type FilterBarFacet, type FilterBarValue } from '../../registry/ui/filter-bar'
 import { FullscreenButton } from '../../registry/ui/fullscreen'
 import { canVibrate, useHaptics, vHaptic } from '../../registry/ui/haptics'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../registry/ui/hover-card'
@@ -72,6 +74,7 @@ import { InputGroup, PasswordInput, SearchInput } from '../../registry/ui/input-
 import { Kanban, type KanbanColumn } from '../../registry/ui/kanban'
 import { Kbd } from '../../registry/ui/kbd'
 import { Label } from '../../registry/ui/label'
+import { MaskedInput, masks } from '../../registry/ui/masked-input'
 import { Menubar, MenubarContent, MenubarMenu, MenubarTrigger } from '../../registry/ui/menubar'
 import { MultiSelect, MultiSelectItem } from '../../registry/ui/multi-select'
 import {
@@ -84,13 +87,19 @@ import {
 import { NotificationPrompt } from '../../registry/ui/notification-prompt'
 import { NumberInput } from '../../registry/ui/number-input'
 import { OfflineBanner } from '../../registry/ui/offline-banner'
+import { OptionCard } from '../../registry/ui/option-card'
+import { OrderSummary } from '../../registry/ui/order-summary'
 import { Pagination } from '../../registry/ui/pagination'
 import { PinInput } from '../../registry/ui/pin-input'
 import { Popover, PopoverContent, PopoverTrigger } from '../../registry/ui/popover'
+import { Price } from '../../registry/ui/price'
+import { ProductCard } from '../../registry/ui/product-card'
+import { ProductGallery, type ProductGalleryImage } from '../../registry/ui/product-gallery'
 import { Progress } from '../../registry/ui/progress'
 import { QrCode } from '../../registry/ui/qr-code'
 import { Questionnaire, QuestionnaireStep } from '../../registry/ui/questionnaire'
 import { RadioGroup, RadioGroupItem } from '../../registry/ui/radio-group'
+import { RangeSlider } from '../../registry/ui/range-slider'
 import { Rating } from '../../registry/ui/rating'
 import { ResizableHandle, ResizablePanel, ResizablePanels } from '../../registry/ui/resizable'
 import { vReveal } from '../../registry/ui/reveal'
@@ -117,6 +126,7 @@ import { SoundToggle, soundSettings, vSound } from '../../registry/ui/sound'
 import { Spinner } from '../../registry/ui/spinner'
 import { Stat } from '../../registry/ui/stat'
 import { Stepper } from '../../registry/ui/stepper'
+import { Swatch, SwatchGroup } from '../../registry/ui/swatch'
 import { Switch } from '../../registry/ui/switch'
 import { TagsInput } from '../../registry/ui/tags-input'
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../../registry/ui/table'
@@ -136,6 +146,8 @@ import { Prose, Typography } from '../../registry/ui/typography'
 import { VirtualList } from '../../registry/ui/virtual-list'
 import { Icon, iconNames, registerIcons } from '../../registry/ui/icon'
 import { ImageFan, type ImageFanImage } from '../../registry/ui/image-fan'
+import { Cart, sampleCart, type CartItem } from '../../registry/blocks/cart'
+import { Checkout, type CheckoutValues } from '../../registry/blocks/checkout'
 import { Dashboard } from '../../registry/blocks/dashboard'
 import { SettingsPage } from '../../registry/blocks/settings'
 import { SignIn } from '../../registry/blocks/sign-in'
@@ -621,6 +633,97 @@ const deploymentColumns: DataTableColumn<Deployment>[] = [
   { key: 'author', label: 'Author', sortable: true },
 ]
 const selectedDeployments = ref<string[]>([])
+const deploymentFilters = ref<FilterBarValue>({})
+const deploymentFacets: FilterBarFacet[] = [
+  { key: 'status', label: 'Status', options: facetOptions(deploymentRows, 'status') },
+  { key: 'author', label: 'Author', options: facetOptions(deploymentRows, 'author') },
+]
+const bulkAction = ref('')
+
+// A table fed by a "server": the rows are searched, filtered, sorted and cut into pages out of sight, and arrive after a pause.
+const serverFilters = ref<FilterBarValue>({})
+const serverSort = ref<DataTableSort>()
+const serverPage = ref(1)
+const serverSearch = ref('')
+const serverRows = ref<Deployment[]>([])
+const serverTotal = ref(0)
+const serverLoading = ref(false)
+let serverTimer: ReturnType<typeof setTimeout> | undefined
+function fetchDeployments() {
+  serverLoading.value = true
+  clearTimeout(serverTimer)
+  serverTimer = setTimeout(() => {
+    const query = serverSearch.value.trim().toLowerCase()
+    const sort = serverSort.value
+    const found = deploymentRows
+      .filter((row) => Object.entries(serverFilters.value).every(([key, values]) => !values.length || values.includes(String(row[key as keyof Deployment]))))
+      .filter((row) => !query || `${row.commit} ${row.branch} ${row.author}`.toLowerCase().includes(query))
+    if (sort) found.sort((a, b) => String(a[sort.key as keyof Deployment]).localeCompare(String(b[sort.key as keyof Deployment])) * (sort.direction === 'desc' ? -1 : 1))
+    serverTotal.value = found.length
+    serverRows.value = found.slice((serverPage.value - 1) * 8, serverPage.value * 8)
+    serverLoading.value = false
+  }, 250)
+}
+watch([serverFilters, serverSort, serverPage, serverSearch], fetchDeployments, { immediate: true })
+
+// Shop: stand-in product pictures drawn as SVG, so the demos need no image files and no network.
+const shopPicture = (background: string, ink: string, view = 0) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="${background}"/>${
+      [
+        `<rect x="130" y="120" width="140" height="170" rx="22" fill="${ink}"/><path d="M270 160h22a34 34 0 0 1 0 68h-22" fill="none" stroke="${ink}" stroke-width="18"/>`,
+        `<circle cx="200" cy="200" r="96" fill="${ink}"/><circle cx="200" cy="200" r="70" fill="${background}" opacity=".55"/>`,
+        `<rect x="60" y="150" width="280" height="200" rx="30" fill="${ink}"/><rect x="60" y="150" width="280" height="36" rx="18" fill="${background}" opacity=".35"/>`,
+        `<rect x="150" y="70" width="100" height="120" rx="16" fill="${ink}"/><rect x="110" y="230" width="100" height="120" rx="16" fill="${ink}" opacity=".6"/><rect x="230" y="230" width="100" height="120" rx="16" fill="${ink}" opacity=".3"/>`,
+      ][view]
+    }</svg>`,
+  )}`
+const shopProducts = [
+  { title: 'Stoneware mug', brand: 'Hearth', price: 24, rating: 4.5, reviews: 128, badge: 'New', image: shopPicture('#efe7da', '#c9b79c') },
+  { title: 'Wool throw', brand: 'Fell & Co', price: 96, compareAt: 120, rating: 4.8, reviews: 64, badge: 'Sale', image: shopPicture('#dde5d6', '#6f8a5b', 2) },
+  { title: 'Desk lamp', brand: 'Lumen', price: 148.5, rating: 4.1, reviews: 23, image: shopPicture('#dfe3ea', '#2f3a4f', 1) },
+]
+const wishlist = ref<string[]>([])
+const toggleWish = (title: string) => (wishlist.value = wishlist.value.includes(title) ? wishlist.value.filter((other) => other !== title) : [...wishlist.value, title])
+const shopEvent = ref('nothing added yet')
+const mugColour = ref('sand')
+const mugSize = ref('350')
+const galleryImages: ProductGalleryImage[] = ['Front of the mug', 'The mug from above', 'The glaze up close', 'The mug in three colours'].map((alt, view) => ({
+  alt,
+  src: shopPicture('#efe7da', '#c9b79c', view),
+}))
+const galleryImage = ref(1)
+const priceRange = ref<[number, number]>([40, 160])
+const cardNumber = ref('')
+const cardExpiry = ref('')
+const phone = ref('')
+const delivery = ref('standard')
+const lineQuantity = ref(2)
+const lineRemoved = ref(false)
+
+// Blocks: cart and checkout
+const cartItems = ref<CartItem[]>([...sampleCart])
+const cartDiscount = ref<number>()
+const cartCodeError = ref<string>()
+const cartEvent = ref('nothing yet')
+function applyCartCode(code: string) {
+  const good = code.toUpperCase() === 'SAVE10'
+  cartCodeError.value = good ? undefined : 'That code is not valid.'
+  cartDiscount.value = good ? 10 : undefined
+}
+const checkoutLoading = ref(false)
+const checkoutError = ref<string>()
+const checkoutEvent = ref('nothing yet')
+function placeOrder(values: CheckoutValues) {
+  checkoutError.value = undefined
+  checkoutLoading.value = true
+  setTimeout(() => {
+    checkoutLoading.value = false
+    // A card number starting 4000 stands in for one the bank turns down.
+    if (values.card?.number.startsWith('4000')) checkoutError.value = 'Your card was declined. Try another card.'
+    else checkoutEvent.value = `order placed for ${values.email}, ${values.shippingMethod} delivery to ${values.country}`
+  }, 700)
+}
 
 // Skeleton
 const deploymentLoading = ref(true)
@@ -1777,21 +1880,56 @@ function undoable() {
         </div>
       </Demo>
 
-      <Demo name="data-table" title="Data table" description="Rows and column definitions in; sorting, row selection and pages out." wide>
+      <Demo name="data-table" title="Data table and Filter bar" description="Rows and column definitions in; sorting, search, filters, row selection with bulk actions, rows that open, columns to hide and pages out." wide>
         <DataTable
           v-model:selected="selectedDeployments"
+          v-model:filters="deploymentFilters"
           :rows="deploymentRows"
           :columns="deploymentColumns"
           row-key="id"
           :page-size="6"
           selectable
+          searchable
+          search-placeholder="Search deployments"
+          column-toggle
           label="Deployments"
         >
+          <template #toolbar><FilterBar v-model="deploymentFilters" :facets="deploymentFacets" label="Filter deployments" /></template>
+          <template #bulk="{ selected, clear }">
+            <Button variant="outline" size="sm" @click="((bulkAction = `redeployed ${selected.length}`), clear())">Redeploy</Button>
+          </template>
+          <template #expanded="{ row }">
+            <p class="hint">Deployment <code>{{ row.id }}</code> of “{{ row.commit }}” by {{ row.author }}.</p>
+          </template>
           <template #cell-status="{ row }">
             <Badge :variant="row.status === 'Failed' ? 'destructive' : row.status === 'Building' ? 'secondary' : 'outline'">{{ row.status }}</Badge>
           </template>
           <template #cell-branch="{ value }"><code class="readout">{{ value }}</code></template>
         </DataTable>
+        <p class="readout" style="width: 100%">bulk action: {{ bulkAction || 'none yet' }}</p>
+      </Demo>
+
+      <Demo name="filter-bar" title="Filter bar, and a table fed by a server" description="The filter bar on its own, driving a table whose rows arrive already searched, filtered, sorted and paged. The headings stay in view while the rows scroll." wide>
+        <div class="stack" style="max-width: none">
+          <FilterBar v-model="serverFilters" :facets="deploymentFacets" label="Filter server deployments">
+            <SearchInput v-model="serverSearch" style="max-width: 16rem" placeholder="Search" aria-label="Search server deployments" />
+          </FilterBar>
+          <DataTable
+            v-model:sort="serverSort"
+            v-model:page="serverPage"
+            :filters="serverFilters"
+            :search="serverSearch"
+            :rows="serverRows"
+            :columns="deploymentColumns"
+            row-key="id"
+            :page-size="8"
+            :total="serverTotal"
+            :loading="serverLoading"
+            manual
+            max-height="17rem"
+            label="Server deployments"
+          />
+        </div>
       </Demo>
 
       <Demo name="table" title="Table" description="A styled HTML table in parts, for when you lay out the rows yourself.">
@@ -1988,6 +2126,99 @@ function undoable() {
         <ImageFan :images="fanImages" />
       </Demo>
 
+      <Demo name="product-card" title="Product card, Price, Swatch" description="A product as one link with its picture, score and price; money with the old price struck through; and colour or size choices with sold-out ones crossed off." wide>
+        <div class="shop-grid">
+          <ProductCard v-for="product in shopProducts" :key="product.title" v-bind="product" href="#product-gallery">
+            <template #action>
+              <Button variant="secondary" size="icon" :aria-pressed="wishlist.includes(product.title)" :aria-label="`Save ${product.title} for later`" @click="toggleWish(product.title)">
+                <Icon name="heart" :style="wishlist.includes(product.title) ? { fill: 'currentColor' } : undefined" />
+              </Button>
+            </template>
+            <Button variant="outline" size="sm" @click="shopEvent = `added ${product.title}`">Add to cart</Button>
+          </ProductCard>
+        </div>
+        <div class="stack" style="max-width: none">
+          <div class="row">
+            <Price :amount="24" size="lg" />
+            <Price :amount="96" :compare-at="120" show-saving />
+            <Price :amount="9" unit="/ month" size="sm" />
+            <Price :amount="1299" currency="EUR" locale="de-DE" />
+          </div>
+          <div class="row">
+            <SwatchGroup v-model="mugColour" label="Colour">
+              <Swatch value="sand" color="#c9b79c" label="Sand" />
+              <Swatch value="moss" color="#6f8a5b" label="Moss" />
+              <Swatch value="ink" color="#2f3a4f" label="Ink" />
+              <Swatch value="chalk" color="#f5f3ee" label="Chalk" unavailable />
+            </SwatchGroup>
+            <SwatchGroup v-model="mugSize" label="Size">
+              <Swatch value="250">250 ml</Swatch>
+              <Swatch value="350">350 ml</Swatch>
+              <Swatch value="500" unavailable>500 ml</Swatch>
+            </SwatchGroup>
+          </div>
+          <p class="readout">{{ mugColour }}, {{ mugSize }} ml · {{ shopEvent }} · saved: {{ wishlist.length }}</p>
+        </div>
+      </Demo>
+
+      <Demo name="product-gallery" title="Product gallery" description="One large picture and thumbnails to switch between. Swipe or use the arrow keys; point with a mouse to magnify.">
+        <div class="stack">
+          <ProductGallery v-model="galleryImage" :images="galleryImages" label="Stoneware mug pictures" zoom />
+          <p class="readout">picture {{ galleryImage }} of {{ galleryImages.length }}</p>
+        </div>
+      </Demo>
+
+      <Demo name="range-slider" title="Range slider and Masked input" description="Two thumbs on one track for a lowest and highest value, and fields that lay out card numbers, dates and phone numbers as they are typed.">
+        <div class="stack">
+          <div class="field">
+            <div class="row-between">
+              <Label id="price-range-label">Price</Label>
+              <span class="readout">${{ priceRange[0] }} to ${{ priceRange[1] }}</span>
+            </div>
+            <RangeSlider v-model="priceRange" :min="0" :max="200" :step="5" :min-gap="10" low-label="Lowest price" high-label="Highest price" aria-labelledby="price-range-label" />
+          </div>
+          <div class="field">
+            <Label for="masked-card">Card number</Label>
+            <MaskedInput id="masked-card" v-model="cardNumber" :mask="masks.card" placeholder="1234 1234 1234 1234" autocomplete="off" />
+          </div>
+          <div class="row" style="flex-wrap: nowrap">
+            <div class="field" style="flex: 1">
+              <Label for="masked-expiry">Expiry</Label>
+              <MaskedInput id="masked-expiry" v-model="cardExpiry" :mask="masks.expiry" placeholder="MM/YY" autocomplete="off" />
+            </div>
+            <div class="field" style="flex: 2">
+              <Label for="masked-phone">Phone</Label>
+              <MaskedInput id="masked-phone" v-model="phone" :mask="masks.phoneUS" placeholder="(555) 010-0199" autocomplete="off" />
+            </div>
+          </div>
+          <p class="readout">card: {{ cardNumber || '—' }} · expiry: {{ cardExpiry || '—' }} · phone: {{ phone || '—' }}</p>
+        </div>
+      </Demo>
+
+      <Demo name="option-card" title="Option card, Cart line item, Order summary" description="The pieces of a cart and a checkout: a choice as a whole card, one product in a cart, and the sums.">
+        <div class="stack">
+          <RadioGroup v-model="delivery" aria-label="Delivery">
+            <OptionCard value="standard" title="Standard" description="3 to 5 working days"><template #end>Free</template></OptionCard>
+            <OptionCard value="express" title="Express" description="1 to 2 working days"><template #end>$12.00</template></OptionCard>
+            <OptionCard value="drone" title="Drone" description="Not available in your area" disabled><template #end>$30.00</template></OptionCard>
+          </RadioGroup>
+          <Separator />
+          <CartLineItem
+            v-if="!lineRemoved"
+            v-model:quantity="lineQuantity"
+            title="Stoneware mug"
+            options="Sand / 350 ml"
+            :image="shopPicture('#efe7da', '#c9b79c')"
+            :price="24"
+            :max="6"
+            @remove="lineRemoved = true"
+          />
+          <Button v-else variant="outline" size="sm" @click="lineRemoved = false">Put the mug back</Button>
+          <Separator />
+          <OrderSummary :subtotal="lineRemoved ? 0 : 24 * lineQuantity" :shipping="delivery === 'express' ? 12 : 0" :tax="lineRemoved ? 0 : 1.92 * lineQuantity" />
+        </div>
+      </Demo>
+
       <Demo name="dashboard" title="Block: Dashboard" description="A whole app page put together from the components above: sidebar, top bar, headline numbers, charts and a table. Copy it, then swap in your own data." wide>
         <div class="block-frame">
           <Dashboard main-as="div" title-as="h3" style="--er-dashboard-height: 44rem" @sign-out="blockEvent = 'signed out'" @export="blockEvent = 'export pressed'" />
@@ -2006,6 +2237,30 @@ function undoable() {
           @save-notifications="blockEvent = `notifications: ${$event.join(', ') || 'none'}`"
           @delete-account="blockEvent = 'account deleted'"
         />
+      </Demo>
+
+      <Demo name="cart" title="Block: Cart" description="The items with quantities to change, a discount code, the sums and the way on. Try the code SAVE10." wide>
+        <div class="stack" style="max-width: 60rem">
+          <Cart
+            v-model:items="cartItems"
+            title-as="h3"
+            shop-href="#product-card"
+            :shipping="0"
+            :discount="cartDiscount"
+            discount-label="SAVE10"
+            :code-error="cartCodeError"
+            @apply-code="applyCartCode"
+            @checkout="cartEvent = `checkout with ${$event.length} lines`"
+          />
+          <p class="readout">{{ cartEvent }}</p>
+        </div>
+      </Demo>
+
+      <Demo name="checkout" title="Block: Checkout" description="Contact, address, delivery and card details checked as one form, beside the order. A card number starting 4000 is declined." wide>
+        <div class="stack" style="max-width: 60rem">
+          <Checkout :loading="checkoutLoading" :error="checkoutError" :tax="11.52" @submit="placeOrder" />
+          <p class="readout">{{ checkoutEvent }}</p>
+        </div>
       </Demo>
     </main>
 
