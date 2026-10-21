@@ -176,7 +176,30 @@ The theme stylesheet is yours and is never overwritten, even with `--overwrite`.
 | `ermine init` | Create `ermine.json` and the theme stylesheet (`-y` accepts the suggested folders) |
 | `ermine add <name...>` | Copy components or blocks and their dependencies (`--all` for every component) |
 | `ermine list` | Show available components and blocks, and which are already installed |
+| `ermine mcp` | Run as an MCP server for AI coding tools (see below) |
 | `--registry <url or path>` | Read components from a different `registry.json`, such as your own fork |
+
+### With AI coding tools
+
+`ermine mcp` is a Model Context Protocol server. Connect it and your coding assistant can list the components, read one's source before using it, set the project up and add components itself. It has four tools: `list_components`, `get_component`, `init_project` and `add_components`.
+
+```sh
+claude mcp add ermine -- npx -y ermineui mcp          # Claude Code
+```
+
+```toml
+# Codex: ~/.codex/config.toml
+[mcp_servers.ermine]
+command = "npx"
+args = ["-y", "ermineui", "mcp"]
+```
+
+```json
+// Cursor: .cursor/mcp.json
+{ "mcpServers": { "ermine": { "command": "npx", "args": ["-y", "ermineui", "mcp"] } } }
+```
+
+The website also serves `/llms.txt`, an index of every component for tools that read the web, and a Markdown page per component (`/components/button.md`) with its source.
 
 ### Vue + Vite
 

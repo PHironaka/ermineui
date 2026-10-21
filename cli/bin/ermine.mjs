@@ -183,57 +183,48 @@ function resolveDependencies(registry, names) {
 
 function report(results) {
   const symbol = { created: green('+'), overwritten: yellow('~'), skipped: dim('·') }
-  for (const [path, status] of results) {
-    console.log(`  ${symbol[status]} ${path}${status === 'skipped' ? dim('  exists, kept as is') : ''}`)
+  return results.map(([path, status]) => `  ${symbol[status]} ${path}${status === 'skipped' ? dim('  exists, kept as is') : ''}`).join('\n')
+}
+
+/** The project's config if it has one, and the registry it names (or the one given, or the bundled one). */
+async function projectRegistry(cwd, source) {
+  const config = existsSync(join(cwd, CONFIG_FILE)) ? loadConfig(cwd) : null
+  return { config, registry: await loadRegistry(source ?? config?.registry) }
+}
+
+// ---------- the work behind each command ----------
+// These return text instead of printing it, because the MCP server's stdout carries its messages.
+
+function checkNoConfig(cwd, overwrite) {
+  if (existsSync(join(cwd, CONFIG_FILE)) && !overwrite) {
+    throw new UserError(`${CONFIG_FILE} already exists. Use --overwrite to replace it.`)
   }
 }
 
-// ---------- commands ----------
-
-async function init({ cwd, flags }) {
-  const registry = await loadRegistry(flags.registry)
-  const defaults = detectDefaults(cwd)
-  const configPath = join(cwd, CONFIG_FILE)
-
-  if (existsSync(configPath) && !flags.overwrite) {
-    throw new UserError(`${CONFIG_FILE} already exists. Use --overwrite to replace it.`)
-  }
-
-  const config = { components: defaults.components, lib: defaults.lib, styles: defaults.styles }
-  if (!flags.yes && process.stdin.isTTY) {
-    console.log(`${bold('Ermine UI')} ${dim(`· ${defaults.framework} project detected`)}\n`)
-    const prompt = createInterface({ input: process.stdin, output: process.stdout })
-    const ask = async (question, fallback) =>
-      (await prompt.question(`${question} ${dim(`(${fallback})`)} `)).trim() || fallback
-    config.components = await ask('Where should components go?', config.components)
-    config.lib = await ask('Where should shared helpers go?', config.lib)
-    config.styles = await ask('Where should the theme stylesheet go?', config.styles)
-    prompt.close()
-    console.log()
-  }
-  if (flags.registry) config.registry = flags.registry
-
-  writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`)
-  const styles = writeFile(cwd, config.styles, registry.styles.content, { overwrite: flags.overwrite })
-  report([
-    [CONFIG_FILE, 'created'],
-    [config.styles, styles],
-  ])
-
+/** Writes ermine.json and the theme stylesheet (unless there is one already), and says what to do next. */
+function setUp(cwd, registry, framework, config, { overwrite }) {
+  writeFileSync(join(cwd, CONFIG_FILE), `${JSON.stringify(config, null, 2)}\n`)
+  const styles = writeFile(cwd, config.styles, registry.styles.content, { overwrite })
   const importPath = config.styles.replace(/^(app|src)\//, '')
   const next = {
     Nuxt: `Add the stylesheet to nuxt.config:  css: ['~/${importPath}']`,
     Astro: `Import the stylesheet in your layout:  import '../${importPath}'`,
     Vue: `Import the stylesheet in your entry file:  import './${importPath}'`,
-  }[defaults.framework]
-  console.log(`\n${bold('Next')}\n  1. ${next}\n  2. Add components:  ermine add button dialog\n`)
+  }[framework]
+  return (
+    report([
+      [CONFIG_FILE, 'created'],
+      [config.styles, styles],
+    ]) + `\n\n${bold('Next')}\n  1. ${next}\n  2. Add components:  ermine add button dialog\n`
+  )
 }
 
-async function add({ cwd, flags, positional }) {
+/** Copies the named components and blocks, and everything they depend on, into the project. */
+async function install(cwd, { names, all, overwrite, registry: source }) {
   const config = loadConfig(cwd)
-  const registry = await loadRegistry(flags.registry ?? config.registry)
+  const registry = await loadRegistry(source ?? config.registry)
   const available = Object.keys(registry.components)
-  const requested = flags.all ? available : positional
+  const requested = all ? available : names
 
   if (requested.length === 0) {
     throw new UserError('Name at least one component or block, e.g. "ermine add button", or use --all.')
@@ -245,7 +236,7 @@ async function add({ cwd, flags, positional }) {
 
   const needed = resolveDependencies(registry, requested)
   const results = []
-  const options = { overwrite: flags.overwrite }
+  const options = { overwrite }
 
   // The theme stylesheet is only written if it is missing — never overwritten, since it holds your theme.
   // If it is there but older than the components being added, the variables it lacks are appended to it.
@@ -279,43 +270,219 @@ async function add({ cwd, flags, positional }) {
     }
   }
 
-  report(results)
+  const lines = [report(results)]
   const extra = needed.components.filter((name) => !requested.includes(name))
   const skipped = results.filter(([, status]) => status === 'skipped').length
   const count = (number, word) => `${number} ${word}${number === 1 ? '' : 's'}`
-  console.log(
+  lines.push(
     `\n${green('Done.')} ` +
       (needed.blocks.length > 0 ? `${count(needed.blocks.length, 'block')} and ` : '') +
       count(needed.components.length, 'component') +
       (extra.length > 0 ? ` (including ${extra.join(', ')}, which the others need)` : '') +
       '.',
   )
-  if (skipped > 0) console.log(dim(`${skipped} existing file${skipped === 1 ? ' was' : 's were'} kept. Use --overwrite to replace them.`))
+  if (skipped > 0) lines.push(dim(`${skipped} existing file${skipped === 1 ? ' was' : 's were'} kept. Use --overwrite to replace them.`))
   if (addedVariables > 0) {
-    console.log(`${yellow('~')} ${config.styles}: added ${addedVariables} variable${addedVariables === 1 ? '' : 's'} that newer components use. Nothing already in the file was changed.`)
+    lines.push(`${yellow('~')} ${config.styles}: added ${addedVariables} variable${addedVariables === 1 ? '' : 's'} that newer components use. Nothing already in the file was changed.`)
   }
+  return lines.join('\n')
+}
+
+/** Every component and block with its summary, ticked where the project already has it. */
+function catalog(cwd, config, registry) {
+  const blocks = registry.blocks ?? {}
+  const width = Math.max(...[...Object.keys(registry.components), ...Object.keys(blocks)].map((name) => name.length))
+  const print = (entries, dir) =>
+    Object.entries(entries).map(([name, entry]) => {
+      const installed = config && existsSync(join(cwd, dir, name))
+      const summary = entry.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
+      return `  ${installed ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`
+    })
+
+  const lines = print(registry.components, config?.components)
+  if (Object.keys(blocks).length > 0) {
+    lines.push(`\n${bold('Blocks')} ${dim('· sections of a page, built from the components above')}`, ...print(blocks, config && blocksDir(config)))
+  }
+  if (config) lines.push(dim(`\n  ✓ already in ${config.components} or ${blocksDir(config)}`))
+  return lines.join('\n')
+}
+
+// ---------- commands ----------
+
+async function init({ cwd, flags }) {
+  const registry = await loadRegistry(flags.registry)
+  const defaults = detectDefaults(cwd)
+  checkNoConfig(cwd, flags.overwrite)
+
+  const config = { components: defaults.components, lib: defaults.lib, styles: defaults.styles }
+  if (!flags.yes && process.stdin.isTTY) {
+    console.log(`${bold('Ermine UI')} ${dim(`· ${defaults.framework} project detected`)}\n`)
+    const prompt = createInterface({ input: process.stdin, output: process.stdout })
+    const ask = async (question, fallback) =>
+      (await prompt.question(`${question} ${dim(`(${fallback})`)} `)).trim() || fallback
+    config.components = await ask('Where should components go?', config.components)
+    config.lib = await ask('Where should shared helpers go?', config.lib)
+    config.styles = await ask('Where should the theme stylesheet go?', config.styles)
+    prompt.close()
+    console.log()
+  }
+  if (flags.registry) config.registry = flags.registry
+
+  console.log(setUp(cwd, registry, defaults.framework, config, { overwrite: flags.overwrite }))
+}
+
+async function add({ cwd, flags, positional }) {
+  console.log(await install(cwd, { names: positional, all: flags.all, overwrite: flags.overwrite, registry: flags.registry }))
 }
 
 async function list({ cwd, flags }) {
-  const configPath = join(cwd, CONFIG_FILE)
-  const config = existsSync(configPath) ? loadConfig(cwd) : null
-  const registry = await loadRegistry(flags.registry ?? config?.registry)
-  const blocks = registry.blocks ?? {}
-  const width = Math.max(...[...Object.keys(registry.components), ...Object.keys(blocks)].map((name) => name.length))
-  const print = (entries, dir) => {
-    for (const [name, entry] of Object.entries(entries)) {
-      const installed = config && existsSync(join(cwd, dir, name))
-      const summary = entry.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
-      console.log(`  ${installed ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`)
+  const { config, registry } = await projectRegistry(cwd, flags.registry)
+  console.log(catalog(cwd, config, registry))
+}
+
+// ---------- MCP server ----------
+// "ermine mcp" lets AI coding tools (Claude Code, Codex, Cursor…) look components up and add them. It speaks the
+// Model Context Protocol over stdio: one JSON-RPC message per line in each direction. Written by hand to keep the
+// command line free of dependencies; it needs only initialize, ping, tools/list and tools/call.
+
+const MCP_VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
+
+const projectFolder = {
+  type: 'string',
+  description: "Absolute path of the project's root folder, where ermine.json is. Defaults to the folder the server was started in.",
+}
+
+const TOOLS = [
+  {
+    name: 'list_components',
+    description: 'List every Ermine UI component and block with a one-line summary, ticking the ones the project already has.',
+    inputSchema: { type: 'object', properties: { cwd: projectFolder } },
+    annotations: { readOnlyHint: true },
+  },
+  {
+    name: 'get_component',
+    description:
+      'Get one component or block: what it does, what else it copies in, and its full source (props, slots, events and exports). Read this before writing code that uses it.',
+    inputSchema: {
+      type: 'object',
+      properties: { name: { type: 'string', description: 'Name as list_components shows it, e.g. "date-picker".' }, cwd: projectFolder },
+      required: ['name'],
+    },
+    annotations: { readOnlyHint: true },
+  },
+  {
+    name: 'init_project',
+    description:
+      "Set a Vue, Nuxt or Astro project up for Ermine UI: writes ermine.json with the usual folders for its framework and copies the theme stylesheet. Needed once, before add_components.",
+    inputSchema: { type: 'object', properties: { cwd: projectFolder } },
+  },
+  {
+    name: 'add_components',
+    description:
+      "Copy components or blocks into the project as source, with every component and helper they depend on, and imports pointed at the project's folders. Files already there are kept unless overwrite is true.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        names: { type: 'array', items: { type: 'string' }, minItems: 1, description: 'Components or blocks to add, e.g. ["button", "dialog"].' },
+        overwrite: { type: 'boolean', description: 'Replace files that already exist. The theme stylesheet is never replaced.' },
+        cwd: projectFolder,
+      },
+      required: ['names'],
+    },
+    annotations: { destructiveHint: true },
+  },
+]
+
+const INSTRUCTIONS = `Ermine UI is a set of Vue 3 components that are copied into the project as source, not installed from npm.
+Use get_component before writing code with a component, so you use its real props and parts. Import from the folder ermine.json names for components (by default "@/components/ui/<name>"; blocks in "@/components/blocks/<name>").
+Styling: theme with the --er-* CSS variables in the theme stylesheet; component styles sit in @layer components, so plain CSS overrides them. Variants are props that become data-variant / data-size attributes.
+If the project has no ermine.json, call init_project first.`
+
+/** A fence longer than any run of backticks inside, so source that contains ``` does not end the block early. */
+function fenced(code, language = '') {
+  const fence = '`'.repeat(Math.max(2, ...[...code.matchAll(/`+/g)].map((match) => match[0].length)) + 1)
+  return `${fence}${language}\n${code.trimEnd()}\n${fence}`
+}
+
+function componentDetails(registry, name) {
+  const isBlock = !registry.components[name] && Boolean(registry.blocks?.[name])
+  const entry = isBlock ? registry.blocks[name] : registry.components[name]
+  if (!entry) throw new UserError(`Unknown component or block: ${name}. Call list_components to see what is available.`)
+
+  const [title, ...rest] = entry.description.split(' — ')
+  const parts = [`# ${title} (${isBlock ? 'block' : 'component'} "${name}")`, rest.join(' — ')]
+  const brings = [
+    entry.components.length > 0 && `components: ${entry.components.join(', ')}`,
+    entry.lib.length > 0 && `helpers: ${entry.lib.join(', ')}`,
+  ].filter(Boolean)
+  if (brings.length > 0) parts.push(`Adding it also copies the ${brings.join('; ')}.`)
+  parts.push(`Import from its folder, by default '@/components/${isBlock ? 'blocks' : 'ui'}/${name}'; index.ts lists what it exports.`)
+  const languages = { vue: 'vue', ts: 'ts', css: 'css' }
+  for (const file of entry.files) parts.push(`## ${file.file}\n\n${fenced(file.content, languages[file.file.split('.').pop()] ?? '')}`)
+  return parts.join('\n\n')
+}
+
+const toolHandlers = {
+  async list_components({ cwd }, source) {
+    const { config, registry } = await projectRegistry(cwd, source)
+    return (config ? '' : 'This project has no ermine.json yet, so nothing is ticked. Call init_project before adding components.\n\n') + catalog(cwd, config, registry)
+  },
+  async get_component({ cwd, name }, source) {
+    const { registry } = await projectRegistry(cwd, source)
+    return componentDetails(registry, String(name ?? ''))
+  },
+  async init_project({ cwd }, source) {
+    const registry = await loadRegistry(source)
+    const defaults = detectDefaults(cwd)
+    checkNoConfig(cwd, false)
+    const config = { components: defaults.components, lib: defaults.lib, styles: defaults.styles }
+    if (source) config.registry = source
+    return `${defaults.framework} project detected.\n${setUp(cwd, registry, defaults.framework, config, { overwrite: false })}`
+  },
+  async add_components({ cwd, names, overwrite }, source) {
+    if (!Array.isArray(names)) throw new UserError('"names" must be a list of component or block names.')
+    return install(cwd, { names: names.map(String), overwrite: overwrite === true, registry: source })
+  },
+}
+
+async function respond({ method, params = {} }, source) {
+  if (method === 'initialize') {
+    const protocolVersion = MCP_VERSIONS.includes(params.protocolVersion) ? params.protocolVersion : MCP_VERSIONS[0]
+    const version = JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version
+    return { result: { protocolVersion, capabilities: { tools: {} }, serverInfo: { name: 'ermineui', version }, instructions: INSTRUCTIONS } }
+  }
+  if (method === 'ping') return { result: {} }
+  if (method === 'tools/list') return { result: { tools: TOOLS } }
+  if (method === 'tools/call') {
+    const handler = toolHandlers[params.name]
+    if (!handler) return { error: { code: -32602, message: `Unknown tool: ${params.name}` } }
+    const args = params.arguments ?? {}
+    try {
+      const text = await handler({ ...args, cwd: resolve(args.cwd ?? process.cwd()) }, source)
+      return { result: { content: [{ type: 'text', text }] } }
+    } catch (error) {
+      // A failed tool call is reported to the model as a result, so it can read the message and try again.
+      return { result: { content: [{ type: 'text', text: error.message }], isError: true } }
     }
   }
+  return { error: { code: -32601, message: `Method not found: ${method}` } }
+}
 
-  print(registry.components, config?.components)
-  if (Object.keys(blocks).length > 0) {
-    console.log(`\n${bold('Blocks')} ${dim('· sections of a page, built from the components above')}`)
-    print(blocks, config && blocksDir(config))
+async function serve({ flags }) {
+  const send = (message) => process.stdout.write(`${JSON.stringify({ jsonrpc: '2.0', ...message })}\n`)
+  for await (const line of createInterface({ input: process.stdin, crlfDelay: Infinity })) {
+    if (!line.trim()) continue
+    let message
+    try {
+      message = JSON.parse(line)
+    } catch {
+      send({ id: null, error: { code: -32700, message: 'Parse error' } })
+      continue
+    }
+    // Notifications (no id) need no answer; "notifications/initialized" is the only one clients send here.
+    if (message.id === undefined || message.id === null) continue
+    send({ id: message.id, ...(await respond(message, flags.registry)) })
   }
-  if (config) console.log(dim(`\n  ✓ already in ${config.components} or ${blocksDir(config)}`))
 }
 
 const HELP = `${bold('ermine')} — copy Ermine UI components into your project
@@ -325,6 +492,7 @@ ${bold('Usage')}
   ermine add <name...>        Copy components or blocks (and what they depend on) into your project
   ermine add --all            Copy every component
   ermine list                 Show available components and blocks
+  ermine mcp                  Run as an MCP server, so AI coding tools can look components up and add them
 
 ${bold('Options')}
   -y, --yes                  Accept the suggested folders without asking
@@ -342,6 +510,7 @@ async function main() {
   if (command === 'init') return init(context)
   if (command === 'add') return add(context)
   if (command === 'list') return list(context)
+  if (command === 'mcp') return serve(context)
   if (command === '--version' || command === '-v') {
     return console.log(JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version)
   }

@@ -163,3 +163,56 @@ test('a block’s imports follow the folders named in ermine.json', () => {
     assert.ok(existsSync(join(dir, 'app/ui/icon/icons.ts')))
   })
 })
+
+// Talks to "ermine mcp" the way an AI coding tool would: one JSON-RPC message per line on stdin, answers on stdout.
+function mcp(cwd: string, ...calls: [string, Record<string, unknown>?][]) {
+  const messages = [
+    { jsonrpc: '2.0', id: 0, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'test', version: '1' } } },
+    { jsonrpc: '2.0', method: 'notifications/initialized' },
+    ...calls.map(([method, params], index) => ({ jsonrpc: '2.0', id: index + 1, method, params })),
+  ]
+  const output = execFileSync('node', [cli, 'mcp'], { cwd, encoding: 'utf8', input: messages.map((message) => JSON.stringify(message)).join('\n') })
+  return output.trim().split('\n').map((line) => JSON.parse(line))
+}
+const call = (name: string, args: Record<string, unknown>) => ['tools/call', { name, arguments: args }] as [string, Record<string, unknown>]
+const text = (response: { result: { content: { text: string }[] } }) => response.result.content[0]!.text
+
+test('the MCP server answers the handshake and lists its tools', () => {
+  project((dir) => {
+    const [hello, tools, unknown] = mcp(dir, ['tools/list'], ['resources/list'])
+    assert.equal(hello.result.protocolVersion, '2025-06-18', 'agrees to the version the client asked for')
+    assert.deepEqual(hello.result.capabilities, { tools: {} })
+    assert.deepEqual(
+      tools.result.tools.map((tool: { name: string }) => tool.name),
+      ['list_components', 'get_component', 'init_project', 'add_components'],
+    )
+    assert.equal(unknown.error.code, -32601)
+  })
+})
+
+test('through the MCP server, a project is set up, components are added and read', () => {
+  project((dir) => {
+    const [, before, init, add, again, details, list, missing] = mcp(
+      dir,
+      call('add_components', { names: ['button'] }),
+      call('init_project', {}),
+      call('add_components', { names: ['dialog'] }),
+      call('add_components', { names: ['dialog'] }),
+      call('get_component', { name: 'select' }),
+      call('list_components', {}),
+      call('get_component', { name: 'buton' }),
+    )
+    assert.equal(before.result.isError, true)
+    assert.match(text(before), /ermine init/, 'says the project needs setting up first')
+    assert.match(text(init), /Vue project detected/)
+    assert.ok(existsSync(join(dir, 'ermine.json')))
+    assert.match(text(add), /Done\./)
+    assert.ok(existsSync(join(dir, 'src/components/ui/dialog/DialogContent.vue')))
+    assert.match(text(again), /kept/)
+    assert.doesNotMatch(text(add), /\u001b\[/, 'no terminal colour codes in what the model reads')
+    assert.match(text(details), /## SelectTrigger\.vue/)
+    assert.match(text(details), /helpers: .*floating/)
+    assert.ok(text(list).split('\n').find((line) => /^  . dialog /.test(line))!.includes('✓'))
+    assert.equal(missing.result.isError, true)
+  })
+})
