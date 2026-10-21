@@ -22,7 +22,7 @@ const playgroundIndex = {
 
 // The site shows the components straight from ../registry, the same files the CLI copies, so it cannot drift from them.
 export default defineConfig({
-  site: 'https://pipelog.dev',
+  site: 'https://ermineui.netlify.app',
   integrations: [vue(), playgroundIndex],
   vite: {
     resolve: {
