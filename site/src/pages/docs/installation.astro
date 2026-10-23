@@ -101,6 +101,8 @@ const config = `{
       <h2 id="theming">Theming</h2>
       <p><code>ermine.css</code> defines every colour, radius, shadow and duration as a CSS variable. Edit the values and every component follows. The file is yours and is never overwritten, even with <code>--overwrite</code>.</p>
       <CodeBlock code={theme} lang="css" />
+      <p>Or start from a ready-made <a href="/themes/">colour theme</a>: a base for the greys and an accent for the primary colour, each checked for contrast in light and dark.</p>
+      <Command args="theme slate blue" />
       <ul>
         <li><strong>Dark mode</strong> follows the operating system. To force a theme, put <code>class="dark"</code> or <code>class="light"</code> on <code>&lt;html&gt;</code>, or on any element to theme only what is inside it.</li>
         <li><strong>Overriding a component.</strong> Component styles sit in <code>@layer components</code>, so any rule you write outside a layer wins without <code>!important</code>. Or edit the component's own <code>&lt;style&gt;</code> block; it is your code.</li>

@@ -1,11 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Command from '../components/Command.astro'
+import CodeBlock from '../components/CodeBlock.astro'
 import ThemePicker from '../components/ThemePicker.vue'
 import { themes } from '../data/catalog'
 
 const bases = themes.filter((theme) => theme.kind === 'base')
 const accents = themes.filter((theme) => theme.kind === 'accent')
+
+// The block "ermine theme blue" writes, in the same form as themeBlock() in cli/bin/ermine.mjs.
+const blue = themes.find((theme) => theme.name === 'blue')!
+const written = `/* ermine theme accent: blue. "ermine theme" replaces this block when you pick another accent.
+   To fine-tune a colour, set it again in a rule after this block. */
+${blue.css}
+/* end ermine theme accent */`
+const tweak = `/* After the theme's block, so it wins */
+:root {
+  --er-primary: light-dark(oklch(0.5 0.22 262), oklch(0.75 0.14 254));
+}`
+const rose = themes.find((theme) => theme.name === 'rose')!
+const scoped = `/* The rose accent for one part of the page only */
+${rose.css.replace(':root', '.campaign')}`
 ---
 
 <Layout title="Themes. Ermine UI" description="Colour themes for Ermine UI: a base that tints the greys and an accent for the primary colour, in light and dark.">
@@ -22,16 +37,48 @@ const accents = themes.filter((theme) => theme.kind === 'accent')
     <ThemePicker client:load themes={themes} />
 
     <div class="prose">
-      <h2 id="apply">Applying a theme</h2>
+      <h2 id="apply">Using a theme</h2>
+
+      <h3 id="new-project">In a new project</h3>
+      <p>Pass the pair to <code>init</code>, and the theme stylesheet it copies starts with them applied.</p>
+      <Command args="init --theme slate,blue" />
+
+      <h3 id="existing-project">In a project already set up</h3>
       <p>
-        Name a base, an accent, or both. The command writes them at the end of your theme stylesheet, each in its own marked
-        block, and replaces only that block when you pick again. Nothing else in the file changes.
+        Name a base, an accent, or both. Picking one kind keeps the other, so the second line below keeps the slate base and
+        swaps the accent. <code>--reset</code> removes both, back to your stylesheet's own colours. Run <code>theme</code> on
+        its own to list the themes and see which ones you are using.
       </p>
       <Command args={['theme slate blue', 'theme rose', 'theme --reset']} />
+
+      <h3 id="what-changes">What changes in your stylesheet</h3>
       <p>
-        The second line keeps the slate base and swaps the accent; <code>--reset</code> removes both. To set one up from the
-        start, use <code>init --theme slate,blue</code>. To adjust a colour, set the variable again in a rule after the theme's
-        block. AI coding tools connected to <code>ermine mcp</code> can do the same with its <code>set_theme</code> tool.
+        Each theme goes at the end of your theme stylesheet as a <code>:root</code> block of <code>--er-*</code> variables,
+        between two marker comments. The next <code>theme</code> command replaces only what sits between those markers, so
+        the rest of the file, including your own edits, stays as it is. This is the block for <code>blue</code>:
+      </p>
+      <CodeBlock code={written} lang="css" />
+      <p>
+        Every component reads these variables, so nothing else needs changing. Dark mode works as before: each value holds a
+        light and a dark colour in <code>light-dark()</code>.
+      </p>
+
+      <h3 id="fine-tune">Adjusting a colour</h3>
+      <p>Don't edit inside the markers, because the next <code>theme</code> command replaces that block. Set the variable again in a rule after it:</p>
+      <CodeBlock code={tweak} lang="css" />
+
+      <h3 id="by-hand">Without the command line</h3>
+      <p>
+        Choose a pair in the picker above, open <em>Or paste the CSS</em>, and paste the CSS at the end of your theme stylesheet.
+        Put the base before the accent, because both set the primary colour and the later one wins. To theme only one section,
+        change <code>:root</code> to a selector for that section:
+      </p>
+      <CodeBlock code={scoped} lang="css" />
+
+      <h3 id="assistants">From an AI coding tool</h3>
+      <p>
+        Tools connected to <code>ermine mcp</code> can apply themes with its <code>set_theme</code> tool. Ask for
+        "the slate base with a blue accent" and the tool writes the same blocks the command does.
       </p>
 
       <h2 id="bases">Bases</h2>
