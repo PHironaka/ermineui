@@ -431,6 +431,7 @@ const fanImages: ImageFanImage[] = [
   ['Notes', '#13241c', '#eafff3', '#3ecf8e'],
 ].map(([name, background, ink, accent]) => ({
   alt: `${name} home page`,
+  label: name,
   href: '#image-fan',
   src: `data:image/svg+xml,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="${background}"/><rect x="20" y="18" width="46" height="8" rx="4" fill="${ink}"/><rect x="236" y="18" width="64" height="8" rx="4" fill="${ink}" opacity=".35"/><rect x="20" y="58" width="150" height="14" rx="3" fill="${ink}"/><rect x="20" y="80" width="110" height="14" rx="3" fill="${ink}"/><rect x="20" y="108" width="120" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="20" y="120" width="90" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="196" y="52" width="104" height="92" rx="8" fill="${accent}"/><rect x="20" y="160" width="84" height="40" rx="6" fill="${accent}" opacity=".5"/><rect x="118" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/><rect x="216" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/></svg>`,
@@ -2175,7 +2176,7 @@ function undoable() {
         </div>
       </Demo>
 
-      <Demo name="image-fan" title="Image fan" description="Framed pictures overlapping like a hand of cards. Point at one, or tab to it, and it comes to the front. The fan shrinks to fit a narrow space." wide>
+      <Demo name="image-fan" title="Image fan" description="Framed pictures overlapping like a hand of cards. Point at one, or tab to it, and it straightens and lifts while the others slide aside, with its name underneath. The fan shrinks to fit a narrow space." wide>
         <ImageFan :images="fanImages" />
       </Demo>
 

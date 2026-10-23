@@ -152,4 +152,31 @@ test.describe('image fan', () => {
     await expect(card.locator('.er-image-fan-item').last()).toHaveCSS('z-index', '99')
     await expect(card.getByRole('link')).toHaveCount(5)
   })
+
+  test('the picture pointed at straightens and lifts, the others slide clear of it, and its name shows underneath', async ({ page }) => {
+    const card = demo(page, 'image-fan')
+    const items = card.locator('.er-image-fan-item')
+    const caption = card.locator('.er-image-fan-caption')
+    await expect(caption).toHaveText('')
+    await expect(caption).toHaveAttribute('aria-hidden', 'true')
+
+    const before = await items.first().boundingBox()
+    await items.first().hover({ position: { x: 10, y: 40 } })
+    await expect(caption).toHaveText('Journal')
+    // Animations are off in these tests, so everything is already in its new place.
+    await expect(items.first()).toHaveAttribute('data-state', 'active')
+    const after = await items.first().boundingBox()
+    expect(after!.x).toBeGreaterThan(before!.x - 1) // it stays where it was, only level now
+    expect(after!.y).toBeLessThan(before!.y) // and higher
+    const boxes = await items.evaluateAll((list) => list.map((item) => item.getBoundingClientRect()))
+    // Every other picture is now clear of it, to the right, in order.
+    for (let index = 1; index < boxes.length; index++) expect(boxes[index]!.left).toBeGreaterThan(boxes[0]!.right - 12)
+    for (let index = 2; index < boxes.length; index++) expect(boxes[index]!.left).toBeGreaterThan(boxes[index - 1]!.left)
+
+    await page.mouse.move(0, 0)
+    await expect(caption).toHaveText('')
+    await expect(items.first()).not.toHaveAttribute('data-state', 'active')
+    await card.getByRole('link', { name: 'Archive home page' }).focus()
+    await expect(caption).toHaveText('Archive')
+  })
 })
