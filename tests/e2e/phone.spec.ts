@@ -81,8 +81,8 @@ test('the sticky scroll is one column on a phone, with each step’s media above
   const card = demo(page, 'sticky-scroll')
   const media = card.locator('.er-sticky-scroll-media')
   const copy = card.locator('.er-sticky-scroll-copy')
-  await expect(media).toHaveCount(4)
-  for (let index = 0; index < 4; index++) {
+  await expect(media).toHaveCount(5)
+  for (let index = 0; index < 5; index++) {
     await expect(media.nth(index)).toHaveCSS('opacity', '1')
     await expect(media.nth(index)).toHaveCSS('position', 'static')
     const [above, below] = [await media.nth(index).boundingBox(), await copy.nth(index).boundingBox()]

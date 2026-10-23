@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
+import { Cart, readCartLink, sampleCart, sampleProducts, type CartItem } from '@registry/blocks/cart'
 import { Checkout } from '@registry/blocks/checkout'
 import { Dashboard } from '@registry/blocks/dashboard'
 import { ProductListing } from '@registry/blocks/product-listing'
@@ -10,15 +11,32 @@ import { SegmentedControl, SegmentedControlItem } from '@registry/ui/segmented-c
 const views = [
   { value: 'dashboard', label: 'Dashboard', address: 'app.example.com' },
   { value: 'shop', label: 'Shop', address: 'shop.example.com/products' },
+  { value: 'cart', label: 'Cart', address: 'shop.example.com/cart' },
   { value: 'checkout', label: 'Checkout', address: 'shop.example.com/checkout' },
   { value: 'sign-in', label: 'Sign in', address: 'app.example.com/sign-in' },
 ]
 const view = ref('dashboard')
 const saved = ref<string[]>([])
+const cart = ref<CartItem[]>([...sampleCart])
+const shared = ref(false)
+const showcase = ref<HTMLElement>()
+
+// A cart shared from here links back to this page; opening the link shows the same cart, looked up again in the
+// sample catalogue.
+onMounted(async () => {
+  const link = readCartLink(window.location.href, (id) => sampleProducts.find((product) => product.id === id))
+  if (!link) return
+  cart.value = link.items
+  shared.value = true
+  view.value = 'cart'
+  // Someone opening the link came for the cart, which is below the fold.
+  await nextTick()
+  showcase.value?.scrollIntoView({ block: 'start' })
+})
 </script>
 
 <template>
-  <div class="showcase">
+  <div ref="showcase" class="showcase">
     <SegmentedControl v-model="view" label="Block to show">
       <SegmentedControlItem v-for="item in views" :key="item.value" :value="item.value">{{ item.label }}</SegmentedControlItem>
     </SegmentedControl>
@@ -31,6 +49,7 @@ const saved = ref<string[]>([])
       <div class="window-body" :data-view="view">
         <Dashboard v-if="view === 'dashboard'" main-as="div" title-as="h2" style="--er-dashboard-height: 42rem" />
         <ProductListing v-else-if="view === 'shop'" v-model:saved="saved" title-as="h2" />
+        <Cart v-else-if="view === 'cart'" v-model:items="cart" :title="shared ? 'Shared cart' : 'Your cart'" title-as="h2" :shipping="0" shareable share-url="/" shop-href="#blocks" />
         <Checkout v-else-if="view === 'checkout'" :tax="11.52" />
         <SignIn v-else forgot-href="#blocks" sign-up-href="#blocks" />
       </div>
@@ -40,6 +59,7 @@ const saved = ref<string[]>([])
 
 <style scoped>
 .showcase {
+  scroll-margin-top: calc(var(--site-nav-height) + 1rem);
   display: grid;
   justify-items: center;
   gap: 1.5rem;

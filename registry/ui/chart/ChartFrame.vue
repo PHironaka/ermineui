@@ -235,6 +235,19 @@ const showTable = ref(false)
     opacity: 0.1;
   }
 
+  /* A partly drawn line: the way still to come. */
+  .er-chart-line[data-part='ahead'] {
+    stroke-width: 1.5;
+    stroke-dasharray: 0 5;
+    opacity: 0.55;
+  }
+
+  .er-chart-point {
+    fill: var(--er-chart-surface);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease;
+  }
+
   .er-chart-dot {
     stroke: var(--er-chart-surface);
     stroke-width: 2;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import ChartFrame from './ChartFrame.vue'
 import { barPath, niceScale, textWidth, toNumber, type ChartSeries } from './scale'
 
@@ -26,6 +26,11 @@ const props = withDefaults(
     format?: (value: number) => string
     /** How values are written on the axis. Short by default: 12.5K, 3M. */
     tickFormat?: (value: number) => string
+    /**
+     * Lines and areas only: how much to draw, 0 to 1, from the left. What is still to come shows faintly as a
+     * dotted line with open points. For a chart that draws itself as the page scrolls, e.g. in a sticky scroll.
+     */
+    reveal?: number
   }>(),
   { type: 'line', height: 240, endLabels: true },
 )
@@ -154,6 +159,7 @@ const lines = computed(() => {
     let area = ''
     let run: number[] = []
     let end: { x: number; y: number } | undefined
+    const points: Array<{ x: number; y: number }> = []
     // A gap in the data breaks the line instead of drawing straight across it.
     const closeRun = () => {
       if (run.length) area += `L${center(run[run.length - 1]!)},${baseline.value}L${center(run[0]!)},${baseline.value}Z`
@@ -167,9 +173,10 @@ const lines = computed(() => {
       area += `${run.length ? 'L' : 'M'}${point}`
       run.push(index)
       end = { x: center(index), y: y(value) }
+      points.push(end)
     })
     closeRun()
-    return { line, area, end, color: colors.value[seriesIndex]! }
+    return { line, area, end, points, color: colors.value[seriesIndex]! }
   })
 })
 
@@ -207,6 +214,16 @@ const bars = computed(() => {
   })
   return result
 })
+
+/** With `reveal`: how far across the line is drawn, in px, and the clip that stops it there. */
+const revealX = computed(() => {
+  if (props.reveal === undefined || isBar.value || !rows.value.length) return undefined
+  const first = center(0)
+  return first + Math.min(1, Math.max(0, props.reveal)) * (center(rows.value.length - 1) - first)
+})
+const clipId = `er-chart-reveal-${useId()}`
+// A point counts as reached a hair before the line gets to it, so it fills as the line arrives.
+const reached = (x: number) => revealX.value !== undefined && x <= revealX.value + 0.5
 
 const activeRow = computed(() => (active.value === null ? undefined : rows.value[active.value]))
 /** The readout for the active row: one entry per series being drawn. */
@@ -304,13 +321,51 @@ function clear() {
         <path v-for="bar in bars" :key="bar.key" :d="bar.d" :fill="bar.color" />
 
         <template v-if="!isBar">
+          <!-- Partly drawn: the part still to come is a faint dotted line, and the drawn part is clipped at revealX. -->
+          <clipPath v-if="revealX !== undefined" :id="clipId">
+            <rect x="0" y="0" :width="revealX" :height="height" />
+          </clipPath>
           <template v-if="type === 'area'">
-            <path v-for="(item, index) in lines" :key="`area-${index}`" class="er-chart-area" :d="item.area" :fill="item.color" />
+            <path
+              v-for="(item, index) in lines"
+              :key="`area-${index}`"
+              class="er-chart-area"
+              :d="item.area"
+              :fill="item.color"
+              :clip-path="revealX !== undefined ? `url(#${clipId})` : undefined"
+            />
           </template>
           <line v-if="active !== null" class="er-chart-crosshair" :x1="center(active)" :x2="center(active)" :y1="TOP" :y2="bottom" />
-          <path v-for="(item, index) in lines" :key="`line-${index}`" class="er-chart-line" :d="item.line" :stroke="item.color" />
-          <template v-for="(item, index) in lines" :key="`end-${index}`">
-            <circle v-if="item.end" class="er-chart-dot" :cx="item.end.x" :cy="item.end.y" r="4" :fill="item.color" />
+          <template v-if="revealX !== undefined">
+            <path v-for="(item, index) in lines" :key="`ahead-${index}`" class="er-chart-line" data-part="ahead" :d="item.line" :stroke="item.color" />
+          </template>
+          <path
+            v-for="(item, index) in lines"
+            :key="`line-${index}`"
+            class="er-chart-line"
+            :d="item.line"
+            :stroke="item.color"
+            :clip-path="revealX !== undefined ? `url(#${clipId})` : undefined"
+          />
+          <template v-if="revealX !== undefined">
+            <template v-for="(item, index) in lines" :key="`points-${index}`">
+              <circle
+                v-for="point in item.points"
+                :key="point.x"
+                class="er-chart-point"
+                :data-state="reached(point.x) ? 'reached' : 'ahead'"
+                :cx="point.x"
+                :cy="point.y"
+                r="3.5"
+                :stroke="item.color"
+                :style="reached(point.x) ? { fill: item.color } : undefined"
+              />
+            </template>
+          </template>
+          <template v-else>
+            <template v-for="(item, index) in lines" :key="`end-${index}`">
+              <circle v-if="item.end" class="er-chart-dot" :cx="item.end.x" :cy="item.end.y" r="4" :fill="item.color" />
+            </template>
           </template>
           <template v-for="item in readout" :key="`dot-${item.index}`">
             <circle v-if="item.value !== null" class="er-chart-dot" :cx="center(active!)" :cy="y(item.value)" r="4" :fill="colors[item.index]" />

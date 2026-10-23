@@ -104,7 +104,7 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `empty-state` | Icon, heading, text and actions for when there is nothing to list |
 | `toast` | `toast()` from anywhere, with one `<Toaster />` mounted |
 | `image-fan` | A few framed pictures overlapping like a hand of cards, tilted outward from the middle; each lifts to the front on hover or focus, and the whole fan shrinks to fit |
-| `sticky-scroll` | Two columns: one stays put showing a picture or a large heading, and changes as each step's copy scrolls past the middle of the window; one column on narrow screens |
+| `sticky-scroll` | Two columns: one stays put showing a picture, a large heading or anything you like, and changes as each step's copy scrolls past the middle of the window. A step can take several screens, with its scroll progress passed to the media, such as a chart that draws as you go. One column on narrow screens |
 | `icon` | 62 built-in line icons that take the size and colour of the text around them; add your own with `registerIcons()` |
 | `segmented-control` | One choice from two to five, side by side in a single track |
 | `toolbar` | A row of controls that takes one stop in the tab order; arrow keys move between them |
@@ -149,17 +149,6 @@ A block is a section of a page, or a whole page, already put together from the c
 | `sign-up` | Name, email and a password with a strength meter, terms to agree to, and a link to sign in |
 | `forgot-password` | Asks for an email to send a reset link to, then says to check the inbox |
 | `not-found` | The page for a wrong address or an error: what happened, a search box and the way home |
-
-**Sharing a cart.** Give `Cart` the `shareable` prop and it shows a "Share cart" button, which opens the share sheet on a phone and copies the link elsewhere. The link holds only product ids and quantities, such as `/cart?cart=mug-sand:2,lamp-ink:1`. The page it opens reads the cart back with `readCartLink`, looking each id up in your own catalogue. An edited link cannot change a price, and an old one shows today's. Lines the catalogue does not know are left out and listed in `skipped`. Quantities over a product's `max` are lowered, and those products are listed in `limited`.
-
-```ts
-import { readCartLink } from '@/components/blocks/cart'
-
-const shared = readCartLink(window.location.href, (id) => products.find((product) => product.id === id))
-if (shared) items.value = shared.items // null when the address has no cart in it
-```
-
-`shareUrl` sets the page the link opens (by default the one the cart is on), and `shareParam` the query parameter's name.
 
 ## Try it
 
@@ -651,6 +640,29 @@ const switchTheme = (event: MouseEvent) => revealTransition(() => toggleTheme(),
 
 `ShareButton` opens the device's own share sheet where the browser has one (phones, and some desktop browsers) and otherwise copies the link and says "Link copied". `QrCode` is generated in the page, with no service called. It is always dark on white, since many scanners cannot read an inverted code. `level` (`L`, `M`, `Q`, `H`) trades capacity for resistance to damage; text too long to fit shows a message instead of a broken code. Shorter text makes bigger squares, which scan from further away.
 
+**Sticky scroll**
+
+```vue
+<StickyScroll top="3rem">
+  <StickyScrollItem heading="Copy it in.">
+    <p>One command puts a component's source in your project.</p>
+  </StickyScrollItem>
+  <StickyScrollItem image="/screens/themes.png" alt="A page with a red accent">
+    <h3>Themes to start from</h3>
+    <p>Pick a base and an accent.</p>
+  </StickyScrollItem>
+  <StickyScrollItem :span="3">
+    <template #media="{ progress }">
+      <Chart :data="days" x="day" :series="[{ key: 'owed' }]" label="What the account still owed" :reveal="progress" />
+    </template>
+    <h3>Paid in 39 days</h3>
+    <p>The chart draws itself while this copy stays beside it.</p>
+  </StickyScrollItem>
+</StickyScroll>
+```
+
+Each step gives the pinned column a picture (`image` and `alt`), a large `heading`, or anything else through the `#media` slot. `top` is how far down the media sticks, such as the height of a sticky header. `side="end"` puts it on the right, and `v-model:active` is the index of the step showing. A step with `span` greater than 1 takes that many screens of scrolling, and its copy stays put beside the media too. The `#media` slot's `progress` then runs from 0 as it settles to 1 just before it moves on, so whatever it drives finishes in view. On a one-screen step, `progress` runs while the copy passes the middle of the window. The line and area chart's `reveal` draws that much of the line, from the left, with the part still to come dotted and its points open. Below 40rem wide the section is one column, and nothing sticks.
+
 **Signature pad**
 
 ```vue
@@ -963,8 +975,24 @@ An option card goes inside a `RadioGroup` and is that group's radio button with 
 **Cart and checkout blocks**
 
 ```vue
-<Cart v-model:items="items" :shipping="shipping" :discount="discount" :code-error="codeError" @apply-code="checkCode" @checkout="goToCheckout" />
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Cart, readCartLink, type CartItem } from '@/components/blocks/cart'
 
+const items = ref<CartItem[]>([])
+// Opened from a shared cart link: each line is looked up again in your own catalogue.
+onMounted(() => {
+  const shared = readCartLink(window.location.href, (id) => products.find((product) => product.id === id))
+  if (shared) items.value = shared.items
+})
+</script>
+
+<template>
+  <Cart v-model:items="items" shareable :shipping="shipping" :discount="discount" :code-error="codeError" @apply-code="checkCode" @checkout="goToCheckout" />
+</template>
+```
+
+```vue
 <Checkout :items="items" :shipping-methods="methods" :tax="tax" :loading="paying" :error="paymentError" @submit="placeOrder">
   <!-- For real payments: your provider's own card fields, so card numbers never touch your pages. -->
   <template #payment><div id="card-element" /></template>
@@ -972,6 +1000,8 @@ An option card goes inside a `RadioGroup` and is that group's radio button with 
 ```
 
 The cart emits `applyCode` and leaves the checking to you: set `discount` when the code is good, `codeError` when it is not. The checkout emits `submit` only once every field passes. Its built-in card fields are for prototypes and for providers that take card details from you; with the `#payment` slot filled they are not shown or checked, and `submit` carries no card.
+
+With `shareable`, the cart shows a "Share cart" button. It opens the share sheet on a phone and copies the link elsewhere. The link holds only product ids and quantities, such as `/cart?cart=mug-sand:2,lamp-ink:1`, and `readCartLink` turns it back into cart lines by looking each id up in your catalogue. So an edited link cannot change a price, and an old one shows today's. It returns `null` when the address has no cart in it. Lines the catalogue does not know are left out and listed in `skipped`. Quantities over a product's `max` are lowered, and those products are listed in `limited`, so you can tell the visitor. `shareUrl` sets the page the link opens (by default the one the cart is on), and `shareParam` the query parameter's name.
 
 **Quantity stepper, wishlist button, segmented control**
 

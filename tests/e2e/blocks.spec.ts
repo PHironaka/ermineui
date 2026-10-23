@@ -189,7 +189,7 @@ test.describe('sticky scroll', () => {
     const items = card.locator('.er-sticky-scroll-item')
     const media = items.locator('.er-sticky-scroll-media')
     const copy = items.locator('.er-sticky-scroll-copy')
-    await expect(items).toHaveCount(4)
+    await expect(items).toHaveCount(5)
 
     await centre(copy.nth(0))
     await expect(items.nth(0)).toHaveAttribute('data-state', 'active')
@@ -213,6 +213,37 @@ test.describe('sticky scroll', () => {
     await centre(copy.nth(3))
     await expect(items.nth(3)).toHaveAttribute('data-state', 'active')
     await expect(card.getByRole('img', { name: 'A light page with a red accent' })).toBeVisible()
+  })
+
+  test('a step spanning several screens keeps its copy beside the media, and draws its chart while both stay put', async ({ page }) => {
+    const step = demo(page, 'sticky-scroll').locator('.er-sticky-scroll-item').nth(4)
+    const copy = step.locator('.er-sticky-scroll-copy')
+    const points = step.locator('.er-chart-point')
+    const reached = step.locator('.er-chart-point[data-state="reached"]')
+    const { top, height } = await copy.evaluate((element) => ({ top: element.getBoundingClientRect().top + window.scrollY, height: element.offsetHeight }))
+    const viewport = page.viewportSize()!.height
+    expect(height).toBeGreaterThan(viewport * 2.5)
+
+    // Settled at the top of the window: the chart is at its start, with only the first point reached.
+    await page.evaluate((y) => window.scrollTo(0, y), top)
+    await expect(step).toHaveAttribute('data-state', 'active')
+    await expect(points).toHaveCount(8)
+    await expect(reached).toHaveCount(1)
+    await expect(step.locator('.er-chart-line[data-part="ahead"]')).toHaveCount(1)
+    const copyBefore = await step.locator('.er-sticky-scroll-copy-inner').boundingBox()
+
+    // Halfway through, it has drawn about half, and the copy has not moved.
+    await page.evaluate((y) => window.scrollTo(0, y), top + (height - viewport) / 2)
+    await expect(reached).toHaveCount(4)
+    await expect(step.locator('.sticky-chart-caption')).toContainText('Reply received')
+    const copyAfter = await step.locator('.er-sticky-scroll-copy-inner').boundingBox()
+    expect(Math.abs(copyAfter!.y - copyBefore!.y)).toBeLessThan(2)
+
+    // At the end of the stretch it has finished, and the media is still in place.
+    await page.evaluate((y) => window.scrollTo(0, y), top + height - viewport - 1)
+    await expect(reached).toHaveCount(8)
+    await expect(step.locator('.sticky-chart-caption')).toContainText('Paid in full')
+    expect((await step.locator('.er-sticky-scroll-media').boundingBox())!.y).toBeGreaterThanOrEqual(-1)
   })
 
   test('tabbing to a link in a step shows that step', async ({ page }) => {

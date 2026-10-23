@@ -59,7 +59,7 @@ const groups: Record<string, string[]> = {
   ],
   Overlays: ['dialog', 'alert-dialog', 'sheet', 'popover', 'tooltip', 'hover-card', 'dropdown-menu', 'context-menu', 'command', 'toast', 'tour', 'lightbox', 'action-sheet'],
   Navigation: ['tabs', 'breadcrumb', 'pagination', 'navigation-menu', 'menubar', 'sidebar', 'toolbar', 'app-bar', 'bottom-nav', 'fab'],
-  'Layout and content': ['card', 'separator', 'accordion', 'collapsible', 'carousel', 'resizable', 'scroll-area', 'typography', 'image-fan', 'marquee', 'markdown', 'code-block', 'media-player'],
+  'Layout and content': ['card', 'separator', 'accordion', 'collapsible', 'carousel', 'resizable', 'scroll-area', 'typography', 'image-fan', 'sticky-scroll', 'marquee', 'markdown', 'code-block', 'media-player'],
   'Data and charts': ['table', 'data-table', 'filter-bar', 'chart', 'stat', 'meter', 'tree', 'kanban', 'event-calendar', 'virtual-list', 'timeline', 'description-list', 'json-viewer', 'diff-viewer', 'comparison-table'],
   'Status and feedback': ['alert', 'badge', 'banner', 'progress', 'spinner', 'skeleton', 'empty-state', 'status', 'avatar', 'kbd', 'icon', 'copy-button', 'count-up', 'countdown', 'reveal', 'scroll-progress'],
   Commerce: [

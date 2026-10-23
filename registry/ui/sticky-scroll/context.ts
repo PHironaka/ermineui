@@ -6,6 +6,8 @@ export interface StickyScrollContext {
   steps: Readonly<ShallowRef<HTMLElement[]>>
   /** Index of the step whose media is showing. */
   active: Ref<number>
+  /** How far each step's copy has scrolled past the middle of the window, 0 to 1, by index. */
+  progress: Readonly<Ref<number[]>>
   register: (copy: HTMLElement) => void
   unregister: (copy: HTMLElement) => void
 }

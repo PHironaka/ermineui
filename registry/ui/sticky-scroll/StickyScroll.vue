@@ -17,7 +17,9 @@ const active = defineModel<number>('active', { default: 0 })
 
 const steps = shallowRef<HTMLElement[]>([])
 const ready = ref(false)
+const progress = ref<number[]>([])
 let observer: IntersectionObserver | undefined
+let frame = 0
 
 function register(copy: HTMLElement) {
   // Kept in page order, whatever order the steps mount in.
@@ -30,7 +32,27 @@ function unregister(copy: HTMLElement) {
   observer?.unobserve(copy)
 }
 
-provideStickyScroll({ steps, active, register, unregister })
+provideStickyScroll({ steps, active, progress, register, unregister })
+
+// Each step's progress, from 0 to 1. A step longer than a screen counts the stretch where its copy stays put: 0
+// as it settles, 1 just as it lets go, so whatever the media draws is finished while it is still in view. Any
+// other step counts from its copy's top reaching the middle of the window to its bottom leaving it. Measured at
+// most once a frame, however fast the scroll events come.
+const clamp = (value: number) => Math.min(1, Math.max(0, value))
+function measure() {
+  frame = 0
+  const middle = window.innerHeight / 2
+  progress.value = steps.value.map((step) => {
+    const box = step.getBoundingClientRect()
+    const pinned = step.firstElementChild as HTMLElement | null
+    const travel = pinned ? box.height - pinned.offsetHeight : 0
+    if (pinned && travel > 1) return clamp((pinned.getBoundingClientRect().top - box.top) / travel)
+    return box.height > 0 ? clamp((middle - box.top) / box.height) : 0
+  })
+}
+function schedule() {
+  if (!frame) frame = requestAnimationFrame(measure)
+}
 
 onMounted(() => {
   // The step crossing the middle of the window is the one shown. Above the first step or past the last, the
@@ -45,13 +67,22 @@ onMounted(() => {
   )
   for (const step of steps.value) observer.observe(step)
   ready.value = true
+  measure()
+  window.addEventListener('scroll', schedule, { passive: true })
+  window.addEventListener('resize', schedule, { passive: true })
 })
 
-onBeforeUnmount(() => observer?.disconnect())
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  cancelAnimationFrame(frame)
+  window.removeEventListener('scroll', schedule)
+  window.removeEventListener('resize', schedule)
+})
 
 // A step removed from the end takes the index with it.
 watch(steps, (list) => {
   if (list.length > 0 && active.value > list.length - 1) active.value = list.length - 1
+  if (ready.value) schedule()
 })
 
 const length = (value: number | string) => (typeof value === 'number' ? `${value}px` : value)

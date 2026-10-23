@@ -445,6 +445,19 @@ const stickyPicture = (background: string, ink: string, accent: string) =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="${background}"/><circle cx="290" cy="110" r="70" fill="${accent}"/><rect x="40" y="60" width="150" height="16" rx="4" fill="${ink}"/><rect x="40" y="90" width="110" height="16" rx="4" fill="${ink}"/><rect x="40" y="130" width="130" height="8" rx="4" fill="${ink}" opacity=".4"/><rect x="40" y="220" width="320" height="40" rx="8" fill="${ink}" opacity=".12"/></svg>`,
   )}`
 const stickyPictures = { library: stickyPicture('#1f2430', '#f5f5f5', '#5b8def'), theme: stickyPicture('#f4f1ea', '#1c1c1c', '#e5484d') }
+// A step that draws a chart as it scrolls: what one past-due account still owed, day by day.
+const collection = [
+  { day: 'Day 1', owed: 18400, event: 'Account imported', note: 'Three invoices, the oldest 41 days past due.' },
+  { day: 'Day 2', owed: 18400, event: 'Contact found', note: 'The accounts payable lead, not the general inbox.' },
+  { day: 'Day 3', owed: 18400, event: 'First notice sent', note: 'A reminder with every invoice attached.' },
+  { day: 'Day 5', owed: 18400, event: 'Reply received', note: 'They ask to pay in two parts.' },
+  { day: 'Day 6', owed: 15200, event: 'Plan agreed', note: 'A deposit today, half the rest in each of two months.' },
+  { day: 'Day 9', owed: 7600, event: 'First instalment paid', note: '$7,600 arrives, on time.' },
+  { day: 'Day 36', owed: 7600, event: 'Reminder sent', note: 'Three days before the last instalment is due.' },
+  { day: 'Day 39', owed: 0, event: 'Paid in full', note: 'The account is closed.' },
+]
+/** The latest point the chart has reached at a step's progress, counting one the line is a hair short of, as the chart does. */
+const collectionAt = (progress: number) => collection[Math.min(collection.length - 1, Math.floor(progress * (collection.length - 1) + 0.01))]!
 
 // An icon of our own, added beside the built-in set.
 registerIcons({ rocket: 'M5 19c0-2 1-4 3-5l3 3c-1 2-3 3-5 3ZM9 13c1-5 5-9 11-9 0 6-4 10-9 11ZM15 9v.01' })
@@ -2211,6 +2224,17 @@ function undoable() {
           <StickyScrollItem :image="stickyPictures.theme" alt="A light page with a red accent">
             <h3>Themes to start from</h3>
             <p>Pick a base for the greys and an accent for the primary colour, from the Colour theme menu at the top of this page.</p>
+          </StickyScrollItem>
+          <StickyScrollItem :span="3">
+            <template #media="{ progress }">
+              <div class="sticky-chart">
+                <p class="sticky-chart-title">Every past-due account, followed up</p>
+                <Chart :data="collection" x="day" :series="[{ key: 'owed', label: 'Still owed' }]" label="What one account still owed, by day" :format="dollars" :height="260" :reveal="progress" />
+                <p class="sticky-chart-caption"><span>{{ collectionAt(progress).day }}</span> {{ collectionAt(progress).event }}. {{ collectionAt(progress).note }}</p>
+              </div>
+            </template>
+            <h3>A chart that draws as you scroll</h3>
+            <p>This step takes three screens of scrolling. The copy stays put beside the chart, and the media slot's <code>progress</code> runs from 0 to 1 and goes to the chart's <code>reveal</code>.</p>
           </StickyScrollItem>
         </StickyScroll>
       </Demo>

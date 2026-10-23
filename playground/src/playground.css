@@ -514,3 +514,30 @@ body {
   font-family: var(--er-font-mono);
   font-size: 0.75rem;
 }
+
+.sticky-chart {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+.sticky-chart-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.sticky-chart-caption {
+  margin: 0;
+  min-height: 3em;
+  color: var(--er-muted-foreground);
+  font-size: 0.875rem;
+}
+.sticky-chart-caption span {
+  margin-right: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--er-radius-sm);
+  background: var(--er-muted);
+  color: var(--er-foreground);
+  font-family: var(--er-font-mono);
+  font-size: 0.8125rem;
+}
