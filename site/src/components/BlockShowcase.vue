@@ -58,9 +58,16 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+/* One column no wider than the page: on a phone the five tabs scroll sideways instead of widening the window. */
+.showcase > .er-segmented-control {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
 .showcase {
   scroll-margin-top: calc(var(--site-nav-height) + 1rem);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   gap: 1.5rem;
 }
