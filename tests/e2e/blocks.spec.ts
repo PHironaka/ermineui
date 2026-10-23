@@ -180,3 +180,45 @@ test.describe('image fan', () => {
     await expect(caption).toHaveText('Archive')
   })
 })
+
+test.describe('sticky scroll', () => {
+  const centre = (locator: import('@playwright/test').Locator) => locator.evaluate((element) => element.scrollIntoView({ block: 'center' }))
+
+  test('the media column stays put and changes to each step as its copy reaches the middle', async ({ page }) => {
+    const card = demo(page, 'sticky-scroll')
+    const items = card.locator('.er-sticky-scroll-item')
+    const media = items.locator('.er-sticky-scroll-media')
+    const copy = items.locator('.er-sticky-scroll-copy')
+    await expect(items).toHaveCount(4)
+
+    await centre(copy.nth(0))
+    await expect(items.nth(0)).toHaveAttribute('data-state', 'active')
+    await expect(media.nth(0)).toHaveCSS('opacity', '1')
+    await expect(media.nth(1)).toHaveCSS('opacity', '0')
+    const before = await media.nth(0).boundingBox()
+
+    await centre(copy.nth(1))
+    await expect(items.nth(1)).toHaveAttribute('data-state', 'active')
+    await expect(items.nth(0)).toHaveAttribute('data-state', 'inactive')
+    await expect(media.nth(1)).toHaveCSS('opacity', '1')
+    await expect(media.nth(0)).toHaveCSS('opacity', '0')
+    // Stuck: the media is where the first step's was, while the copy has moved up a whole step.
+    const after = await media.nth(1).boundingBox()
+    expect(Math.abs(after!.y - before!.y)).toBeLessThan(2)
+    expect(after!.x).toBe(before!.x)
+    const [left, right] = [await media.nth(1).boundingBox(), await copy.nth(1).boundingBox()]
+    expect(left!.x + left!.width).toBeLessThanOrEqual(right!.x)
+
+    await expect(items.nth(0).getByRole('heading', { name: 'Copy it in.' })).toBeAttached()
+    await centre(copy.nth(3))
+    await expect(items.nth(3)).toHaveAttribute('data-state', 'active')
+    await expect(card.getByRole('img', { name: 'A light page with a red accent' })).toBeVisible()
+  })
+
+  test('tabbing to a link in a step shows that step', async ({ page }) => {
+    const card = demo(page, 'sticky-scroll')
+    await centre(card.locator('.er-sticky-scroll-copy').first())
+    await card.getByRole('link', { name: 'Start with the button' }).focus()
+    await expect(card.locator('.er-sticky-scroll-item').nth(2)).toHaveAttribute('data-state', 'active')
+  })
+})

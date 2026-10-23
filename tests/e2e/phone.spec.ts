@@ -76,3 +76,16 @@ test('the image fan shrinks to fit instead of spilling out of its card', async (
   expect(first!.x).toBeGreaterThanOrEqual(stage!.x - 12)
   expect(last!.x + last!.width).toBeLessThanOrEqual(stage!.x + stage!.width + 12)
 })
+
+test('the sticky scroll is one column on a phone, with each step’s media above its copy', async ({ page }) => {
+  const card = demo(page, 'sticky-scroll')
+  const media = card.locator('.er-sticky-scroll-media')
+  const copy = card.locator('.er-sticky-scroll-copy')
+  await expect(media).toHaveCount(4)
+  for (let index = 0; index < 4; index++) {
+    await expect(media.nth(index)).toHaveCSS('opacity', '1')
+    await expect(media.nth(index)).toHaveCSS('position', 'static')
+    const [above, below] = [await media.nth(index).boundingBox(), await copy.nth(index).boundingBox()]
+    expect(above!.y + above!.height).toBeLessThanOrEqual(below!.y + 1)
+  }
+})

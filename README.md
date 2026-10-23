@@ -104,6 +104,7 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `empty-state` | Icon, heading, text and actions for when there is nothing to list |
 | `toast` | `toast()` from anywhere, with one `<Toaster />` mounted |
 | `image-fan` | A few framed pictures overlapping like a hand of cards, tilted outward from the middle; each lifts to the front on hover or focus, and the whole fan shrinks to fit |
+| `sticky-scroll` | Two columns: one stays put showing a picture or a large heading, and changes as each step's copy scrolls past the middle of the window; one column on narrow screens |
 | `icon` | 62 built-in line icons that take the size and colour of the text around them; add your own with `registerIcons()` |
 | `segmented-control` | One choice from two to five, side by side in a single track |
 | `toolbar` | A row of controls that takes one stop in the tab order; arrow keys move between them |

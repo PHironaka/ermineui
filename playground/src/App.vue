@@ -146,6 +146,7 @@ import { Prose, Typography } from '../../registry/ui/typography'
 import { VirtualList } from '../../registry/ui/virtual-list'
 import { Icon, iconNames, registerIcons } from '../../registry/ui/icon'
 import { ImageFan, type ImageFanImage } from '../../registry/ui/image-fan'
+import { StickyScroll, StickyScrollItem } from '../../registry/ui/sticky-scroll'
 import { Cart, sampleCart, type CartItem } from '../../registry/blocks/cart'
 import { Checkout, type CheckoutValues } from '../../registry/blocks/checkout'
 import { Dashboard } from '../../registry/blocks/dashboard'
@@ -437,6 +438,13 @@ const fanImages: ImageFanImage[] = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="${background}"/><rect x="20" y="18" width="46" height="8" rx="4" fill="${ink}"/><rect x="236" y="18" width="64" height="8" rx="4" fill="${ink}" opacity=".35"/><rect x="20" y="58" width="150" height="14" rx="3" fill="${ink}"/><rect x="20" y="80" width="110" height="14" rx="3" fill="${ink}"/><rect x="20" y="108" width="120" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="20" y="120" width="90" height="6" rx="3" fill="${ink}" opacity=".4"/><rect x="196" y="52" width="104" height="92" rx="8" fill="${accent}"/><rect x="20" y="160" width="84" height="40" rx="6" fill="${accent}" opacity=".5"/><rect x="118" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/><rect x="216" y="160" width="84" height="40" rx="6" fill="${ink}" opacity=".15"/></svg>`,
   )}`,
 }))
+
+// Sticky scroll: stand-in pictures drawn as SVG, like the fan's.
+const stickyPicture = (background: string, ink: string, accent: string) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="${background}"/><circle cx="290" cy="110" r="70" fill="${accent}"/><rect x="40" y="60" width="150" height="16" rx="4" fill="${ink}"/><rect x="40" y="90" width="110" height="16" rx="4" fill="${ink}"/><rect x="40" y="130" width="130" height="8" rx="4" fill="${ink}" opacity=".4"/><rect x="40" y="220" width="320" height="40" rx="8" fill="${ink}" opacity=".12"/></svg>`,
+  )}`
+const stickyPictures = { library: stickyPicture('#1f2430', '#f5f5f5', '#5b8def'), theme: stickyPicture('#f4f1ea', '#1c1c1c', '#e5484d') }
 
 // An icon of our own, added beside the built-in set.
 registerIcons({ rocket: 'M5 19c0-2 1-4 3-5l3 3c-1 2-3 3-5 3ZM9 13c1-5 5-9 11-9 0 6-4 10-9 11ZM15 9v.01' })
@@ -799,7 +807,7 @@ function undoable() {
 
 <template>
   <Banner v-model:open="bannerOpen" variant="info" dismissible>
-    Ermine now has 141 components and 12 blocks.
+    Ermine now has 142 components and 12 blocks.
     <template #action><a href="#navigation-menu">See what is new</a></template>
   </Banner>
   <OfflineBanner />
@@ -852,7 +860,7 @@ function undoable() {
     <section class="intro" aria-label="Introduction">
       <h1>Vue components you copy in and own.</h1>
       <p>
-        141 accessible components and 12 blocks for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
+        142 accessible components and 12 blocks for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
         runtime dependencies beyond Vue. The command line copies the source into your project, so every line is
         yours to change.
       </p>
@@ -2178,6 +2186,25 @@ function undoable() {
 
       <Demo name="image-fan" title="Image fan" description="Framed pictures overlapping like a hand of cards. Point at one, or tab to it, and it straightens and lifts while the others slide aside, with its name underneath. The fan shrinks to fit a narrow space." wide>
         <ImageFan :images="fanImages" />
+      </Demo>
+
+      <Demo name="sticky-scroll" title="Sticky scroll" description="Two columns: one stays put while the copy in the other scrolls past, and changes to each step's picture or heading as it reaches the middle of the window. One column on a narrow screen." wide>
+        <StickyScroll>
+          <StickyScrollItem heading="Copy it in.">
+            <p>One command puts a component's source in your project. There is no package to keep up to date, and nothing runs that you cannot read.</p>
+          </StickyScrollItem>
+          <StickyScrollItem heading="Make it yours.">
+            <p>Every colour, radius and shadow is a CSS variable. Change one and every component follows, in light and dark.</p>
+          </StickyScrollItem>
+          <StickyScrollItem :image="stickyPictures.library" alt="A dark page of components with a blue accent">
+            <h3>Over a hundred components</h3>
+            <p>Forms, menus, overlays, charts and whole page sections, each tested by keyboard and screen reader. <a href="#button">Start with the button</a>.</p>
+          </StickyScrollItem>
+          <StickyScrollItem :image="stickyPictures.theme" alt="A light page with a red accent">
+            <h3>Themes to start from</h3>
+            <p>Pick a base for the greys and an accent for the primary colour, from the Colour theme menu at the top of this page.</p>
+          </StickyScrollItem>
+        </StickyScroll>
       </Demo>
 
       <Demo name="product-card" title="Product card, Price, Swatch" description="A product as one link with its picture, score and price; money with the old price struck through; and colour or size choices with sold-out ones crossed off." wide>
