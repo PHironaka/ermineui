@@ -167,4 +167,10 @@ export const themes: ThemeEntry[] = Object.entries(registry.themes).map(([name, 
   css: theme.content.replace(/^\/\*\*[\s\S]*?\*\/\s*/, '').trim(),
   dot: theme.content.match(new RegExp(`--er-${theme.kind === 'accent' ? 'primary' : 'muted-foreground'}: ([^;]+);`))?.[1] ?? 'currentColor',
 }))
+// Round the colour wheel, so a row of swatches reads as a spectrum; untinted greys (neutral) come first.
+const hue = (theme: ThemeEntry) => {
+  const [, chroma = '0', angle = '0'] = theme.dot.match(/oklch\([\d.]+ ([\d.]+) ([\d.]+)/) ?? []
+  return Number(chroma) < 0.005 ? -1 : Number(angle)
+}
+themes.sort((a, b) => hue(a) - hue(b))
 export const find = (name: string) => components.find((item) => item.name === name) ?? blocks.find((item) => item.name === name)

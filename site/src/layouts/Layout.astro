@@ -1,7 +1,8 @@
 ---
 import '@registry/styles/ermine.css'
 import '../styles/site.css'
-import { version } from '../data/catalog'
+import SiteTheme from '../components/SiteTheme.vue'
+import { themes, version } from '../data/catalog'
 
 interface Props {
   title: string
@@ -18,6 +19,13 @@ const links = [
   { href: '/docs/installation/', label: 'Install' },
   { href: github, label: 'GitHub', optional: true },
 ]
+
+// Every colour theme, keyed to an attribute on <html> so the menu in the top bar can switch them, bases before
+// accents so an accent's primary colour wins over the base's.
+const themeCss = [...themes]
+  .sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'base' ? -1 : 1))
+  .map((theme) => theme.css.replace(':root', `:root[data-${theme.kind}='${theme.name}']`))
+  .join('\n')
 ---
 
 <!doctype html>
@@ -32,14 +40,16 @@ const links = [
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style set:html={themeCss}></style>
     <script is:inline>
-      // Before anything is drawn: apply a theme chosen on an earlier visit, and note that scripting is on.
+      // Before anything is drawn: apply a colour theme chosen on an earlier visit, and note that scripting is on.
       ;(function () {
         var root = document.documentElement
         root.classList.add('js')
         try {
-          var theme = localStorage.getItem('ermine-theme')
-          if (theme === 'dark' || theme === 'light') root.classList.add(theme)
+          var theme = (localStorage.getItem('ermine-colour-theme') || '').split(',')
+          if (theme[0] && theme[0] !== 'neutral') root.dataset.base = theme[0]
+          if (theme[1] && theme[1] !== 'mono') root.dataset.accent = theme[1]
           var pm = localStorage.getItem('ermine-pm')
           if (pm) root.dataset.pm = pm
         } catch (error) {}
@@ -60,11 +70,7 @@ const links = [
             ))
           }
         </nav>
-        <button class="nav-theme" type="button" data-theme-toggle aria-label="Switch between light and dark">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3a9 9 0 1 0 9 9a7 7 0 0 1-9-9Z"></path>
-          </svg>
-        </button>
+        <SiteTheme client:load themes={themes} />
       </div>
     </header>
 
@@ -87,16 +93,6 @@ const links = [
 
     <script>
       const root = document.documentElement
-
-      // Light and dark: start from what is showing now, and remember the choice.
-      document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
-        const dark = root.classList.contains('dark') || (!root.classList.contains('light') && matchMedia('(prefers-color-scheme: dark)').matches)
-        root.classList.remove('dark', 'light')
-        root.classList.add(dark ? 'light' : 'dark')
-        try {
-          localStorage.setItem('ermine-theme', dark ? 'light' : 'dark')
-        } catch {}
-      })
 
       document.addEventListener('click', (event) => {
         const target = event.target instanceof Element ? event.target : null
