@@ -176,12 +176,13 @@ The theme stylesheet is yours and is never overwritten, even with `--overwrite`.
 | `ermine init` | Create `ermine.json` and the theme stylesheet (`-y` accepts the suggested folders) |
 | `ermine add <name...>` | Copy components or blocks and their dependencies (`--all` for every component) |
 | `ermine list` | Show available components and blocks, and which are already installed |
+| `ermine theme <base> <accent>` | Apply colour themes to your stylesheet (no names: list them; `--reset` removes them) |
 | `ermine mcp` | Run as an MCP server for AI coding tools (see below) |
 | `--registry <url or path>` | Read components from a different `registry.json`, such as your own fork |
 
 ### With AI coding tools
 
-`ermine mcp` is a Model Context Protocol server. Connect it and your coding assistant can list the components, read one's source before using it, set the project up and add components itself. It has four tools: `list_components`, `get_component`, `init_project` and `add_components`.
+`ermine mcp` is a Model Context Protocol server. Connect it and your coding assistant can list the components, read one's source before using it, set the project up and add components itself. It has five tools: `list_components`, `get_component`, `init_project`, `add_components` and `set_theme`.
 
 ```sh
 claude mcp add ermine -- npx -y ermineui mcp          # Claude Code
@@ -255,6 +256,16 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 ## Theming
 
 `ermine.css` defines every colour, radius, shadow and duration as a CSS variable. Edit the values and all components follow.
+
+**Colour themes.** Ready-made sets of those variables, in two kinds you combine: a **base** tints the surfaces, text and lines (`neutral`, the default, `slate`, `stone`, `zinc`) and an **accent** sets the primary colour and focus ring (`blue`, `violet`, `green`, `rose`, `orange`). Every pairing keeps text at 4.5:1 contrast and the focus ring at 3:1, in light and dark.
+
+```sh
+npx ermineui theme slate blue    # or one at a time; picking a base keeps the accent, and the other way round
+npx ermineui theme --reset       # back to the stylesheet's own colours
+npx ermineui init --theme slate,blue
+```
+
+The command writes each theme at the end of your stylesheet in its own marked block and replaces only that block next time; nothing else in the file changes. To adjust a colour, set it again in a rule after the block. The website's Themes page previews them and gives the CSS to paste by hand.
 
 ```css
 :root {
@@ -1200,6 +1211,7 @@ toast('Deployment archived', { action: { label: 'Undo', onClick: restore } })
 ```
 registry/
   styles/ermine.css     theme tokens, base styles, shared floating styles
+  themes/base|accent/   colour themes: :root blocks of variables that "ermine theme" writes into a project
   lib/                 behavior helpers (copied into the user's project)
     primitive.ts         Primitive (as / as-child) and Portal
     floating.ts          positioning: flip, shift, follow scroll and resize

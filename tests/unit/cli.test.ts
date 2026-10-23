@@ -184,7 +184,7 @@ test('the MCP server answers the handshake and lists its tools', () => {
     assert.deepEqual(hello.result.capabilities, { tools: {} })
     assert.deepEqual(
       tools.result.tools.map((tool: { name: string }) => tool.name),
-      ['list_components', 'get_component', 'init_project', 'add_components'],
+      ['list_components', 'get_component', 'init_project', 'add_components', 'set_theme'],
     )
     assert.equal(unknown.error.code, -32601)
   })
@@ -214,5 +214,55 @@ test('through the MCP server, a project is set up, components are added and read
     assert.match(text(details), /helpers: .*floating/)
     assert.ok(text(list).split('\n').find((line) => /^  . dialog /.test(line))!.includes('✓'))
     assert.equal(missing.result.isError, true)
+  })
+})
+
+test('theme writes a base and an accent into the stylesheet, swaps them, and removes them', () => {
+  project((dir) => {
+    ermine(dir, 'init', '-y')
+    const stylesheet = join(dir, 'src/styles/ermine.css')
+    const original = readFileSync(stylesheet, 'utf8')
+
+    assert.match(ermine(dir, 'theme', 'blue'), /accent blue/)
+    assert.match(ermine(dir, 'theme', 'stone'), /base stone, accent blue/, 'picking a base keeps the accent')
+    let css = readFileSync(stylesheet, 'utf8')
+    assert.ok(css.startsWith(original.trimEnd()), 'what was there is untouched')
+    assert.ok(css.indexOf('ermine theme base: stone') < css.indexOf('ermine theme accent: blue'), 'the base comes first, so the accent wins')
+
+    ermine(dir, 'theme', 'zinc', 'rose')
+    css = readFileSync(stylesheet, 'utf8')
+    assert.equal(css.match(/ermine theme base:/g)?.length, 1, 'the old base block is replaced, not added to')
+    assert.ok(css.includes('ermine theme base: zinc') && css.includes('ermine theme accent: rose'))
+    assert.ok(ermine(dir, 'theme').split('\n').find((line) => /\srose\s/.test(line))!.includes('✓'))
+
+    assert.match(fails(dir, 'theme', 'blue', 'rose'), /Pick one accent theme/)
+    assert.match(fails(dir, 'theme', 'purple'), /Unknown theme: purple\. Bases: .*slate.*Accents: .*blue/)
+
+    ermine(dir, 'theme', '--reset')
+    assert.equal(readFileSync(stylesheet, 'utf8'), original, 'reset gives back the file as it was')
+  })
+})
+
+test('init --theme applies themes straight away, and they survive variables being appended', () => {
+  project((dir) => {
+    ermine(dir, 'init', '-y', '--theme', 'slate,green')
+    const stylesheet = join(dir, 'src/styles/ermine.css')
+    writeFileSync(stylesheet, readFileSync(stylesheet, 'utf8').replace(/^\s*--er-chart-1:.*\n/m, ''))
+    ermine(dir, 'add', 'chart')
+    ermine(dir, 'theme', 'violet')
+    const css = readFileSync(stylesheet, 'utf8')
+    assert.ok(css.includes('ermine theme base: slate') && css.includes('ermine theme accent: violet'))
+    assert.match(css, /Added by "ermine add"[\s\S]*--er-chart-1/)
+  })
+})
+
+test('through the MCP server, themes are listed and applied', () => {
+  project((dir) => {
+    ermine(dir, 'init', '-y')
+    const [, list, set, wrong] = mcp(dir, call('set_theme', {}), call('set_theme', { names: ['stone', 'orange'] }), call('set_theme', { names: ['teal'] }))
+    assert.match(text(list), /Bases[\s\S]*slate[\s\S]*Accents[\s\S]*orange/)
+    assert.match(text(set), /base stone, accent orange/)
+    assert.ok(readFileSync(join(dir, 'src/styles/ermine.css'), 'utf8').includes('ermine theme accent: orange'))
+    assert.equal(wrong.result.isError, true)
   })
 })

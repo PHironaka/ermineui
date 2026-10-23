@@ -1,0 +1,6 @@
+/** Green — the primary colour and focus ring in green. */
+:root {
+  --er-primary: light-dark(oklch(0.527 0.145 150), oklch(0.75 0.16 150));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.04 150));
+  --er-ring: light-dark(oklch(0.527 0.145 150), oklch(0.75 0.16 150));
+}

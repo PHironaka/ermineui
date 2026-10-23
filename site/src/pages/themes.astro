@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Command from '../components/Command.astro'
+import ThemePicker from '../components/ThemePicker.vue'
+import { themes } from '../data/catalog'
+
+const bases = themes.filter((theme) => theme.kind === 'base')
+const accents = themes.filter((theme) => theme.kind === 'accent')
+---
+
+<Layout title="Themes. Ermine UI" description="Colour themes for Ermine UI: a base that tints the greys and an accent for the primary colour, in light and dark.">
+  <div class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">Themes</p>
+      <h1 class="headline">Pick a base and an accent.</h1>
+      <p class="lede">
+        A base tints the surfaces, text and lines; an accent sets the primary colour and the focus ring. Every pairing is
+        checked for readable contrast in light and dark.
+      </p>
+    </header>
+
+    <ThemePicker client:load themes={themes} />
+
+    <div class="prose">
+      <h2 id="apply">Applying a theme</h2>
+      <p>
+        Name a base, an accent, or both. The command writes them at the end of your theme stylesheet, each in its own marked
+        block, and replaces only that block when you pick again. Nothing else in the file changes.
+      </p>
+      <Command args={['theme slate blue', 'theme rose', 'theme --reset']} />
+      <p>
+        The second line keeps the slate base and swaps the accent; <code>--reset</code> removes both. To set one up from the
+        start, use <code>init --theme slate,blue</code>. To adjust a colour, set the variable again in a rule after the theme's
+        block. AI coding tools connected to <code>ermine mcp</code> can do the same with its <code>set_theme</code> tool.
+      </p>
+
+      <h2 id="bases">Bases</h2>
+      <ul>{bases.map((theme) => <li><code>{theme.name}</code>: {theme.summary}</li>)}</ul>
+
+      <h2 id="accents">Accents</h2>
+      <ul>{accents.map((theme) => <li><code>{theme.name}</code>: {theme.summary}</li>)}</ul>
+      <p>With no accent, the primary colour is the base's own near-black (near-white in the dark theme).</p>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,6 @@
+/** Orange — the primary colour and focus ring in orange. */
+:root {
+  --er-primary: light-dark(oklch(0.553 0.17 40), oklch(0.75 0.15 50));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.04 50));
+  --er-ring: light-dark(oklch(0.553 0.17 40), oklch(0.75 0.15 50));
+}

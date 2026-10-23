@@ -171,6 +171,32 @@ function toggleTheme(event?: MouseEvent) {
   }, event && event.clientX ? event : undefined)
 }
 
+// Colour themes: the same files "ermine theme" writes into a project, laid over the stylesheet in one <style> element.
+const themeFiles = import.meta.glob('../../registry/themes/*/*.css', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
+const colourThemes = Object.entries(themeFiles).map(([path, css]) => {
+  const [, kind = '', name = ''] = path.match(/themes\/(base|accent)\/([\w-]+)\.css$/)!
+  // A dot for each: the accent's primary colour, or the base's grey text, which shows its tint best.
+  const dot = css.match(new RegExp(`--er-${kind === 'accent' ? 'primary' : 'muted-foreground'}: ([^;]+);`))![1]!
+  return { kind, name, css, dot, title: name.charAt(0).toUpperCase() + name.slice(1) }
+})
+const baseThemes = colourThemes.filter((item) => item.kind === 'base')
+const accentThemes = colourThemes.filter((item) => item.kind === 'accent')
+const baseTheme = ref('neutral')
+const accentTheme = ref('mono')
+const themeCommand = computed(() => `npx ermineui theme ${baseTheme.value}${accentTheme.value === 'mono' ? '' : ` ${accentTheme.value}`}`)
+onMounted(() => {
+  const style = document.createElement('style')
+  style.dataset.colourTheme = ''
+  document.head.append(style)
+  watch(
+    [baseTheme, accentTheme],
+    ([base, accent]) => {
+      style.textContent = colourThemes.filter((item) => item.name === base || item.name === accent).map((item) => item.css).join('\n')
+    },
+    { immediate: true },
+  )
+})
+
 // Button: loading
 const saving = ref(false)
 function save() {
@@ -782,6 +808,29 @@ function undoable() {
       <div class="brand"><span class="brand-mark" aria-hidden="true" /> Ermine UI</div>
       <div class="row">
         <Badge variant="outline">v0.3.0</Badge>
+        <Popover>
+          <PopoverTrigger as-child>
+            <Button variant="outline" size="icon" aria-label="Colour theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.1a1.9 1.9 0 0 0-1.4 3.2A1.7 1.7 0 0 1 12 22Z" />
+                <circle cx="7.5" cy="10.5" r="1" /><circle cx="12" cy="7.5" r="1" /><circle cx="16.5" cy="10.5" r="1" />
+              </svg>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" class="colour-theme">
+            <p class="popover-title">Colour theme</p>
+            <p class="hint">Base</p>
+            <SwatchGroup v-model="baseTheme" label="Base colours">
+              <Swatch v-for="item in baseThemes" :key="item.name" :value="item.name" :color="item.dot" :label="item.title" />
+            </SwatchGroup>
+            <p class="hint">Accent</p>
+            <SwatchGroup v-model="accentTheme" label="Accent colour">
+              <Swatch value="mono" color="var(--er-foreground)" label="Mono (no accent)" />
+              <Swatch v-for="item in accentThemes" :key="item.name" :value="item.name" :color="item.dot" :label="item.title" />
+            </SwatchGroup>
+            <code class="colour-theme-command">{{ themeCommand }}</code>
+          </PopoverContent>
+        </Popover>
         <Tooltip>
           <TooltipTrigger as-child>
             <Button variant="outline" size="icon" :aria-label="`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`" @click="toggleTheme">

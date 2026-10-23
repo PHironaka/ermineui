@@ -1,0 +1,25 @@
+/** Slate — cool, blue-tinted greys. */
+:root {
+  /* Surfaces and text */
+  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.042 264.7));
+  --er-foreground: light-dark(oklch(0.145 0.042 264.7), oklch(0.985 0.003 247.9));
+  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.042 265.8));
+  --er-card-foreground: light-dark(oklch(0.145 0.042 264.7), oklch(0.985 0.003 247.9));
+  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.042 265.8));
+  --er-popover-foreground: light-dark(oklch(0.145 0.042 264.7), oklch(0.985 0.003 247.9));
+
+  /* Actions (an accent theme replaces the primary colour and the ring) */
+  --er-primary: light-dark(oklch(0.205 0.042 265.8), oklch(0.922 0.014 255.5));
+  --er-primary-foreground: light-dark(oklch(0.985 0.003 247.9), oklch(0.205 0.042 265.8));
+  --er-secondary: light-dark(oklch(0.965 0.007 247.9), oklch(0.269 0.041 260));
+  --er-secondary-foreground: light-dark(oklch(0.205 0.042 265.8), oklch(0.985 0.003 247.9));
+  --er-muted: light-dark(oklch(0.965 0.007 247.9), oklch(0.269 0.041 260));
+  --er-muted-foreground: light-dark(oklch(0.5 0.044 257.3), oklch(0.708 0.04 256.8));
+  --er-accent: light-dark(oklch(0.965 0.007 247.9), oklch(0.3 0.042 260));
+  --er-accent-foreground: light-dark(oklch(0.205 0.042 265.8), oklch(0.985 0.003 247.9));
+
+  /* Lines and focus */
+  --er-border: light-dark(oklch(0.915 0.015 255.5), oklch(1 0 0 / 12%));
+  --er-input: light-dark(oklch(0.87 0.022 252.9), oklch(1 0 0 / 18%));
+  --er-ring: light-dark(oklch(0.45 0.043 257.3), oklch(0.75 0.035 256.8));
+}

@@ -1,0 +1,6 @@
+/** Rose — the primary colour and focus ring in rose. */
+:root {
+  --er-primary: light-dark(oklch(0.56 0.21 17), oklch(0.73 0.15 12));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 17));
+  --er-ring: light-dark(oklch(0.56 0.21 17), oklch(0.73 0.15 12));
+}

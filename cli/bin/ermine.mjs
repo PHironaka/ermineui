@@ -29,7 +29,7 @@ function parseArgs(argv) {
       continue
     }
     const [name, inline] = arg.replace(/^--?/, '').split('=')
-    if (['cwd', 'registry'].includes(name)) flags[name] = inline ?? argv[++i]
+    if (['cwd', 'registry', 'theme'].includes(name)) flags[name] = inline ?? argv[++i]
     else flags[{ y: 'yes', a: 'all', o: 'overwrite', h: 'help', v: 'version' }[name] ?? name] = true
   }
   return { flags, positional }
@@ -307,6 +307,82 @@ function catalog(cwd, config, registry) {
   return lines.join('\n')
 }
 
+// ---------- colour themes ----------
+// A theme is a :root block of variables written at the end of the project's stylesheet, between two marker
+// comments, so a later "ermine theme" can find it and swap it for another. One base block and one accent block
+// at most; the base comes first, because it sets a primary colour that the accent replaces.
+
+const THEME_KINDS = { base: 'surfaces, text and lines', accent: 'primary colour and focus ring' }
+const themeBlockPattern = (kind) => new RegExp(`/\\* ermine theme ${kind}: [\\s\\S]*?/\\* end ermine theme ${kind} \\*/\\n?`)
+
+/** The base and accent themes the stylesheet currently has blocks for. */
+function currentThemes(css) {
+  return Object.fromEntries(Object.keys(THEME_KINDS).map((kind) => [kind, css.match(new RegExp(`/\\* ermine theme ${kind}: ([\\w-]+)`))?.[1]]))
+}
+
+function themeBlock(name, theme) {
+  const variables = theme.content.replace(/^\/\*\*[\s\S]*?\*\/\s*/, '').trim()
+  return (
+    `/* ermine theme ${theme.kind}: ${name}. "ermine theme" replaces this block when you pick another ${theme.kind}.\n` +
+    `   To fine-tune a colour, set it again in a rule after this block. */\n${variables}\n/* end ermine theme ${theme.kind} */\n`
+  )
+}
+
+/** Writes the chosen themes into the project's stylesheet, keeping the other kind's choice unless `reset`. */
+function applyThemes(cwd, config, registry, names, { reset }) {
+  const themes = registry.themes ?? {}
+  const byKind = (kind) => Object.keys(themes).filter((name) => themes[name].kind === kind)
+  const unknown = names.filter((name) => !themes[name])
+  if (unknown.length > 0) {
+    throw new UserError(`Unknown theme: ${unknown.join(', ')}. Bases: ${byKind('base').join(', ')}. Accents: ${byKind('accent').join(', ')}.`)
+  }
+  const picked = {}
+  for (const name of names) {
+    const { kind } = themes[name]
+    if (picked[kind]) throw new UserError(`Pick one ${kind} theme, not both ${picked[kind]} and ${name}.`)
+    picked[kind] = name
+  }
+
+  const path = join(cwd, config.styles)
+  if (!existsSync(path)) throw new UserError(`${config.styles} not found. Run "ermine init" to create it.`)
+  let css = readFileSync(path, 'utf8')
+  const chosen = reset ? {} : { ...currentThemes(css), ...picked }
+  for (const kind of Object.keys(THEME_KINDS)) {
+    const pattern = themeBlockPattern(kind)
+    const name = chosen[kind]
+    if (!name) css = css.replace(pattern, '')
+    else if (pattern.test(css)) css = css.replace(pattern, themeBlock(name, themes[name]))
+    else if (kind === 'base' && themeBlockPattern('accent').test(css)) css = css.replace(themeBlockPattern('accent'), (accent) => `${themeBlock(name, themes[name])}\n${accent}`)
+    else css = `${css.replace(/\n*$/, '\n')}\n${themeBlock(name, themes[name])}`
+  }
+  writeFileSync(path, css.replace(/\n{3,}/g, '\n\n').replace(/\n*$/, '\n'))
+
+  if (reset) return `${yellow('~')} ${config.styles}: themes removed; the stylesheet's own colours apply again.`
+  const now = Object.entries(chosen)
+    .filter(([, name]) => name)
+    .map(([kind, name]) => `${kind} ${bold(name)}`)
+  return `${yellow('~')} ${config.styles}: ${now.join(', ')}. Nothing else in the file was changed.`
+}
+
+/** Every theme with its summary, ticked where the project's stylesheet uses it. */
+function themeCatalog(cwd, config, registry) {
+  const themes = registry.themes ?? {}
+  const path = config && join(cwd, config.styles)
+  const current = path && existsSync(path) ? currentThemes(readFileSync(path, 'utf8')) : {}
+  const width = Math.max(...Object.keys(themes).map((name) => name.length))
+  const lines = []
+  for (const [kind, what] of Object.entries(THEME_KINDS)) {
+    lines.push(`${lines.length > 0 ? '\n' : ''}${bold(kind === 'base' ? 'Bases' : 'Accents')} ${dim(`· ${what}`)}`)
+    for (const [name, theme] of Object.entries(themes)) {
+      if (theme.kind !== kind) continue
+      const summary = theme.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
+      lines.push(`  ${current[kind] === name ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`)
+    }
+  }
+  lines.push(dim('\n  Pick one of each, e.g. "ermine theme slate blue". "ermine theme --reset" removes them.'))
+  return lines.join('\n')
+}
+
 // ---------- commands ----------
 
 async function init({ cwd, flags }) {
@@ -329,6 +405,7 @@ async function init({ cwd, flags }) {
   if (flags.registry) config.registry = flags.registry
 
   console.log(setUp(cwd, registry, defaults.framework, config, { overwrite: flags.overwrite }))
+  if (typeof flags.theme === 'string') console.log(applyThemes(cwd, config, registry, flags.theme.split(','), { reset: false }))
 }
 
 async function add({ cwd, flags, positional }) {
@@ -338,6 +415,13 @@ async function add({ cwd, flags, positional }) {
 async function list({ cwd, flags }) {
   const { config, registry } = await projectRegistry(cwd, flags.registry)
   console.log(catalog(cwd, config, registry))
+}
+
+async function theme({ cwd, flags, positional }) {
+  const { config, registry } = await projectRegistry(cwd, flags.registry)
+  if (positional.length === 0 && !flags.reset) return console.log(themeCatalog(cwd, config, registry))
+  if (!config) throw new UserError(`No ${CONFIG_FILE} found in ${cwd}. Run "ermine init" first.`)
+  console.log(applyThemes(cwd, config, registry, positional, { reset: flags.reset }))
 }
 
 // ---------- MCP server ----------
@@ -391,12 +475,25 @@ const TOOLS = [
     },
     annotations: { destructiveHint: true },
   },
+  {
+    name: 'set_theme',
+    description:
+      "Apply colour themes to the project's stylesheet: one base (tints surfaces, text and lines) and/or one accent (primary colour and focus ring). Picking one kind keeps the other. With no names, lists the themes and which are in use.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        names: { type: 'array', items: { type: 'string' }, description: 'e.g. ["slate", "blue"]. Bases and accents are listed by calling this with no names.' },
+        reset: { type: 'boolean', description: "Remove both themes, back to the stylesheet's own colours." },
+        cwd: projectFolder,
+      },
+    },
+  },
 ]
 
 const INSTRUCTIONS = `Ermine UI is a set of Vue 3 components that are copied into the project as source, not installed from npm.
 Use get_component before writing code with a component, so you use its real props and parts. Import from the folder ermine.json names for components (by default "@/components/ui/<name>"; blocks in "@/components/blocks/<name>").
 Styling: theme with the --er-* CSS variables in the theme stylesheet; component styles sit in @layer components, so plain CSS overrides them. Variants are props that become data-variant / data-size attributes.
-If the project has no ermine.json, call init_project first.`
+If the project has no ermine.json, call init_project first. To change the colours, use set_theme rather than editing the variables by hand.`
 
 /** A fence longer than any run of backticks inside, so source that contains ``` does not end the block early. */
 function fenced(code, language = '') {
@@ -438,6 +535,13 @@ const toolHandlers = {
     const config = { components: defaults.components, lib: defaults.lib, styles: defaults.styles }
     if (source) config.registry = source
     return `${defaults.framework} project detected.\n${setUp(cwd, registry, defaults.framework, config, { overwrite: false })}`
+  },
+  async set_theme({ cwd, names = [], reset }, source) {
+    const { config, registry } = await projectRegistry(cwd, source)
+    if (!Array.isArray(names)) throw new UserError('"names" must be a list of theme names.')
+    if (names.length === 0 && reset !== true) return themeCatalog(cwd, config, registry)
+    if (!config) throw new UserError('This project has no ermine.json yet. Call init_project first.')
+    return applyThemes(cwd, config, registry, names.map(String), { reset: reset === true })
   },
   async add_components({ cwd, names, overwrite }, source) {
     if (!Array.isArray(names)) throw new UserError('"names" must be a list of component or block names.')
@@ -492,11 +596,15 @@ ${bold('Usage')}
   ermine add <name...>        Copy components or blocks (and what they depend on) into your project
   ermine add --all            Copy every component
   ermine list                 Show available components and blocks
+  ermine theme <name...>      Apply a base and/or accent colour theme, e.g. "ermine theme slate blue"
+  ermine theme                Show the colour themes
   ermine mcp                  Run as an MCP server, so AI coding tools can look components up and add them
 
 ${bold('Options')}
   -y, --yes                  Accept the suggested folders without asking
   -o, --overwrite            Replace files that already exist
+      --theme <base,accent>  With init: apply themes straight away, e.g. --theme slate,blue
+      --reset                With theme: remove the themes, back to the stylesheet's own colours
       --cwd <dir>            Run as if started in <dir>
       --registry <url|path>  Use a different registry.json (your own fork, for example)
 `
@@ -510,6 +618,7 @@ async function main() {
   if (command === 'init') return init(context)
   if (command === 'add') return add(context)
   if (command === 'list') return list(context)
+  if (command === 'theme') return theme(context)
   if (command === 'mcp') return serve(context)
   if (command === '--version' || command === '-v') {
     return console.log(JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version)

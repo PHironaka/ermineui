@@ -7,6 +7,7 @@ npx ermineui init                 # creates ermine.json and the theme stylesheet
 npx ermineui add button dialog    # copies components, and anything they depend on
 npx ermineui add dashboard        # copies a block: a whole page built from the components
 npx ermineui list                 # shows every component and block
+npx ermineui theme slate blue     # applies a base and an accent colour theme
 ```
 
 `npx ermineui mcp` runs an MCP server, so AI coding tools (Claude Code, Codex, Cursor) can look components up and add them. For Claude Code: `claude mcp add ermine -- npx -y ermineui mcp`.

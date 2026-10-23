@@ -64,5 +64,17 @@ for (const scheme of ['light', 'dark'] as const) {
 
       expect(problems).toEqual([])
     })
+
+    // The colour themes' variables are contrast-checked in tests/unit/themes.test.ts; this checks them as drawn,
+    // where colours are also mixed and layered. One pairing per scheme keeps the scan time down.
+    test('the whole page passes axe with colour themes applied', async ({ page }) => {
+      const [base, accent] = scheme === 'light' ? ['Stone', 'Orange'] : ['Slate', 'Violet']
+      await page.getByRole('button', { name: 'Colour theme' }).click()
+      await page.getByRole('radio', { name: base }).check()
+      await page.getByRole('radio', { name: accent }).check()
+      await page.keyboard.press('Escape')
+      const results = await new AxeBuilder({ page }).analyze()
+      expect(summarize(results.violations)).toEqual([])
+    })
   })
 }

@@ -1,0 +1,6 @@
+/** Violet — the primary colour and focus ring in violet. */
+:root {
+  --er-primary: light-dark(oklch(0.541 0.22 293), oklch(0.72 0.15 293));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 293));
+  --er-ring: light-dark(oklch(0.541 0.22 293), oklch(0.72 0.15 293));
+}

@@ -12,11 +12,17 @@ interface RegistryEntry {
   lib: string[]
   components: string[]
 }
+interface RegistryTheme {
+  kind: 'base' | 'accent'
+  description: string
+  content: string
+}
 interface Registry {
   version: string
   lib: Record<string, RegistryFile>
   components: Record<string, RegistryEntry>
   blocks: Record<string, RegistryEntry>
+  themes: Record<string, RegistryTheme>
 }
 
 const registry = registryJson as unknown as Registry
@@ -143,4 +149,22 @@ export const components = Object.entries(registry.components).map(([name, item])
 export const blocks = Object.entries(registry.blocks).map(([name, item]) => entry('block', name, item))
 export const categories = [...Object.keys(groups), ...(components.some((item) => item.category === 'More') ? ['More'] : [])]
 export const lib = registry.lib
+
+export interface ThemeEntry {
+  name: string
+  kind: 'base' | 'accent'
+  title: string
+  summary: string
+  /** The theme's :root block, without its description comment: what "ermine theme" writes into a project. */
+  css: string
+  /** A colour that stands for it: the accent's primary colour, or the base's grey text, which shows its tint best. */
+  dot: string
+}
+export const themes: ThemeEntry[] = Object.entries(registry.themes).map(([name, theme]) => ({
+  name,
+  kind: theme.kind,
+  ...describe(theme.description),
+  css: theme.content.replace(/^\/\*\*[\s\S]*?\*\/\s*/, '').trim(),
+  dot: theme.content.match(new RegExp(`--er-${theme.kind === 'accent' ? 'primary' : 'muted-foreground'}: ([^;]+);`))?.[1] ?? 'currentColor',
+}))
 export const find = (name: string) => components.find((item) => item.name === name) ?? blocks.find((item) => item.name === name)

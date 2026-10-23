@@ -127,3 +127,25 @@ test.describe('update prompt', () => {
     await expect(readout(page, 'install-prompt')).toHaveText('update: reloading into the new version')
   })
 })
+
+test.describe('colour theme picker', () => {
+  test('lays a base and an accent over the page, and shows the command that does the same in a project', async ({ page }) => {
+    const variable = (name: string) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), name)
+    const neutralPrimary = await variable('--er-primary')
+
+    await page.getByRole('button', { name: 'Colour theme' }).click()
+    const accent = page.getByRole('radiogroup', { name: 'Accent colour' })
+    await expect(accent.getByRole('radio', { name: 'Mono (no accent)' })).toBeChecked()
+    await accent.getByRole('radio', { name: 'Blue' }).check()
+    await page.getByRole('radiogroup', { name: 'Base colours' }).getByRole('radio', { name: 'Slate' }).check()
+
+    expect(await variable('--er-primary')).not.toBe(neutralPrimary)
+    expect(await variable('--er-background')).toContain('264.7')
+    await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme slate blue')
+
+    await accent.getByRole('radio', { name: 'Mono (no accent)' }).check()
+    await page.getByRole('radiogroup', { name: 'Base colours' }).getByRole('radio', { name: 'Neutral' }).check()
+    expect(await variable('--er-primary')).toBe(neutralPrimary)
+    await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme neutral')
+  })
+})

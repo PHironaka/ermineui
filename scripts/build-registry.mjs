@@ -67,6 +67,18 @@ for (const [name, component] of [...Object.entries(components), ...Object.entrie
   for (const dep of component.components) if (!components[dep]) throw new Error(`${name} imports unknown component "${dep}"`)
 }
 
+// Colour themes: registry/themes/<kind>/<name>.css. A base tints the surfaces, text and lines; an accent sets the
+// primary colour and focus ring. A project uses at most one of each, so names must be unique across both kinds.
+const themes = {}
+for (const kind of ['base', 'accent']) {
+  for (const file of readdirSync(join(registryDir, 'themes', kind)).sort()) {
+    const name = file.replace(/\.css$/, '')
+    if (themes[name]) throw new Error(`"${name}" is both a base and an accent theme; "ermine theme" needs the names to differ`)
+    const content = read(join(registryDir, 'themes', kind, file))
+    themes[name] = { kind, description: content.match(/\/\*\*\s*(.+?)\s*\*\//s)?.[1] ?? '', content }
+  }
+}
+
 const pkg = JSON.parse(read(join(root, 'cli', 'package.json')))
 const registry = {
   name: 'ermine',
@@ -75,9 +87,10 @@ const registry = {
   lib,
   components,
   blocks,
+  themes,
 }
 
 writeFileSync(join(root, 'cli', 'registry.json'), `${JSON.stringify(registry, null, 2)}\n`)
 console.log(
-  `registry.json: ${Object.keys(components).length} components, ${Object.keys(blocks).length} blocks, ${Object.keys(lib).length} helpers, v${registry.version}`,
+  `registry.json: ${Object.keys(components).length} components, ${Object.keys(blocks).length} blocks, ${Object.keys(lib).length} helpers, ${Object.keys(themes).length} themes, v${registry.version}`,
 )

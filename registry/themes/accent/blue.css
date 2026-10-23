@@ -1,0 +1,6 @@
+/** Blue — the primary colour and focus ring in blue. */
+:root {
+  --er-primary: light-dark(oklch(0.546 0.215 262), oklch(0.707 0.15 254));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 262));
+  --er-ring: light-dark(oklch(0.546 0.215 262), oklch(0.707 0.15 254));
+}

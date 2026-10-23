@@ -495,3 +495,22 @@ body {
   font-weight: 600;
   white-space: nowrap;
 }
+
+.colour-theme {
+  display: grid;
+  gap: 0.5rem;
+  width: 15rem;
+}
+
+.colour-theme .hint {
+  margin: 0.25rem 0 0;
+}
+
+.colour-theme-command {
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--er-radius-sm);
+  background: var(--er-muted);
+  font-family: var(--er-font-mono);
+  font-size: 0.75rem;
+}

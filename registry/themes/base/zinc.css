@@ -1,0 +1,25 @@
+/** Zinc — greys with the faintest violet cast. */
+:root {
+  /* Surfaces and text */
+  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.005 285.8));
+  --er-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));
+  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.006 285.9));
+  --er-card-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));
+  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.006 285.9));
+  --er-popover-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));
+
+  /* Actions (an accent theme replaces the primary colour and the ring) */
+  --er-primary: light-dark(oklch(0.205 0.006 285.9), oklch(0.922 0.004 286.3));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.205 0.006 285.9));
+  --er-secondary: light-dark(oklch(0.965 0.001 286.4), oklch(0.269 0.006 286));
+  --er-secondary-foreground: light-dark(oklch(0.205 0.006 285.9), oklch(0.985 0 0));
+  --er-muted: light-dark(oklch(0.965 0.001 286.4), oklch(0.269 0.006 286));
+  --er-muted-foreground: light-dark(oklch(0.5 0.016 285.9), oklch(0.708 0.015 286.1));
+  --er-accent: light-dark(oklch(0.965 0.001 286.4), oklch(0.3 0.008 286));
+  --er-accent-foreground: light-dark(oklch(0.205 0.006 285.9), oklch(0.985 0 0));
+
+  /* Lines and focus */
+  --er-border: light-dark(oklch(0.915 0.004 286.3), oklch(1 0 0 / 12%));
+  --er-input: light-dark(oklch(0.87 0.006 286.3), oklch(1 0 0 / 18%));
+  --er-ring: light-dark(oklch(0.45 0.017 285.8), oklch(0.75 0.013 286.1));
+}
