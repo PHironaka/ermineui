@@ -808,7 +808,7 @@ function undoable() {
     <header class="topbar">
       <div class="brand"><span class="brand-mark" aria-hidden="true" /> Ermine UI</div>
       <div class="row">
-        <Badge variant="outline">v0.3.0</Badge>
+        <Badge variant="outline">v0.4.0</Badge>
         <Popover>
           <PopoverTrigger as-child>
             <Button variant="outline" size="icon" aria-label="Colour theme">
