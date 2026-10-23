@@ -147,7 +147,7 @@ import { VirtualList } from '../../registry/ui/virtual-list'
 import { Icon, iconNames, registerIcons } from '../../registry/ui/icon'
 import { ImageFan, type ImageFanImage } from '../../registry/ui/image-fan'
 import { StickyScroll, StickyScrollItem } from '../../registry/ui/sticky-scroll'
-import { Cart, sampleCart, type CartItem } from '../../registry/blocks/cart'
+import { Cart, readCartLink, sampleCart, sampleProducts, type CartItem } from '../../registry/blocks/cart'
 import { Checkout, type CheckoutValues } from '../../registry/blocks/checkout'
 import { Dashboard } from '../../registry/blocks/dashboard'
 import { SettingsPage } from '../../registry/blocks/settings'
@@ -745,6 +745,14 @@ const cartItems = ref<CartItem[]>([...sampleCart])
 const cartDiscount = ref<number>()
 const cartCodeError = ref<string>()
 const cartEvent = ref('nothing yet')
+// Opened from a shared cart link: the cart is the one in the link, looked up in the made-up catalogue.
+onMounted(() => {
+  const shared = readCartLink(window.location.href, (id) => sampleProducts.find((product) => product.id === id))
+  if (!shared) return
+  cartItems.value = shared.items
+  const notes = [shared.skipped.length && `${shared.skipped.length} not found`, shared.limited.length && `${shared.limited.join(', ')} lowered to what is in stock`].filter(Boolean)
+  cartEvent.value = `opened a shared cart with ${shared.items.length} lines${notes.length ? `; ${notes.join('; ')}` : ''}`
+})
 function applyCartCode(code: string) {
   const good = code.toUpperCase() === 'SAVE10'
   cartCodeError.value = good ? undefined : 'That code is not valid.'
@@ -2325,7 +2333,7 @@ function undoable() {
         />
       </Demo>
 
-      <Demo name="cart" title="Block: Cart" description="The items with quantities to change, a discount code, the sums and the way on. Try the code SAVE10." wide>
+      <Demo name="cart" title="Block: Cart" description="The items with quantities to change, a discount code, the sums and the way on. Try the code SAVE10, or share the cart: the link opens this page with the same items." wide>
         <div class="stack" style="max-width: 60rem">
           <Cart
             v-model:items="cartItems"
@@ -2336,7 +2344,10 @@ function undoable() {
             discount-label="SAVE10"
             :code-error="cartCodeError"
             @apply-code="applyCartCode"
+            shareable
+            :share-url="'#cart'"
             @checkout="cartEvent = `checkout with ${$event.length} lines`"
+            @share="cartEvent = `shared ${$event}`"
           />
           <p class="readout">{{ cartEvent }}</p>
         </div>

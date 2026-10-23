@@ -32,3 +32,6 @@ export const sampleCart: CartItem[] = [
   { id: 'throw-moss', title: 'Wool throw', options: 'Moss / 130 × 180 cm', price: 96, compareAt: 120, quantity: 1, max: 3, image: picture('#dde5d6', '#6f8a5b') },
   { id: 'lamp-ink', title: 'Desk lamp', options: 'Ink', price: 148.5, quantity: 1, image: picture('#dfe3ea', '#2f3a4f') },
 ]
+
+/** The same made-up products as a catalogue, for looking up the lines of a shared cart link. */
+export const sampleProducts = sampleCart.map(({ quantity: _quantity, ...product }) => product)

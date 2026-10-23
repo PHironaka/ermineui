@@ -140,7 +140,7 @@ A block is a section of a page, or a whole page, already put together from the c
 | `dashboard` | App page with a collapsing sidebar, a top bar with a user menu, headline numbers, an area chart, a bar list and a sortable table. `DashboardShell` is the frame on its own, for your other pages |
 | `sign-in` | Email and password on a card, checked before it is sent, with a loading state and a place for the server's error |
 | `settings` | Account settings in tabs: a profile form, notification switches, and a delete button behind a confirmation |
-| `cart` | The items in a cart with quantities to change, a discount code field, the sums and a checkout button; an empty state when there is nothing in it |
+| `cart` | The items in a cart with quantities to change, a discount code field, the sums and a checkout button; an empty state when there is nothing in it, and a link to share the cart if you want one |
 | `checkout` | Contact, delivery address, delivery choice and card details in one checked form, beside a summary of the order |
 | `product-detail` | A product's page: pictures, price, stock, options, quantity and "Add to cart", then details and reviews |
 | `product-listing` | A grid of products with filters, a way to sort, a wishlist heart on each, and pages |
@@ -149,6 +149,17 @@ A block is a section of a page, or a whole page, already put together from the c
 | `sign-up` | Name, email and a password with a strength meter, terms to agree to, and a link to sign in |
 | `forgot-password` | Asks for an email to send a reset link to, then says to check the inbox |
 | `not-found` | The page for a wrong address or an error: what happened, a search box and the way home |
+
+**Sharing a cart.** Give `Cart` the `shareable` prop and it shows a "Share cart" button, which opens the share sheet on a phone and copies the link elsewhere. The link holds only product ids and quantities, such as `/cart?cart=mug-sand:2,lamp-ink:1`. The page it opens reads the cart back with `readCartLink`, looking each id up in your own catalogue. An edited link cannot change a price, and an old one shows today's. Lines the catalogue does not know are left out and listed in `skipped`. Quantities over a product's `max` are lowered, and those products are listed in `limited`.
+
+```ts
+import { readCartLink } from '@/components/blocks/cart'
+
+const shared = readCartLink(window.location.href, (id) => products.find((product) => product.id === id))
+if (shared) items.value = shared.items // null when the address has no cart in it
+```
+
+`shareUrl` sets the page the link opens (by default the one the cart is on), and `shareParam` the query parameter's name.
 
 ## Try it
 

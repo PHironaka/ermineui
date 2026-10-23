@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { Button } from '../../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { CartLineItem } from '../../ui/cart-line-item'
@@ -7,9 +7,11 @@ import { EmptyState } from '../../ui/empty-state'
 import { Field } from '../../ui/field'
 import { Input } from '../../ui/input'
 import { OrderSummary } from '../../ui/order-summary'
+import { ShareButton } from '../../ui/share-button'
 import { sampleCart, type CartItem } from './sample-data'
+import { cartLink } from './share'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     title?: string
     currency?: string
@@ -31,13 +33,21 @@ withDefaults(
     shopHref?: string
     /** Heading level of the title. */
     titleAs?: string
+    /** Show a button that shares a link to this cart. Read the link back with readCartLink() from share.ts. */
+    shareable?: boolean
+    /** The page the shared link opens, which should read the cart from it. Defaults to the page the cart is on. */
+    shareUrl?: string
+    /** The query parameter the link keeps the cart in. */
+    shareParam?: string
   }>(),
-  { title: 'Your cart', currency: 'USD', locale: 'en-US', codes: true, shopHref: '/', titleAs: 'h2' },
+  { title: 'Your cart', currency: 'USD', locale: 'en-US', codes: true, shopHref: '/', titleAs: 'h2', shareParam: 'cart' },
 )
 
 const emit = defineEmits<{
   /** "Checkout" was pressed. */
   checkout: [items: CartItem[]]
+  /** The cart's link was shared, through the share sheet or by copying it. */
+  share: [url: string]
   /** A discount code was entered. Check it on your server, then set `discount` or `codeError`. */
   applyCode: [code: string]
 }>()
@@ -52,6 +62,11 @@ const heading = ref<HTMLElement | null>(null)
 /** Said aloud after an item is removed: the row disappears, and nothing else would tell a screen reader user so. */
 const message = ref('')
 const code = ref('')
+
+// The page's address is only known in the browser, so the link is made once the cart is on the page.
+const page = ref<string>()
+onMounted(() => (page.value = window.location.href))
+const link = computed(() => (page.value ? cartLink(items.value, new URL(props.shareUrl ?? page.value, page.value), props.shareParam) : undefined))
 
 function setQuantity(id: string, quantity: number) {
   items.value = items.value.map((item) => (item.id === id ? { ...item, quantity } : item))
@@ -113,6 +128,9 @@ async function remove(item: CartItem) {
             <template #footer>
               <Button size="lg" :loading="loading" @click="emit('checkout', items)">Checkout</Button>
               <a class="er-cart-link" :href="shopHref">Continue shopping</a>
+              <ShareButton v-if="shareable" class="er-cart-share" variant="ghost" size="sm" :url="link" :title="title" @share="link && emit('share', link)" @copy="emit('share', $event)">
+                Share cart
+              </ShareButton>
             </template>
           </OrderSummary>
         </CardContent>
@@ -203,6 +221,10 @@ async function remove(item: CartItem) {
     text-align: center;
     text-decoration: underline;
     text-underline-offset: 0.2em;
+  }
+
+  .er-cart-share {
+    justify-self: center;
   }
 
   .er-cart-link:hover {

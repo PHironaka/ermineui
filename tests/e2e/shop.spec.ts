@@ -192,13 +192,46 @@ test.describe('cart block', () => {
   test('removing an item is announced and focus is kept; an empty cart says so', async ({ page }) => {
     const card = demo(page, 'cart')
     await card.getByRole('button', { name: 'Remove Desk lamp' }).click()
-    await expect(card.getByRole('status')).toHaveText('Desk lamp removed from your cart.')
+    await expect(card.getByRole('status').filter({ hasText: 'removed' })).toHaveText('Desk lamp removed from your cart.')
     await expect(card.getByRole('heading', { name: /Your cart/ })).toBeFocused()
     await expect(card.getByRole('listitem')).toHaveCount(2)
     await card.getByRole('button', { name: 'Remove Stoneware mug' }).click()
     await card.getByRole('button', { name: 'Remove Wool throw' }).click()
     await expect(card.getByText('Your cart is empty')).toBeVisible()
     await expect(card.getByRole('link', { name: 'Continue shopping' })).toHaveAttribute('href', '#product-card')
+  })
+
+  test('shares a link that holds the cart as it is now, and the link opens the same cart', async ({ page }) => {
+    // No share sheet in the test browser, so the link is copied; the copy is kept to open it after.
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'share', { value: undefined, configurable: true })
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText: async (text: string) => void ((window as unknown as { __copied: string }).__copied = text) }, configurable: true })
+    })
+    await page.reload()
+    const card = demo(page, 'cart')
+    await card.getByRole('button', { name: 'Increase' }).first().click()
+    await card.getByRole('button', { name: 'Remove Desk lamp' }).click()
+    await card.getByRole('button', { name: 'Share cart' }).click()
+    await expect(card.getByRole('button', { name: /Link copied/ })).toBeVisible()
+    const link = await page.evaluate(() => (window as unknown as { __copied: string }).__copied)
+    expect(new URL(link).search).toBe('?cart=mug-sand:3,throw-moss:1')
+    expect(new URL(link).hash).toBe('#cart')
+    await expect(readout(page, 'cart')).toHaveText(`shared ${link}`)
+
+    await page.goto(link)
+    const opened = demo(page, 'cart')
+    await expect(readout(page, 'cart')).toHaveText('opened a shared cart with 2 lines')
+    await expect(opened.getByRole('heading', { name: /Your cart/ })).toContainText('4 items')
+    await expect(opened.getByRole('listitem')).toHaveCount(2)
+    await expect(opened.locator('.er-order-summary-total dd')).toHaveText('$168.00')
+  })
+
+  test('a shared link that was tampered with keeps the catalogue’s prices and stock', async ({ page }) => {
+    await page.goto('/?cart=throw-moss:9,made-up:1,mug-sand:1&price=0#cart')
+    const card = demo(page, 'cart')
+    await expect(readout(page, 'cart')).toHaveText('opened a shared cart with 2 lines; 1 not found; Wool throw lowered to what is in stock')
+    await expect(card.getByRole('heading', { name: /Your cart/ })).toContainText('4 items')
+    await expect(card.locator('.er-order-summary-total dd')).toHaveText('$312.00')
   })
 })
 
