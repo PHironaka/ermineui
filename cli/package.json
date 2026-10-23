@@ -1,6 +1,6 @@
 {
   "name": "ermineui",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Copy-in Vue 3 components styled with plain CSS variables. You own the code.",
   "type": "module",
   "bin": {
