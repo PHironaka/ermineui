@@ -259,7 +259,7 @@ test('init --theme applies themes straight away, and they survive variables bein
 test('through the MCP server, themes are listed and applied', () => {
   project((dir) => {
     ermine(dir, 'init', '-y')
-    const [, list, set, wrong] = mcp(dir, call('set_theme', {}), call('set_theme', { names: ['stone', 'orange'] }), call('set_theme', { names: ['teal'] }))
+    const [, list, set, wrong] = mcp(dir, call('set_theme', {}), call('set_theme', { names: ['stone', 'orange'] }), call('set_theme', { names: ['chartreuse'] }))
     assert.match(text(list), /Bases[\s\S]*slate[\s\S]*Accents[\s\S]*orange/)
     assert.match(text(set), /base stone, accent orange/)
     assert.ok(readFileSync(join(dir, 'src/styles/ermine.css'), 'utf8').includes('ermine theme accent: orange'))

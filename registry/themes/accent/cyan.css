@@ -1,0 +1,6 @@
+/** Cyan — the primary colour and focus ring in cyan. */
+:root {
+  --er-primary: light-dark(oklch(0.53 0.09 215), oklch(0.75 0.12 215));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.03 215));
+  --er-ring: light-dark(oklch(0.53 0.09 215), oklch(0.75 0.12 215));
+}

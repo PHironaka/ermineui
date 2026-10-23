@@ -257,7 +257,7 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 
 `ermine.css` defines every colour, radius, shadow and duration as a CSS variable. Edit the values and all components follow.
 
-**Colour themes.** Ready-made sets of those variables, in two kinds you combine: a **base** tints the surfaces, text and lines (`neutral`, the default, `slate`, `stone`, `zinc`) and an **accent** sets the primary colour and focus ring (`blue`, `violet`, `green`, `rose`, `orange`). Every pairing keeps text at 4.5:1 contrast and the focus ring at 3:1, in light and dark.
+**Colour themes.** Ready-made sets of those variables, in two kinds you combine: a **base** tints the surfaces, text and lines (`neutral`, the default, `slate`, `stone`, `zinc`, `mauve`, `sage`, `olive`, `sand`, `mist`, `blush`) and an **accent** sets the primary colour and focus ring (`red`, `orange`, `amber`, `green`, `teal`, `cyan`, `blue`, `indigo`, `violet`, `fuchsia`, `pink`, `rose`). Every pairing keeps text at 4.5:1 contrast and the focus ring at 3:1, in light and dark.
 
 ```sh
 npx ermineui theme slate blue    # or one at a time; picking a base keeps the accent, and the other way round

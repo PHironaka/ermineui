@@ -1,0 +1,6 @@
+/** Red — the primary colour and focus ring in red. */
+:root {
+  --er-primary: light-dark(oklch(0.565 0.22 25), oklch(0.72 0.16 25));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 25));
+  --er-ring: light-dark(oklch(0.565 0.22 25), oklch(0.72 0.16 25));
+}

@@ -1,0 +1,6 @@
+/** Fuchsia — the primary colour and focus ring in fuchsia. */
+:root {
+  --er-primary: light-dark(oklch(0.57 0.24 322), oklch(0.72 0.18 322));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 322));
+  --er-ring: light-dark(oklch(0.57 0.24 322), oklch(0.72 0.18 322));
+}

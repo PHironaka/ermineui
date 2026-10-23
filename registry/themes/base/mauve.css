@@ -1,0 +1,25 @@
+/** Mauve — greys with a soft purple tint. */
+:root {
+  /* Surfaces and text */
+  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.019 310));
+  --er-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));
+  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.019 310));
+  --er-card-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));
+  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.019 310));
+  --er-popover-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));
+
+  /* Actions (an accent theme replaces the primary colour and the ring) */
+  --er-primary: light-dark(oklch(0.205 0.019 310), oklch(0.922 0.006 310));
+  --er-primary-foreground: light-dark(oklch(0.985 0.001 310), oklch(0.205 0.019 310));
+  --er-secondary: light-dark(oklch(0.965 0.003 310), oklch(0.269 0.018 310));
+  --er-secondary-foreground: light-dark(oklch(0.205 0.019 310), oklch(0.985 0.001 310));
+  --er-muted: light-dark(oklch(0.965 0.003 310), oklch(0.269 0.018 310));
+  --er-muted-foreground: light-dark(oklch(0.5 0.02 310), oklch(0.708 0.018 310));
+  --er-accent: light-dark(oklch(0.965 0.003 310), oklch(0.3 0.019 310));
+  --er-accent-foreground: light-dark(oklch(0.205 0.019 310), oklch(0.985 0.001 310));
+
+  /* Lines and focus */
+  --er-border: light-dark(oklch(0.915 0.007 310), oklch(1 0 0 / 12%));
+  --er-input: light-dark(oklch(0.87 0.01 310), oklch(1 0 0 / 18%));
+  --er-ring: light-dark(oklch(0.45 0.019 310), oklch(0.75 0.016 310));
+}

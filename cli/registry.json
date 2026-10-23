@@ -3464,10 +3464,40 @@
     }
   },
   "themes": {
+    "blush": {
+      "kind": "base",
+      "description": "Blush — greys with a soft pink tint.",
+      "content": "/** Blush — greys with a soft pink tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.017 10));\n  --er-foreground: light-dark(oklch(0.145 0.017 10), oklch(0.985 0.001 10));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.017 10));\n  --er-card-foreground: light-dark(oklch(0.145 0.017 10), oklch(0.985 0.001 10));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.017 10));\n  --er-popover-foreground: light-dark(oklch(0.145 0.017 10), oklch(0.985 0.001 10));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.017 10), oklch(0.922 0.006 10));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 10), oklch(0.205 0.017 10));\n  --er-secondary: light-dark(oklch(0.965 0.003 10), oklch(0.269 0.016 10));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.017 10), oklch(0.985 0.001 10));\n  --er-muted: light-dark(oklch(0.965 0.003 10), oklch(0.269 0.016 10));\n  --er-muted-foreground: light-dark(oklch(0.5 0.018 10), oklch(0.708 0.016 10));\n  --er-accent: light-dark(oklch(0.965 0.003 10), oklch(0.3 0.017 10));\n  --er-accent-foreground: light-dark(oklch(0.205 0.017 10), oklch(0.985 0.001 10));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.006 10), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.009 10), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.017 10), oklch(0.75 0.014 10));\n}\n"
+    },
+    "mauve": {
+      "kind": "base",
+      "description": "Mauve — greys with a soft purple tint.",
+      "content": "/** Mauve — greys with a soft purple tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.019 310));\n  --er-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.019 310));\n  --er-card-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.019 310));\n  --er-popover-foreground: light-dark(oklch(0.145 0.019 310), oklch(0.985 0.001 310));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.019 310), oklch(0.922 0.006 310));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 310), oklch(0.205 0.019 310));\n  --er-secondary: light-dark(oklch(0.965 0.003 310), oklch(0.269 0.018 310));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.019 310), oklch(0.985 0.001 310));\n  --er-muted: light-dark(oklch(0.965 0.003 310), oklch(0.269 0.018 310));\n  --er-muted-foreground: light-dark(oklch(0.5 0.02 310), oklch(0.708 0.018 310));\n  --er-accent: light-dark(oklch(0.965 0.003 310), oklch(0.3 0.019 310));\n  --er-accent-foreground: light-dark(oklch(0.205 0.019 310), oklch(0.985 0.001 310));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.007 310), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.01 310), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.019 310), oklch(0.75 0.016 310));\n}\n"
+    },
+    "mist": {
+      "kind": "base",
+      "description": "Mist — cool greys with a soft blue-green tint.",
+      "content": "/** Mist — cool greys with a soft blue-green tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.019 215));\n  --er-foreground: light-dark(oklch(0.145 0.019 215), oklch(0.985 0.001 215));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.019 215));\n  --er-card-foreground: light-dark(oklch(0.145 0.019 215), oklch(0.985 0.001 215));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.019 215));\n  --er-popover-foreground: light-dark(oklch(0.145 0.019 215), oklch(0.985 0.001 215));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.019 215), oklch(0.922 0.006 215));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 215), oklch(0.205 0.019 215));\n  --er-secondary: light-dark(oklch(0.965 0.003 215), oklch(0.269 0.018 215));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.019 215), oklch(0.985 0.001 215));\n  --er-muted: light-dark(oklch(0.965 0.003 215), oklch(0.269 0.018 215));\n  --er-muted-foreground: light-dark(oklch(0.5 0.02 215), oklch(0.708 0.018 215));\n  --er-accent: light-dark(oklch(0.965 0.003 215), oklch(0.3 0.019 215));\n  --er-accent-foreground: light-dark(oklch(0.205 0.019 215), oklch(0.985 0.001 215));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.007 215), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.01 215), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.019 215), oklch(0.75 0.016 215));\n}\n"
+    },
     "neutral": {
       "kind": "base",
       "description": "Neutral — pure greys with no tint. The default.",
       "content": "/** Neutral — pure greys with no tint. The default. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0 0));\n  --er-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0 0));\n  --er-card-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0 0));\n  --er-popover-foreground: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0 0), oklch(0.922 0 0));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.205 0 0));\n  --er-secondary: light-dark(oklch(0.965 0 0), oklch(0.269 0 0));\n  --er-secondary-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));\n  --er-muted: light-dark(oklch(0.965 0 0), oklch(0.269 0 0));\n  --er-muted-foreground: light-dark(oklch(0.5 0 0), oklch(0.708 0 0));\n  --er-accent: light-dark(oklch(0.965 0 0), oklch(0.3 0 0));\n  --er-accent-foreground: light-dark(oklch(0.205 0 0), oklch(0.985 0 0));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0 0), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0 0), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0 0), oklch(0.75 0 0));\n}\n"
+    },
+    "olive": {
+      "kind": "base",
+      "description": "Olive — greys with a soft yellow-green tint.",
+      "content": "/** Olive — greys with a soft yellow-green tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.017 115));\n  --er-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.017 115));\n  --er-card-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.017 115));\n  --er-popover-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.017 115), oklch(0.922 0.006 115));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 115), oklch(0.205 0.017 115));\n  --er-secondary: light-dark(oklch(0.965 0.003 115), oklch(0.269 0.016 115));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.017 115), oklch(0.985 0.001 115));\n  --er-muted: light-dark(oklch(0.965 0.003 115), oklch(0.269 0.016 115));\n  --er-muted-foreground: light-dark(oklch(0.5 0.018 115), oklch(0.708 0.016 115));\n  --er-accent: light-dark(oklch(0.965 0.003 115), oklch(0.3 0.017 115));\n  --er-accent-foreground: light-dark(oklch(0.205 0.017 115), oklch(0.985 0.001 115));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.006 115), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.009 115), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.017 115), oklch(0.75 0.014 115));\n}\n"
+    },
+    "sage": {
+      "kind": "base",
+      "description": "Sage — greys with a soft green tint.",
+      "content": "/** Sage — greys with a soft green tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.017 150));\n  --er-foreground: light-dark(oklch(0.145 0.017 150), oklch(0.985 0.001 150));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.017 150));\n  --er-card-foreground: light-dark(oklch(0.145 0.017 150), oklch(0.985 0.001 150));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.017 150));\n  --er-popover-foreground: light-dark(oklch(0.145 0.017 150), oklch(0.985 0.001 150));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.017 150), oklch(0.922 0.006 150));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 150), oklch(0.205 0.017 150));\n  --er-secondary: light-dark(oklch(0.965 0.003 150), oklch(0.269 0.016 150));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.017 150), oklch(0.985 0.001 150));\n  --er-muted: light-dark(oklch(0.965 0.003 150), oklch(0.269 0.016 150));\n  --er-muted-foreground: light-dark(oklch(0.5 0.018 150), oklch(0.708 0.016 150));\n  --er-accent: light-dark(oklch(0.965 0.003 150), oklch(0.3 0.017 150));\n  --er-accent-foreground: light-dark(oklch(0.205 0.017 150), oklch(0.985 0.001 150));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.006 150), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.009 150), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.017 150), oklch(0.75 0.014 150));\n}\n"
+    },
+    "sand": {
+      "kind": "base",
+      "description": "Sand — warm greys with a soft golden tint.",
+      "content": "/** Sand — warm greys with a soft golden tint. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.017 80));\n  --er-foreground: light-dark(oklch(0.145 0.017 80), oklch(0.985 0.001 80));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.017 80));\n  --er-card-foreground: light-dark(oklch(0.145 0.017 80), oklch(0.985 0.001 80));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.017 80));\n  --er-popover-foreground: light-dark(oklch(0.145 0.017 80), oklch(0.985 0.001 80));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.017 80), oklch(0.922 0.006 80));\n  --er-primary-foreground: light-dark(oklch(0.985 0.001 80), oklch(0.205 0.017 80));\n  --er-secondary: light-dark(oklch(0.965 0.003 80), oklch(0.269 0.016 80));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.017 80), oklch(0.985 0.001 80));\n  --er-muted: light-dark(oklch(0.965 0.003 80), oklch(0.269 0.016 80));\n  --er-muted-foreground: light-dark(oklch(0.5 0.018 80), oklch(0.708 0.016 80));\n  --er-accent: light-dark(oklch(0.965 0.003 80), oklch(0.3 0.017 80));\n  --er-accent-foreground: light-dark(oklch(0.205 0.017 80), oklch(0.985 0.001 80));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.006 80), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.009 80), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.017 80), oklch(0.75 0.014 80));\n}\n"
     },
     "slate": {
       "kind": "base",
@@ -3484,25 +3514,60 @@
       "description": "Zinc — greys with the faintest violet cast.",
       "content": "/** Zinc — greys with the faintest violet cast. */\n:root {\n  /* Surfaces and text */\n  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.005 285.8));\n  --er-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));\n  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.006 285.9));\n  --er-card-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));\n  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.006 285.9));\n  --er-popover-foreground: light-dark(oklch(0.145 0.005 285.8), oklch(0.985 0 0));\n\n  /* Actions (an accent theme replaces the primary colour and the ring) */\n  --er-primary: light-dark(oklch(0.205 0.006 285.9), oklch(0.922 0.004 286.3));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.205 0.006 285.9));\n  --er-secondary: light-dark(oklch(0.965 0.001 286.4), oklch(0.269 0.006 286));\n  --er-secondary-foreground: light-dark(oklch(0.205 0.006 285.9), oklch(0.985 0 0));\n  --er-muted: light-dark(oklch(0.965 0.001 286.4), oklch(0.269 0.006 286));\n  --er-muted-foreground: light-dark(oklch(0.5 0.016 285.9), oklch(0.708 0.015 286.1));\n  --er-accent: light-dark(oklch(0.965 0.001 286.4), oklch(0.3 0.008 286));\n  --er-accent-foreground: light-dark(oklch(0.205 0.006 285.9), oklch(0.985 0 0));\n\n  /* Lines and focus */\n  --er-border: light-dark(oklch(0.915 0.004 286.3), oklch(1 0 0 / 12%));\n  --er-input: light-dark(oklch(0.87 0.006 286.3), oklch(1 0 0 / 18%));\n  --er-ring: light-dark(oklch(0.45 0.017 285.8), oklch(0.75 0.013 286.1));\n}\n"
     },
+    "amber": {
+      "kind": "accent",
+      "description": "Amber — the primary colour and focus ring in amber.",
+      "content": "/** Amber — the primary colour and focus ring in amber. */\n:root {\n  --er-primary: light-dark(oklch(0.545 0.12 65), oklch(0.8 0.15 65));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 65));\n  --er-ring: light-dark(oklch(0.545 0.12 65), oklch(0.8 0.15 65));\n}\n"
+    },
     "blue": {
       "kind": "accent",
       "description": "Blue — the primary colour and focus ring in blue.",
       "content": "/** Blue — the primary colour and focus ring in blue. */\n:root {\n  --er-primary: light-dark(oklch(0.546 0.215 262), oklch(0.707 0.15 254));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 262));\n  --er-ring: light-dark(oklch(0.546 0.215 262), oklch(0.707 0.15 254));\n}\n"
+    },
+    "cyan": {
+      "kind": "accent",
+      "description": "Cyan — the primary colour and focus ring in cyan.",
+      "content": "/** Cyan — the primary colour and focus ring in cyan. */\n:root {\n  --er-primary: light-dark(oklch(0.53 0.09 215), oklch(0.75 0.12 215));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.03 215));\n  --er-ring: light-dark(oklch(0.53 0.09 215), oklch(0.75 0.12 215));\n}\n"
+    },
+    "fuchsia": {
+      "kind": "accent",
+      "description": "Fuchsia — the primary colour and focus ring in fuchsia.",
+      "content": "/** Fuchsia — the primary colour and focus ring in fuchsia. */\n:root {\n  --er-primary: light-dark(oklch(0.57 0.24 322), oklch(0.72 0.18 322));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 322));\n  --er-ring: light-dark(oklch(0.57 0.24 322), oklch(0.72 0.18 322));\n}\n"
     },
     "green": {
       "kind": "accent",
       "description": "Green — the primary colour and focus ring in green.",
       "content": "/** Green — the primary colour and focus ring in green. */\n:root {\n  --er-primary: light-dark(oklch(0.527 0.145 150), oklch(0.75 0.16 150));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.04 150));\n  --er-ring: light-dark(oklch(0.527 0.145 150), oklch(0.75 0.16 150));\n}\n"
     },
+    "indigo": {
+      "kind": "accent",
+      "description": "Indigo — the primary colour and focus ring in indigo.",
+      "content": "/** Indigo — the primary colour and focus ring in indigo. */\n:root {\n  --er-primary: light-dark(oklch(0.555 0.22 277), oklch(0.72 0.14 277));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 277));\n  --er-ring: light-dark(oklch(0.555 0.22 277), oklch(0.72 0.14 277));\n}\n"
+    },
     "orange": {
       "kind": "accent",
       "description": "Orange — the primary colour and focus ring in orange.",
       "content": "/** Orange — the primary colour and focus ring in orange. */\n:root {\n  --er-primary: light-dark(oklch(0.553 0.17 40), oklch(0.75 0.15 50));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.04 50));\n  --er-ring: light-dark(oklch(0.553 0.17 40), oklch(0.75 0.15 50));\n}\n"
     },
+    "pink": {
+      "kind": "accent",
+      "description": "Pink — the primary colour and focus ring in pink.",
+      "content": "/** Pink — the primary colour and focus ring in pink. */\n:root {\n  --er-primary: light-dark(oklch(0.565 0.22 350), oklch(0.73 0.15 350));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 350));\n  --er-ring: light-dark(oklch(0.565 0.22 350), oklch(0.73 0.15 350));\n}\n"
+    },
+    "red": {
+      "kind": "accent",
+      "description": "Red — the primary colour and focus ring in red.",
+      "content": "/** Red — the primary colour and focus ring in red. */\n:root {\n  --er-primary: light-dark(oklch(0.565 0.22 25), oklch(0.72 0.16 25));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 25));\n  --er-ring: light-dark(oklch(0.565 0.22 25), oklch(0.72 0.16 25));\n}\n"
+    },
     "rose": {
       "kind": "accent",
       "description": "Rose — the primary colour and focus ring in rose.",
       "content": "/** Rose — the primary colour and focus ring in rose. */\n:root {\n  --er-primary: light-dark(oklch(0.56 0.21 17), oklch(0.73 0.15 12));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 17));\n  --er-ring: light-dark(oklch(0.56 0.21 17), oklch(0.73 0.15 12));\n}\n"
+    },
+    "teal": {
+      "kind": "accent",
+      "description": "Teal — the primary colour and focus ring in teal.",
+      "content": "/** Teal — the primary colour and focus ring in teal. */\n:root {\n  --er-primary: light-dark(oklch(0.53 0.09 185), oklch(0.75 0.12 185));\n  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.03 185));\n  --er-ring: light-dark(oklch(0.53 0.09 185), oklch(0.75 0.12 185));\n}\n"
     },
     "violet": {
       "kind": "accent",

@@ -1,0 +1,6 @@
+/** Indigo — the primary colour and focus ring in indigo. */
+:root {
+  --er-primary: light-dark(oklch(0.555 0.22 277), oklch(0.72 0.14 277));
+  --er-primary-foreground: light-dark(oklch(0.985 0 0), oklch(0.2 0.05 277));
+  --er-ring: light-dark(oklch(0.555 0.22 277), oklch(0.72 0.14 277));
+}

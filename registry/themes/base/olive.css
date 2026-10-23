@@ -1,0 +1,25 @@
+/** Olive — greys with a soft yellow-green tint. */
+:root {
+  /* Surfaces and text */
+  --er-background: light-dark(oklch(1 0 0), oklch(0.145 0.017 115));
+  --er-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));
+  --er-card: light-dark(oklch(1 0 0), oklch(0.205 0.017 115));
+  --er-card-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));
+  --er-popover: light-dark(oklch(1 0 0), oklch(0.225 0.017 115));
+  --er-popover-foreground: light-dark(oklch(0.145 0.017 115), oklch(0.985 0.001 115));
+
+  /* Actions (an accent theme replaces the primary colour and the ring) */
+  --er-primary: light-dark(oklch(0.205 0.017 115), oklch(0.922 0.006 115));
+  --er-primary-foreground: light-dark(oklch(0.985 0.001 115), oklch(0.205 0.017 115));
+  --er-secondary: light-dark(oklch(0.965 0.003 115), oklch(0.269 0.016 115));
+  --er-secondary-foreground: light-dark(oklch(0.205 0.017 115), oklch(0.985 0.001 115));
+  --er-muted: light-dark(oklch(0.965 0.003 115), oklch(0.269 0.016 115));
+  --er-muted-foreground: light-dark(oklch(0.5 0.018 115), oklch(0.708 0.016 115));
+  --er-accent: light-dark(oklch(0.965 0.003 115), oklch(0.3 0.017 115));
+  --er-accent-foreground: light-dark(oklch(0.205 0.017 115), oklch(0.985 0.001 115));
+
+  /* Lines and focus */
+  --er-border: light-dark(oklch(0.915 0.006 115), oklch(1 0 0 / 12%));
+  --er-input: light-dark(oklch(0.87 0.009 115), oklch(1 0 0 / 18%));
+  --er-ring: light-dark(oklch(0.45 0.017 115), oklch(0.75 0.014 115));
+}
