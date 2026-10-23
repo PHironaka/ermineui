@@ -4,6 +4,7 @@ import Bars from '../components/Bars.astro'
 import CodeBlock from '../components/CodeBlock.astro'
 import BlockShowcase from '../components/BlockShowcase.vue'
 import Showcase from '../components/Showcase.vue'
+import HowItWorks from '../components/HowItWorks.vue'
 import { blocks, categories, components, version } from '../data/catalog'
 import { format, metricById, times } from '../data/benchmarks'
 
@@ -74,6 +75,16 @@ import { Button } from '@/components/ui/button'
         One settings page using 13 components, built with Vite and run in Chromium on one machine. Shipped size is JavaScript and CSS, gzipped. Your results will differ.
       </p>
       <div class="pills"><a class="pill quiet" href="/benchmarks/">How we measured, and what it leaves out</a></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="wrap center">
+      <p class="eyebrow">How it works</p>
+      <h2 class="headline" id="how-title">From one command<br />to code you own.</h2>
+    </div>
+    <div class="wrap">
+      <HowItWorks client:visible />
     </div>
   </section>
 

@@ -130,6 +130,7 @@ function show() {
     }
     .er-sticky-scroll .er-sticky-scroll-media {
       position: static;
+      place-items: start;
       height: auto;
       margin-top: 2.5rem;
       opacity: 1;
