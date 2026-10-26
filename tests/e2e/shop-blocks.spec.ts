@@ -184,3 +184,24 @@ test.describe('not found block', () => {
     await expect(readout(page, 'not-found')).toHaveText('searched for mugs')
   })
 })
+
+test.describe('media and text block', () => {
+  test('each layout has its heading, picture and actions', async ({ page }) => {
+    const card = demo(page, 'media-text')
+    const split = card.getByRole('region', { name: 'Fired twice, built for every day' })
+    await expect(split.getByRole('img', { name: 'Hills under a low sun' })).toBeVisible()
+    await expect(split.getByRole('link', { name: 'Shop the collection' })).toHaveAttribute('href', '#product-listing')
+    await expect(split.getByText('Free delivery on orders over $50.')).toBeVisible()
+
+    // Slot copy replaces the body, and an empty note or a null action is left out.
+    const studio = card.getByRole('region', { name: 'Small batches, one kiln' })
+    await expect(studio.locator('.er-media-text-body p')).toHaveCount(2)
+    await expect(studio.locator('.er-media-text-note')).toHaveCount(0)
+    await expect(studio.getByRole('link')).toHaveCount(1)
+
+    await expect(card.getByRole('region', { name: 'The autumn glazes are here' })).toHaveAttribute('data-layout', 'stacked')
+    const columns = card.getByRole('region', { name: 'Not sure what they would pick?' })
+    await expect(columns).toHaveAttribute('data-layout', 'columns')
+    await expect(columns.getByRole('link', { name: 'Check a balance' })).toBeVisible()
+  })
+})

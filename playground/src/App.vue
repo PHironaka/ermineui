@@ -828,7 +828,7 @@ function undoable() {
 
 <template>
   <Banner v-model:open="bannerOpen" variant="info" dismissible>
-    Ermine now has 142 components and 12 blocks.
+    Ermine now has 142 components and 13 blocks.
     <template #action><a href="#navigation-menu">See what is new</a></template>
   </Banner>
   <OfflineBanner />

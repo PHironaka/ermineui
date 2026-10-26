@@ -149,6 +149,7 @@ A block is a section of a page, or a whole page, already put together from the c
 | `sign-up` | Name, email and a password with a strength meter, terms to agree to, and a link to sign in |
 | `forgot-password` | Asks for an email to send a reset link to, then says to check the inbox |
 | `not-found` | The page for a wrong address or an error: what happened, a search box and the way home |
+| `media-text` | A headline, body copy and a picture: side by side (either way round), stacked, or in three columns with the call to action on its own |
 
 ## Try it
 
@@ -1165,6 +1166,18 @@ A pull cannot be done with a keyboard or a mouse, so keep a button that calls `r
 ```
 
 Set `sent` whether or not the address has an account, so the form does not tell a stranger who is a customer. `NotFound` takes a `code`, `title` and `description`, so the same block serves a 500 or an offline page; `retry` adds a "Try again" button.
+
+**Media and text**
+
+```vue
+<MediaText :title="title" :body="body" :image="{ src: '/studio.jpg', alt: 'The kiln, open' }" :primary-action="{ label: 'Shop', href: '/shop' }" />
+<MediaText layout="columns" reverse ratio="1" note="Free delivery over $50.">
+  <p>Copy with <a href="/about">a link</a>, or more than one paragraph.</p>
+  <template #media><video src="/throwing.mp4" muted autoplay loop playsinline /></template>
+</MediaText>
+```
+
+`layout` is `split` (the default), `stacked` or `columns`; `reverse` puts the picture first. Every prop has sample content until you set it: pass an empty string to leave out a piece of text, or `null` for either action or the image, or use the `actions` slot for buttons of your own. In `stacked`, the picture is 21:9 on a wide screen; set `--er-media-text-ratio-wide` to change it.
 
 **Pagination, breadcrumb, slider, toggle group**
 

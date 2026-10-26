@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ForgotPassword } from '../../../registry/blocks/forgot-password'
+import { MediaText } from '../../../registry/blocks/media-text'
 import { NotFound } from '../../../registry/blocks/not-found'
 import { OrderConfirmation } from '../../../registry/blocks/order-confirmation'
 import { OrderHistory } from '../../../registry/blocks/order-history'
@@ -95,6 +96,36 @@ const searched = ref('nothing searched')
 
   <Demo name="forgot-password" title="Block: Forgot password" description="Asks for an email to send a reset link to, then says to check the inbox, whether or not the address has an account.">
     <ForgotPassword v-model:sent="resetSent" :loading="resetLoading" sign-in-href="#sign-in" @submit="sendReset" />
+  </Demo>
+
+  <Demo name="media-text" title="Block: Media and text" description="A headline, body copy and a picture, in three layouts: side by side (either way round), stacked, and three columns with the call to action on its own. Each stacks on a phone." wide>
+    <div class="stack" style="max-width: 60rem; gap: 3rem">
+      <MediaText title-as="h3" :primary-action="{ label: 'Shop the collection', href: '#product-listing' }" :secondary-action="{ label: 'How it is made', href: '#product-detail' }" />
+      <MediaText
+        reverse
+        title-as="h3"
+        eyebrow="In the studio"
+        title="Small batches, one kiln"
+        ratio="1"
+        note=""
+        :secondary-action="null"
+        :primary-action="{ label: 'Meet the makers', href: '#product-detail' }"
+      >
+        <p>We fire on Tuesdays and Fridays. Whatever comes out of the kiln that week is what goes on sale.</p>
+        <p>Seconds, with a wobble or a speck in the glaze, are sold at half price.</p>
+      </MediaText>
+      <MediaText layout="stacked" title-as="h3" eyebrow="New season" title="The autumn glazes are here" :secondary-action="null" :primary-action="{ label: 'See the colours', href: '#product-listing' }" />
+      <MediaText
+        layout="columns"
+        title-as="h3"
+        eyebrow="Gift cards"
+        title="Not sure what they would pick?"
+        body="Send a card by email in any amount from $20. It never runs out, and it can be spent in the shop or the studio."
+        note="Arrives in minutes, or on the day you choose."
+        :primary-action="{ label: 'Buy a gift card', href: '#cart' }"
+        :secondary-action="{ label: 'Check a balance', href: '#cart' }"
+      />
+    </div>
   </Demo>
 
   <Demo name="not-found" title="Block: Not found" description="The page for a wrong address or an error: what happened in plain words, a search box, and the way home.">
