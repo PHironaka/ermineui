@@ -828,7 +828,7 @@ function undoable() {
 
 <template>
   <Banner v-model:open="bannerOpen" variant="info" dismissible>
-    Ermine now has 142 components and 13 blocks.
+    Ermine now has 143 components and 13 blocks.
     <template #action><a href="#navigation-menu">See what is new</a></template>
   </Banner>
   <OfflineBanner />
@@ -881,7 +881,7 @@ function undoable() {
     <section class="intro" aria-label="Introduction">
       <h1>Vue components you copy in and own.</h1>
       <p>
-        142 accessible components and 12 blocks for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
+        143 accessible components and 12 blocks for Vue, Nuxt and Astro. Plain CSS and variables, no styling framework, no
         runtime dependencies beyond Vue. The command line copies the source into your project, so every line is
         yours to change.
       </p>

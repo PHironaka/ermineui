@@ -46,6 +46,7 @@ The npm package for the command line is `ermineui` (published on 7 October 2026)
 | `signature-pad` | Sign with finger, pen or mouse; exported as an image |
 | `scroll-progress`, `reveal`, `count-up` | A reading progress bar; content that appears as it scrolls into view; numbers that run up |
 | `offline-banner` | Appears when the connection drops |
+| `idle-screen` | Covers the page after five minutes with no activity, time in other tabs included, and says when the reader left; `useIdle` on its own for your own response |
 | `wake-lock`, `fullscreen`, `notification-prompt` | Keep the screen on; fill the screen with one element; ask for notification permission politely |
 | `sound` | Short synthesized sounds for buttons and other controls, with a mute button and volume |
 | `typography` | Headings and text sized fluidly with `clamp()`; `Prose` styles long-form HTML |
@@ -695,6 +696,21 @@ The value is a PNG data URL with a transparent background, or `''` while empty. 
 Each wraps one browser feature and leaves itself out where the browser cannot do it. `OfflineBanner` reports the browser's own view of the network: a connection that is up but cannot reach your server still counts as online. `NotificationPrompt` only triggers the browser's permission question when its button is pressed, never on page load, and explains where the setting lives if the answer was no. It asks for permission; sending notifications is up to you.
 
 The colour picker also gained a "pick a colour from the screen" button, shown only in browsers with the EyeDropper API (Chrome and Edge on desktop).
+
+**Idle screen**
+
+```vue
+<IdleScreen @resume="refreshData" />                         <!-- five minutes, then waits for "Continue" or Escape -->
+<IdleScreen :timeout="60_000" resume-on-activity />           <!-- a screensaver: any movement hides it -->
+<IdleScreen v-model:open="away" :disabled="playing">
+  <template #actions="{ resume }">
+    <Button @click="resume">Continue</Button>
+    <Button variant="outline" @click="signOut">Sign out</Button>
+  </template>
+</IdleScreen>
+```
+
+Activity is any pointer movement, press, key, wheel, touch or scroll. Time spent in another tab or window counts as idle: browsers slow timers in hidden tabs, so the screen is already up when the reader comes back to the page. It is a modal (focus moves to its button, the page behind stops scrolling) and its `resume` event says how long the reader was away, a good moment to fetch fresh data. For a different response, such as signing out without showing anything, use the composable alone: `const { idle, lastActive, reset } = useIdle(5 * 60_000)`. It does not lock anything: what is behind it is still in the page.
 
 **Sound**
 

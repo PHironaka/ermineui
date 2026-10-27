@@ -401,3 +401,42 @@ test.describe('eyedropper', () => {
     await expect(page.getByRole('button', { name: 'Pick a colour from the screen' })).toHaveCount(0)
   })
 })
+
+test.describe('idle screen', () => {
+  test('can be shown by hand, says when the reader left, and Escape brings them back', async ({ page }) => {
+    const card = demo(page, 'idle-screen')
+    const show = card.getByRole('button', { name: 'Show it now' })
+    await show.click()
+    const screen = page.getByRole('dialog', { name: 'Welcome back' })
+    await expect(screen).toBeVisible()
+    await expect(screen).toContainText(/Away since .+\. Everything is where you left it\./)
+    await expect(screen.getByRole('button', { name: 'Continue' })).toBeFocused()
+    await page.keyboard.press('Escape')
+    await expect(screen).toBeHidden()
+    await expect(readout(page, 'idle-screen')).toHaveText(/back after [01] s/)
+    await expect(show).toBeFocused()
+  })
+
+  test('comes up after the timeout with no activity, and activity starts the count again', async ({ page }) => {
+    await page.clock.install()
+    await page.reload()
+    const card = demo(page, 'idle-screen')
+    await card.getByRole('switch', { name: 'Show after 10 seconds with no activity' }).click()
+    const screen = page.getByRole('dialog', { name: 'Welcome back' })
+
+    await page.clock.runFor(8_000)
+    await page.mouse.move(10, 10)
+    await page.mouse.move(40, 40)
+    await page.clock.runFor(8_000)
+    await expect(screen).toBeHidden()
+
+    await page.clock.runFor(3_000)
+    await expect(screen).toBeVisible()
+    // Waiting for the button: moving the mouse does not dismiss it.
+    await page.mouse.move(80, 80)
+    await expect(screen).toBeVisible()
+    await screen.getByRole('button', { name: 'Continue' }).click()
+    await expect(screen).toBeHidden()
+    await expect(readout(page, 'idle-screen')).toHaveText(/back after 1\d s/)
+  })
+})

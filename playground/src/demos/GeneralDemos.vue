@@ -6,6 +6,7 @@ import { ChatComposer, ChatMessage, ChatThread } from '../../../registry/ui/chat
 import { CommentThread, type CommentNode } from '../../../registry/ui/comment-thread'
 import { DiffViewer } from '../../../registry/ui/diff-viewer'
 import { EmojiPicker } from '../../../registry/ui/emoji-picker'
+import { IdleScreen } from '../../../registry/ui/idle-screen'
 import { ImageCropper } from '../../../registry/ui/image-cropper'
 import { PasswordInput } from '../../../registry/ui/input-group'
 import { JsonViewer } from '../../../registry/ui/json-viewer'
@@ -20,8 +21,17 @@ import { PhoneInput } from '../../../registry/ui/phone-input'
 import { RichTextEditor } from '../../../registry/ui/rich-text-editor'
 import { SegmentedControl, SegmentedControlItem } from '../../../registry/ui/segmented-control'
 import { Slider } from '../../../registry/ui/slider'
+import { Switch } from '../../../registry/ui/switch'
 import { Toolbar, ToolbarButton, ToolbarSeparator } from '../../../registry/ui/toolbar'
 import Demo from '../Demo.vue'
+
+// Idle screen. Off until asked for, so the playground does not cover itself while someone reads it.
+const idleWatching = ref(false)
+const idleOpen = ref(false)
+const idleEvent = ref('not shown yet')
+function idleBack(away: number) {
+  idleEvent.value = `back after ${Math.round(away / 1000)} s`
+}
 
 // Phone input and password strength
 const phone = ref('')
@@ -319,6 +329,19 @@ onBeforeUnmount(() => {
     <div class="stack" style="max-width: 30rem">
       <MediaPlayer v-if="tone" kind="audio" title="Three seconds of a test tone" :src="tone" preload="auto" @play="mediaEvent = 'playing'" @pause="mediaEvent = 'paused'" @ended="mediaEvent = 'finished'" />
       <p class="readout">{{ mediaEvent }}</p>
+    </div>
+  </Demo>
+  <Demo name="idle-screen" title="Idle screen" description="Covers the page after a stretch with no mouse, keyboard or touch, time in other tabs included, and says when the reader went away. Five minutes unless set; ten seconds here.">
+    <div class="stack">
+      <div class="row-between">
+        <Label for="idle-watching">Show after 10 seconds with no activity</Label>
+        <Switch id="idle-watching" v-model="idleWatching" />
+      </div>
+      <div class="row">
+        <Button variant="outline" @click="idleOpen = true">Show it now</Button>
+      </div>
+      <p class="readout">{{ idleEvent }}</p>
+      <IdleScreen v-model:open="idleOpen" :timeout="10_000" :disabled="!idleWatching" @resume="idleBack" />
     </div>
   </Demo>
 </template>
