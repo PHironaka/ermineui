@@ -1,0 +1,203 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import CodeBlock from '../../components/CodeBlock.astro'
+import { themes } from '../../data/catalog'
+
+const remote = 'https://ermineui.netlify.app/mcp'
+const styles = themes.filter((theme) => theme.kind === 'style').map((theme) => theme.name)
+
+const claudeCode = 'claude mcp add ermine -- npx -y ermineui mcp'
+const codex = `# ~/.codex/config.toml
+[mcp_servers.ermine]
+command = "npx"
+args = ["-y", "ermineui", "mcp"]`
+const cursor = `{
+  "mcpServers": {
+    "ermine": { "command": "npx", "args": ["-y", "ermineui", "mcp"] }
+  }
+}`
+const desktop = `{
+  "mcpServers": {
+    "ermine": { "command": "npx", "args": ["-y", "ermineui", "mcp"] }
+  }
+}`
+const claudeCodeRemote = `claude mcp add --transport http ermine-remote ${remote}`
+
+// Prompts to try, grouped by what they show. Each is plain text to paste into the assistant.
+const prompts: { title: string; note: string; items: string[] }[] = [
+  {
+    title: 'Set up and look around',
+    note: 'With the local server, the assistant runs these against your project.',
+    items: [
+      'Set this project up with Ermine UI and show me which themes are available.',
+      'Which Ermine components and blocks would I use for an online shop?',
+      "How does Ermine's select work? Read it first, then tell me its props and parts.",
+    ],
+  },
+  {
+    title: 'Pick a look',
+    note: `A style sets the type, weights and shapes (${styles.join(', ')}); a base tints the greys; an accent sets the primary colour.`,
+    items: [
+      'Make this look like an architecture portfolio: quiet, image-led, square corners.',
+      'Switch to the soft style but keep my colours.',
+      'Use the catalogue style with a slate base and a blue accent.',
+      'Give me the complete Ermine stylesheet with the editorial style and the sand base.',
+    ],
+  },
+  {
+    title: 'Build something',
+    note: 'The assistant should read each component before writing code with it, so it uses the real props.',
+    items: [
+      "Build a project page for 'Stanley Hills Residence' in the editorial style: a full-bleed hero, a media-and-text section, and a list of project stats.",
+      'Build a product page for a shampoo with the product-detail block and an accordion for the ingredients, in the catalogue style.',
+      'Add a settings page with a form for name, email and notification preferences, using Ermine fields and switches.',
+    ],
+  },
+  {
+    title: 'Fine-tune',
+    note: 'Good answers change variables after the theme blocks rather than editing component CSS.',
+    items: [
+      'Make the buttons pill-shaped but keep everything else from the editorial style.',
+      "I don't want to load fonts from Google. Keep the editorial style with system fonts.",
+    ],
+  },
+]
+---
+
+<Layout title="MCP. Ermine UI" description="Connect Ermine UI to Claude, Codex, Cursor and other AI assistants over the Model Context Protocol, from your editor or from claude.ai.">
+  <div class="wrap doc">
+    <header class="doc-head">
+      <p class="eyebrow">MCP</p>
+      <h1 class="headline">Build with your assistant.</h1>
+      <p class="lede">
+        Ermine UI speaks the Model Context Protocol, so an AI assistant can look components up, read their real source before using them, apply themes and, in your editor,
+        add them to your project itself.
+      </p>
+    </header>
+
+    <div class="prose">
+      <h2 id="which">Two servers</h2>
+      <p>Pick by where the assistant runs. Both serve the same components and themes.</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Local and remote servers compared">
+        <table>
+          <thead><tr><th>Server</th><th>Local</th><th>Remote</th></tr></thead>
+          <tbody>
+            <tr><td>For</td><td>Claude Code, Codex, Cursor, Claude Desktop</td><td>claude.ai and other web clients</td></tr>
+            <tr><td>Runs</td><td>On your computer, started by the assistant: <code>npx ermineui mcp</code></td><td>On this website, at <code>/mcp</code></td></tr>
+            <tr><td>Can change your project</td><td>Yes: sets it up, adds components, applies themes</td><td>No: hands back source, CSS and commands for you to use</td></tr>
+            <tr><td>Serves</td><td>The version of <code>ermineui</code> that npx installs</td><td>The latest version of this website</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="local">Local, in your editor</h2>
+      <p>Add the server once. The assistant starts it when it needs it; there is nothing to keep running.</p>
+      <h3 id="claude-code">Claude Code</h3>
+      <CodeBlock code={claudeCode} lang="sh" />
+      <h3 id="codex">Codex</h3>
+      <CodeBlock code={codex} lang="toml" />
+      <h3 id="cursor">Cursor</h3>
+      <CodeBlock code={cursor} lang="json" label=".cursor/mcp.json" />
+      <h3 id="claude-desktop">Claude Desktop</h3>
+      <p>
+        Open Settings, then Developer, then Edit Config, and add the server. Claude Desktop is not opened in a project, so tell it which folder you mean, for example
+        “set up Ermine in ~/code/my-site”.
+      </p>
+      <CodeBlock code={desktop} lang="json" label="claude_desktop_config.json" />
+
+      <h3 id="local-tools">What it can do</h3>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Local server tools">
+        <table>
+          <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>list_components</code></td><td>Every component and block, ticked where the project already has it.</td></tr>
+            <tr><td><code>get_component</code></td><td>A component's full source and what it depends on.</td></tr>
+            <tr><td><code>init_project</code></td><td>Writes <code>ermine.json</code> and the stylesheet, with the usual folders for Vue, Nuxt or Astro.</td></tr>
+            <tr><td><code>add_components</code></td><td>Copies components or blocks, and everything they need, into the project.</td></tr>
+            <tr><td><code>set_theme</code></td><td>Applies a style, base and accent to the project's stylesheet, or lists them.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="remote">Remote, in claude.ai</h2>
+      <ol>
+        <li>In claude.ai, open Settings, then Connectors, and choose <strong>Add custom connector</strong>. Custom connectors need a paid plan.</li>
+        <li>Name it Ermine UI and paste the address below. It needs no sign-in.</li>
+        <li>In a chat, turn the connector on from the tools menu and ask away.</li>
+      </ol>
+      <CodeBlock code={remote} lang="sh" label="Server address" />
+      <p>The same server works from any client that connects over HTTP, Claude Code included:</p>
+      <CodeBlock code={claudeCodeRemote} lang="sh" />
+
+      <h3 id="remote-tools">What it can do</h3>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Remote server tools">
+        <table>
+          <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>list_components</code></td><td>Every component and block, with a one-line summary.</td></tr>
+            <tr><td><code>get_component</code></td><td>A component's full source and what it depends on.</td></tr>
+            <tr><td><code>get_theme</code></td><td>Lists the themes, or gives the CSS and command for a style, base and accent. It can also give the whole stylesheet with them in it.</td></tr>
+            <tr><td><code>install_instructions</code></td><td>What adding components would copy, where it goes, and the commands to run.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        claude.ai cannot compile <code>.vue</code> files, so a live preview there is the assistant's rebuild of the components in plain HTML and CSS from their source. The
+        code it writes for you to paste uses the real components.
+      </p>
+
+      <h2 id="prompts">Prompts to try</h2>
+      {
+        prompts.map((group) => (
+          <>
+            <h3>{group.title}</h3>
+            <p>{group.note}</p>
+            <ul class="prompts">
+              {group.items.map((prompt) => (
+                <li>
+                  <span>{prompt}</span>
+                  <button class="copy" type="button" data-copy={prompt} aria-label={`Copy prompt: ${prompt}`}>
+                    Copy
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))
+      }
+
+      <h2 id="tips">Getting good results</h2>
+      <ul>
+        <li><strong>Name Ermine UI in the prompt</strong>, at least the first time, so the assistant reaches for the server rather than writing components from memory.</li>
+        <li><strong>Ask it to read before it writes.</strong> “Read the dialog component first” makes it use the real props and parts.</li>
+        <li><strong>Change the look with themes and variables.</strong> Ask for a style or a variable change, such as pill-shaped buttons, rather than edits to component CSS; your changes then survive switching themes.</li>
+        <li>
+          <strong>Fonts.</strong> Styles load their fonts from Google Fonts. To serve fonts yourself, ask the assistant to remove the fonts block at the top of the stylesheet and set
+          <code>--er-font-sans</code>, <code>--er-font-display</code> and <code>--er-font-prose</code>.
+        </li>
+      </ul>
+      <p>Prefer to do it yourself? The <a href="/docs/installation/">installation guide</a> covers the same steps by hand, and <a href="/llms.txt">llms.txt</a> gives any assistant a summary to read.</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .prompts {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .prompts li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius-md);
+    background: var(--er-card);
+  }
+</style>

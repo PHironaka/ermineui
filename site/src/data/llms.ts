@@ -35,8 +35,9 @@ Conventions to follow when writing code that uses them:
 - Compound components are built from parts (\`Dialog\`, \`DialogTrigger\`, \`DialogContent\`…). Overlay triggers (dialog, sheet, popover, tooltip, dropdown menu…) accept \`as-child\` to render your own element, such as a \`Button\`, instead.
 - Theme with the \`--er-*\` CSS variables in \`ermine.css\`. Component styles sit in \`@layer components\`, so unlayered CSS overrides them without \`!important\`. Variants and state are data attributes: \`data-variant\`, \`data-size\`, \`data-state\`, \`data-side\`.
 - Dark mode follows the operating system; force it with \`class="dark"\` or \`class="light"\` on any ancestor.
-- Colour themes: \`npx ermineui theme <base> <accent>\` writes a ready-made set of variables into the stylesheet. Bases: ${themes.filter((theme) => theme.kind === 'base').map((theme) => theme.name).join(', ')}. Accents: ${themes.filter((theme) => theme.kind === 'accent').map((theme) => theme.name).join(', ')}.
+- Themes: \`npx ermineui theme <style> <base> <accent>\` writes ready-made sets of variables into the stylesheet, any of the three. Styles (type, weights, shape, control sizes): ${themes.filter((theme) => theme.kind === 'style').map((theme) => theme.name).join(', ')}. Bases: ${themes.filter((theme) => theme.kind === 'base').map((theme) => theme.name).join(', ')}. Accents: ${themes.filter((theme) => theme.kind === 'accent').map((theme) => theme.name).join(', ')}.
 - Works in Vue + Vite, Nuxt and Astro (as Vue islands).
+- MCP: \`npx ermineui mcp\` is a local server that can set a project up and add components; https://ermineui.netlify.app/mcp is a read-only remote one (Streamable HTTP) for web clients such as claude.ai.
 
 Each link below is a Markdown page with the component's exports, an example and its full source.
 

@@ -13,7 +13,7 @@ interface RegistryEntry {
   components: string[]
 }
 interface RegistryTheme {
-  kind: 'base' | 'accent'
+  kind: 'style' | 'base' | 'accent'
   description: string
   content: string
 }
@@ -152,7 +152,7 @@ export const lib = registry.lib
 
 export interface ThemeEntry {
   name: string
-  kind: 'base' | 'accent'
+  kind: 'style' | 'base' | 'accent'
   title: string
   summary: string
   /** The theme's :root block, without its description comment: what "ermine theme" writes into a project. */
