@@ -132,7 +132,7 @@ function submit() {
 
   .er-sign-up-link {
     color: var(--er-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }

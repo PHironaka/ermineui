@@ -180,7 +180,7 @@ The theme stylesheet is yours and is never overwritten, even with `--overwrite`.
 | `ermine init` | Create `ermine.json` and the theme stylesheet (`-y` accepts the suggested folders) |
 | `ermine add <name...>` | Copy components or blocks and their dependencies (`--all` for every component) |
 | `ermine list` | Show available components and blocks, and which are already installed |
-| `ermine theme <base> <accent>` | Apply colour themes to your stylesheet (no names: list them; `--reset` removes them) |
+| `ermine theme <style> <base> <accent>` | Apply a style and colour themes to your stylesheet, any of the three (no names: list them; `--reset` removes them) |
 | `ermine mcp` | Run as an MCP server for AI coding tools (see below) |
 | `--registry <url or path>` | Read components from a different `registry.json`, such as your own fork |
 
@@ -259,7 +259,7 @@ In an `.astro` file, Astro's type-checker only accepts the attributes a componen
 
 ## Theming
 
-`ermine.css` defines every colour, radius, shadow and duration as a CSS variable. Edit the values and all components follow.
+`ermine.css` defines every colour, radius, shadow and duration as a CSS variable, along with the fonts, weights, control heights and heading tracking. Edit the values and all components follow.
 
 **Colour themes.** Ready-made sets of those variables, in two kinds you combine: a **base** tints the surfaces, text and lines (`neutral`, the default, `slate`, `stone`, `zinc`, `mauve`, `sage`, `olive`, `sand`, `mist`, `blush`) and an **accent** sets the primary colour and focus ring (`red`, `orange`, `amber`, `green`, `teal`, `cyan`, `blue`, `indigo`, `violet`, `fuchsia`, `pink`, `rose`). Every pairing keeps text at 4.5:1 contrast and the focus ring at 3:1, in light and dark.
 
@@ -268,6 +268,31 @@ npx ermineui theme slate blue    # or one at a time; picking a base keeps the ac
 npx ermineui theme --reset       # back to the stylesheet's own colours
 npx ermineui init --theme slate,blue
 ```
+
+**Styles.** A third kind of theme sets the overall look rather than the colours: the fonts, weights, letter spacing, corner shapes, control heights and shadows. Combine one with any base and accent.
+
+| Style | For | Look | Font |
+|---|---|---|---|
+| `editorial` | portfolios, studios | one weight, square corners, no shadows, the biggest headings in spaced capitals | Hanken Grotesk |
+| `soft` | studios, tools | one weight, set slightly tight, compact pill-shaped controls, square pictures | Geist |
+| `catalogue` | shops | a sans for the interface and a serif for headings and reading, square hairline controls, tall buttons | Instrument Sans, Newsreader |
+
+```sh
+npx ermineui theme editorial stone   # a style and a base; the accent stays as it was
+```
+
+A style loads its fonts from Google Fonts with `@import` lines, which `ermine theme` puts in a marked block at the top of your stylesheet (the only place CSS allows them) and swaps along with the style. That sends visitors' browsers to Google's servers; to serve the fonts yourself, delete the block and set `--er-font-sans`, `--er-font-display` and `--er-font-prose` after the style block. The style variables:
+
+| Variable | Default | What it sets |
+|---|---|---|
+| `--er-font-display` / `--er-font-prose` | `var(--er-font-sans)` | headings and titles / reading text (articles, lead paragraphs, descriptions) |
+| `--er-weight-medium`, `-semibold`, `-heading`, `-display` | 500, 600, 650, 700 | every weight in the components, from labels up to display headings |
+| `--er-tracking-ui` | `0em` | letter spacing of interface text |
+| `--er-tracking-heading` | `1` | how tightly headings are set: `0` not at all, negative opens them up |
+| `--er-display-case` | `none` | `uppercase` sets display and h1 headings in capitals |
+| `--er-radius-control` | `var(--er-radius-md)` | single-line controls (buttons, inputs, selects, toggles); `999px` makes pills |
+| `--er-radius-pill` | `999px` | controls that are round by default (quantity steppers, round icon buttons) |
+| `--er-control-sm` / `-md` / `-lg` | 2, 2.25, 2.5rem | heights of buttons, inputs, selects and toggles |
 
 The command writes each theme at the end of your stylesheet in its own marked block and replaces only that block next time; nothing else in the file changes. To adjust a colour, set it again in a rule after the block. The website's Themes page previews them and gives the CSS to paste by hand.
 
@@ -1299,7 +1324,7 @@ toast('Deployment archived', { action: { label: 'Undo', onClick: restore } })
 ```
 registry/
   styles/ermine.css     theme tokens, base styles, shared floating styles
-  themes/base|accent/   colour themes: :root blocks of variables that "ermine theme" writes into a project
+  themes/style|base|accent/  styles and colour themes: :root blocks of variables that "ermine theme" writes into a project
   lib/                 behavior helpers (copied into the user's project)
     primitive.ts         Primitive (as / as-child) and Portal
     floating.ts          positioning: flip, shift, follow scroll and resize

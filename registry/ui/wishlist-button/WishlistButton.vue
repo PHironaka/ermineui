@@ -44,16 +44,16 @@ const saved = defineModel<boolean>({ default: false })
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: var(--er-control-md);
+    height: var(--er-control-md);
     padding: 0;
     border: 1px solid var(--er-border);
-    border-radius: 999px;
+    border-radius: var(--er-radius-pill);
     background: var(--er-background);
     color: var(--er-foreground);
     font: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
     transition:
       background-color var(--er-duration),
@@ -68,7 +68,7 @@ const saved = defineModel<boolean>({ default: false })
   .er-wishlist-button[data-labelled] {
     width: auto;
     padding: 0 0.875rem;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
   }
 
   .er-wishlist-button:hover {

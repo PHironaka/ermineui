@@ -126,14 +126,14 @@ const length = computed(() => Math.PI * radius.value)
   .er-gauge-text strong {
     color: var(--er-foreground);
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.2;
   }
 
   .er-gauge-state {
     color: var(--er-foreground);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 }
 </style>

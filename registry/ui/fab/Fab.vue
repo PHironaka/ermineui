@@ -124,7 +124,7 @@ function press(event: MouseEvent) {
     box-shadow: var(--er-shadow-lg);
     font: inherit;
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
     transition:
       background-color var(--er-duration),
@@ -185,7 +185,7 @@ function press(event: MouseEvent) {
     box-shadow: var(--er-shadow-md);
     font: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
     cursor: pointer;
     transition: background-color var(--er-duration);

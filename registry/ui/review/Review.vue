@@ -67,7 +67,7 @@ const written = computed(() => {
   .er-review-title {
     margin: 0;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.375rem;
   }
 
@@ -90,7 +90,7 @@ const written = computed(() => {
 
   .er-review-author {
     color: var(--er-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-review-verified {

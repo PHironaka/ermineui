@@ -202,7 +202,7 @@ function onKeydown(event: KeyboardEvent) {
   .er-chart-donut-center strong {
     color: var(--er-foreground);
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.2;
   }
 
@@ -238,7 +238,7 @@ function onKeydown(event: KeyboardEvent) {
 
   .er-chart-donut-legend strong {
     color: var(--er-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     text-align: right;
   }
 

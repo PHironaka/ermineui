@@ -517,7 +517,7 @@ body {
 .colour-theme {
   display: grid;
   gap: 0.5rem;
-  width: 15rem;
+  width: 19rem;
 }
 
 .colour-theme .hint {

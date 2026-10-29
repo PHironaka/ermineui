@@ -85,11 +85,11 @@ function readAll() {
     position: relative;
     display: inline-grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: var(--er-control-md);
+    height: var(--er-control-md);
     padding: 0;
     border: 0;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: transparent;
     color: var(--er-foreground);
     cursor: pointer;
@@ -149,7 +149,7 @@ function readAll() {
   .er-notification-center-header h2 {
     margin: 0;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.25rem;
   }
 
@@ -241,7 +241,7 @@ function readAll() {
   }
 
   .er-notification-center-item[data-unread] .er-notification-center-title {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-notification-center-body,

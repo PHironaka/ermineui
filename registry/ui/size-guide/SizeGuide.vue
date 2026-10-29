@@ -117,11 +117,11 @@ const unit = defineModel<SizeUnit>('unit', { default: 'cm' })
     background: var(--er-muted);
     color: var(--er-muted-foreground);
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-size-guide tbody th {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   /* The chosen size: tinted, with a bar down its leading edge so colour is not the only mark. */

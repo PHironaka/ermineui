@@ -59,7 +59,7 @@ const balanced = computed(() => props.balance ?? settings.value.step >= 2)
   .er-typography {
     margin: 0;
     color: var(--er-foreground);
-    font-family: var(--er-font-sans);
+    font-family: var(--er-font-prose);
     font-weight: 400;
     /* Line height and letter spacing have no units or use em, so they scale with the fluid size. */
     line-height: 1.6;
@@ -70,35 +70,48 @@ const balanced = computed(() => props.balance ?? settings.value.step >= 2)
     color: var(--er-muted-foreground);
   }
 
+  .er-typography:is([data-variant='display'], [data-variant='h1'], [data-variant='h2'], [data-variant='h3'], [data-variant='h4']) {
+    font-family: var(--er-font-display);
+  }
+
+  .er-typography:is([data-variant='display'], [data-variant='h1']) {
+    text-transform: var(--er-display-case);
+  }
+
+  /* Labels are interface text, set in the interface font. */
+  .er-typography:is([data-variant='caption'], [data-variant='overline']) {
+    font-family: var(--er-font-sans);
+  }
+
   /* The bigger the text, the tighter it is set. */
   .er-typography[data-variant='display'] {
-    font-weight: 700;
+    font-weight: var(--er-weight-display);
     line-height: 1.04;
-    letter-spacing: -0.035em;
+    letter-spacing: calc(-0.035em * var(--er-tracking-heading));
   }
 
   .er-typography[data-variant='h1'] {
-    font-weight: 700;
+    font-weight: var(--er-weight-display);
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: calc(-0.03em * var(--er-tracking-heading));
   }
 
   .er-typography[data-variant='h2'] {
-    font-weight: 650;
+    font-weight: var(--er-weight-heading);
     line-height: 1.15;
-    letter-spacing: -0.025em;
+    letter-spacing: calc(-0.025em * var(--er-tracking-heading));
   }
 
   .er-typography[data-variant='h3'] {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.25;
-    letter-spacing: -0.02em;
+    letter-spacing: calc(-0.02em * var(--er-tracking-heading));
   }
 
   .er-typography[data-variant='h4'] {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.3;
-    letter-spacing: -0.01em;
+    letter-spacing: calc(-0.01em * var(--er-tracking-heading));
   }
 
   .er-typography[data-variant='lead'] {
@@ -117,7 +130,7 @@ const balanced = computed(() => props.balance ?? settings.value.step >= 2)
 
   .er-typography[data-variant='overline'] {
     color: var(--er-muted-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.4;
     letter-spacing: 0.08em;
     text-transform: uppercase;

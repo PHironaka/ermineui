@@ -133,7 +133,7 @@ function show() {
   .er-sticky-scroll-heading {
     margin: 0;
     font-size: clamp(2rem, 7cqi, 4.5rem);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.05;
     letter-spacing: -0.03em;
     text-wrap: balance;

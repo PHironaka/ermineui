@@ -110,7 +110,7 @@ function go(next: number) {
   .er-pagination-button[aria-current='page'] {
     border-color: var(--er-input);
     background: var(--er-input-background);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     box-shadow: var(--er-shadow-xs);
   }
 

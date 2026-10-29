@@ -67,13 +67,14 @@ for (const [name, component] of [...Object.entries(components), ...Object.entrie
   for (const dep of component.components) if (!components[dep]) throw new Error(`${name} imports unknown component "${dep}"`)
 }
 
-// Colour themes: registry/themes/<kind>/<name>.css. A base tints the surfaces, text and lines; an accent sets the
-// primary colour and focus ring. A project uses at most one of each, so names must be unique across both kinds.
+// Themes: registry/themes/<kind>/<name>.css. A style sets the type, weights, shape and control sizes; a base tints the
+// surfaces, text and lines; an accent sets the primary colour and focus ring. A project uses at most one of each, so
+// names must be unique across all kinds.
 const themes = {}
-for (const kind of ['base', 'accent']) {
+for (const kind of ['style', 'base', 'accent']) {
   for (const file of readdirSync(join(registryDir, 'themes', kind)).sort()) {
     const name = file.replace(/\.css$/, '')
-    if (themes[name]) throw new Error(`"${name}" is both a base and an accent theme; "ermine theme" needs the names to differ`)
+    if (themes[name]) throw new Error(`"${name}" is both a ${themes[name].kind} and a ${kind} theme; "ermine theme" needs the names to differ`)
     const content = read(join(registryDir, 'themes', kind, file))
     themes[name] = { kind, description: content.match(/\/\*\*\s*(.+?)\s*\*\//s)?.[1] ?? '', content }
   }

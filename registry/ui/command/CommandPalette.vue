@@ -223,7 +223,7 @@ useLayer(content, open, {
     padding: 0.5rem 0.5rem 0.25rem;
     color: var(--er-muted-foreground);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-command-item {

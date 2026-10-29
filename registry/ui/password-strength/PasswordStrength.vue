@@ -88,7 +88,7 @@ const checks = computed(() => props.requirements.map((requirement) => ({ label: 
   .er-password-strength-word {
     min-width: 3.25rem;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1rem;
     text-align: right;
   }

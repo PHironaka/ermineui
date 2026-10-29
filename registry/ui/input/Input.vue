@@ -12,10 +12,10 @@ const model = defineModel<string | number>()
     display: block;
     width: 100%;
     min-width: 0;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-foreground);
     font-family: inherit;
@@ -69,7 +69,7 @@ const model = defineModel<string | number>()
     background: transparent;
     color: var(--er-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 }
 </style>

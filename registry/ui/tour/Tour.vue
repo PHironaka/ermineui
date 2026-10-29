@@ -170,7 +170,7 @@ useLayer(card, open, {
   .er-tour-title {
     margin: 0;
     padding-right: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-tour-description {

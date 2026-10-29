@@ -296,7 +296,7 @@ const showTable = ref(false)
     margin-left: auto;
     padding-left: 0.75rem;
     color: var(--er-popover-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
 
@@ -344,7 +344,7 @@ const showTable = ref(false)
 
   .er-chart-table th {
     color: var(--er-muted-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-chart-table tbody th {

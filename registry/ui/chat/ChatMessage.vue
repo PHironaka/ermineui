@@ -79,7 +79,7 @@ const statusWords = { sending: 'Sending…', sent: 'Sent', read: 'Read', failed:
   }
 
   .er-chat-message-author {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-chat-message-bubble {
@@ -130,7 +130,7 @@ const statusWords = { sending: 'Sending…', sent: 'Sent', read: 'Read', failed:
     background: transparent;
     color: var(--er-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration: underline;
     text-underline-offset: 0.2em;
     cursor: pointer;

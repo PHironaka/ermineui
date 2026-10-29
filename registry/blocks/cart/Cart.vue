@@ -155,7 +155,7 @@ async function remove(item: CartItem) {
     gap: 0.25rem 0.75rem;
     margin: 0;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.75rem;
     outline: none;
   }

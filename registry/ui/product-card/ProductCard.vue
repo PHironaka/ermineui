@@ -132,7 +132,7 @@ withDefaults(
   .er-product-card-title {
     margin: 0;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 

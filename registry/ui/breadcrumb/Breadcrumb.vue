@@ -65,7 +65,7 @@ withDefaults(
 
   .er-breadcrumb-link[aria-current='page'] {
     color: var(--er-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 }
 </style>

@@ -78,7 +78,7 @@ const rows = computed(() => {
   }
 
   .er-bar-list-value {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
 

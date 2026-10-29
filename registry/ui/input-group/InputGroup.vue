@@ -14,9 +14,9 @@
     align-items: center;
     width: 100%;
     min-width: 0;
-    height: 2.25rem;
+    height: var(--er-control-md);
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     box-shadow: var(--er-shadow-xs);
     transition:
@@ -82,7 +82,7 @@
     margin-right: -0.25rem;
     padding: 0;
     border: 0;
-    border-radius: var(--er-radius-sm);
+    border-radius: calc(var(--er-radius-control) - 2px);
     background: transparent;
     color: var(--er-muted-foreground);
     cursor: pointer;

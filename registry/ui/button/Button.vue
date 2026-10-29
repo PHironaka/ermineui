@@ -45,15 +45,15 @@ withDefaults(
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 1rem;
     border: 1px solid transparent;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-primary);
     color: var(--er-primary-foreground);
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1;
     white-space: nowrap;
     text-decoration: none;
@@ -144,18 +144,18 @@ withDefaults(
   /* Sizes */
   .er-button[data-size='sm'] {
     gap: 0.375rem;
-    height: 2rem;
+    height: var(--er-control-sm);
     padding: 0 0.75rem;
     font-size: 0.8125rem;
   }
 
   .er-button[data-size='lg'] {
-    height: 2.5rem;
+    height: var(--er-control-lg);
     padding: 0 1.5rem;
   }
 
   .er-button[data-size='icon'] {
-    width: 2.25rem;
+    width: var(--er-control-md);
     padding: 0;
   }
 }

@@ -68,10 +68,26 @@
   --er-radius-md: calc(var(--er-radius) - 2px);
   --er-radius-lg: var(--er-radius);
   --er-radius-xl: calc(var(--er-radius) + 4px);
+  --er-radius-control: var(--er-radius-md); /* single-line controls: buttons, inputs, selects, toggles. 999px makes them pills */
+  --er-radius-pill: 999px; /* controls that are round by default: quantity steppers, round icon buttons. 0 squares them */
+
+  /* Controls: the height of buttons, inputs, selects and toggles at each size */
+  --er-control-sm: 2rem;
+  --er-control-md: 2.25rem;
+  --er-control-lg: 2.5rem;
 
   /* Type */
   --er-font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --er-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --er-font-display: var(--er-font-sans); /* headings and titles */
+  --er-font-prose: var(--er-font-sans); /* reading text: articles, lead paragraphs, descriptions */
+  --er-weight-medium: 500;
+  --er-weight-semibold: 600;
+  --er-weight-heading: 650;
+  --er-weight-display: 700;
+  --er-tracking-ui: 0em; /* letter spacing of interface text */
+  --er-tracking-heading: 1; /* how tightly headings are set: 0 is not at all, negative opens them up */
+  --er-display-case: none; /* uppercase sets the biggest headings in capitals */
 
   /* Fluid type (the typography component). Text grows smoothly between a narrow screen and a wide one,
      with no breakpoints. Each size is the body size multiplied by the ratio once per step up the scale.
@@ -125,6 +141,7 @@
     color: var(--er-foreground);
     font-family: var(--er-font-sans);
     line-height: 1.5;
+    letter-spacing: var(--er-tracking-ui);
     -webkit-font-smoothing: antialiased;
   }
 }

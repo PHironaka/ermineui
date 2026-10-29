@@ -84,7 +84,7 @@ withDefaults(
   }
 
   .er-description-list[data-layout='stacked'] dd {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 }
 </style>

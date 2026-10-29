@@ -46,7 +46,7 @@ defineProps<{
   .er-empty-state-title {
     margin: 0;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-empty-state-description {

@@ -163,7 +163,7 @@ function onKeydown(event: KeyboardEvent) {
   .er-menu-label {
     padding: 0.375rem 0.5rem;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-menu-separator {

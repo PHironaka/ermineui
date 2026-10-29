@@ -78,18 +78,20 @@ const query = ref('')
   .er-not-found-code {
     margin: 0;
     color: var(--er-muted-foreground);
+    font-family: var(--er-font-display);
     font-size: clamp(4rem, 22cqi, 7rem);
-    font-weight: 700;
+    font-weight: var(--er-weight-display);
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.04em;
+    letter-spacing: calc(-0.04em * var(--er-tracking-heading));
     line-height: 1;
   }
 
   .er-not-found-title {
     margin: 0;
+    font-family: var(--er-font-display);
     font-size: 1.5rem;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-weight: var(--er-weight-heading);
+    letter-spacing: calc(-0.01em * var(--er-tracking-heading));
     line-height: 2rem;
     text-wrap: balance;
   }

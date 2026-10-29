@@ -119,7 +119,7 @@ async function again() {
 
   .er-forgot-password-sent strong {
     color: var(--er-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     overflow-wrap: anywhere;
   }
 
@@ -131,7 +131,7 @@ async function again() {
   .er-forgot-password-link {
     color: var(--er-foreground);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-align: center;
     text-decoration: underline;
     text-underline-offset: 0.2em;

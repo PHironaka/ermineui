@@ -235,16 +235,18 @@ watch(videoEl, (video) => {
   .er-hero-eyebrow {
     margin: 0;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .er-hero-title {
     margin: 0;
+    font-family: var(--er-font-display);
     font-size: clamp(2.5rem, 8cqi, 6rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
+    font-weight: var(--er-weight-semibold);
+    letter-spacing: calc(-0.035em * var(--er-tracking-heading));
+    text-transform: var(--er-display-case);
     line-height: 1;
     text-wrap: balance;
   }
@@ -253,6 +255,7 @@ watch(videoEl, (video) => {
     display: grid;
     gap: 0.75rem;
     max-width: 36rem;
+    font-family: var(--er-font-prose);
     font-size: clamp(1rem, 1.6cqi, 1.25rem);
     line-height: 1.5;
     text-wrap: pretty;

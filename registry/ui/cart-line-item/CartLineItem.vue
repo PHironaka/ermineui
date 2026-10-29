@@ -107,7 +107,7 @@ function setQuantity(next: number | undefined) {
 
   .er-cart-line-item-title {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 
@@ -144,18 +144,18 @@ function setQuantity(next: number | undefined) {
 
   .er-cart-line-item-total {
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
     line-height: 1.25rem;
   }
 
   .er-cart-line-item-end .er-number-input {
     width: 6.5rem;
-    height: 2rem;
+    height: var(--er-control-sm);
   }
 
   .er-cart-line-item-end .er-number-input button {
-    width: 2rem;
+    width: var(--er-control-sm);
   }
 
   .er-cart-line-item-remove {

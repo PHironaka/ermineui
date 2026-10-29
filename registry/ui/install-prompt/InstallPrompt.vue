@@ -172,7 +172,7 @@ function dismiss() {
 
   .er-install-prompt-title {
     margin: 0;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-install-prompt-description {

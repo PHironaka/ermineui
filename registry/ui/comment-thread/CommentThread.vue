@@ -84,7 +84,7 @@ function submit() {
   .er-comment-thread-title {
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.5rem;
   }
 
@@ -152,7 +152,7 @@ function submit() {
   }
 
   .er-comment-author {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-comment-badge {
@@ -160,7 +160,7 @@ function submit() {
     border: 1px solid var(--er-border);
     border-radius: 999px;
     font-size: 0.6875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.125rem;
   }
 
@@ -190,7 +190,7 @@ function submit() {
     color: var(--er-muted-foreground);
     font: inherit;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
   }
 

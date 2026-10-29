@@ -219,7 +219,7 @@ function onKeydown(event: KeyboardEvent) {
   }
 
   .er-calendar-title {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-calendar-nav {
@@ -303,7 +303,7 @@ function onKeydown(event: KeyboardEvent) {
 
   .er-calendar-day[data-today] {
     box-shadow: inset 0 0 0 1px var(--er-input);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   /* A range is one continuous band: square where days join, rounded only at its two ends. */

@@ -93,7 +93,7 @@ defineExpose({
 
   .er-payment-card-input-brand {
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 }
 </style>

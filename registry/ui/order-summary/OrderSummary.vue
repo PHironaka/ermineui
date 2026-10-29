@@ -103,7 +103,7 @@ const sum = computed(() => props.total ?? Math.max(0, props.subtotal - (props.di
     padding-top: 0.75rem;
     border-top: 1px solid var(--er-border);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-order-summary-total dt {

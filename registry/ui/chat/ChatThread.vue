@@ -165,7 +165,7 @@ defineExpose({ scrollToEnd })
     box-shadow: var(--er-shadow-md);
     font: inherit;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     transform: translateX(-50%);
     cursor: pointer;
   }

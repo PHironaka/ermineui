@@ -136,7 +136,7 @@ watch(
   .er-sheet-title {
     margin: 0;
     font-size: 1.125rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.2;
   }
 

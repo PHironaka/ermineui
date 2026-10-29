@@ -190,7 +190,7 @@ watch(
     padding: 0.25rem 0.5rem;
     color: var(--er-muted-foreground);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
   }
 
@@ -199,14 +199,14 @@ watch(
     align-items: center;
     gap: 0.625rem;
     width: 100%;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.625rem;
     border: 0;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: transparent;
     color: var(--er-muted-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-align: left;
     text-decoration: none;
     white-space: nowrap;

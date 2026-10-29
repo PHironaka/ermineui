@@ -55,7 +55,7 @@ const saving = computed(() => percentOff(props.amount, props.compareAt))
   }
 
   .er-price-now {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-price[data-sale] .er-price-now {
@@ -74,7 +74,7 @@ const saving = computed(() => percentOff(props.amount, props.compareAt))
     background: var(--er-destructive);
     color: var(--er-destructive-foreground);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-price-hidden {

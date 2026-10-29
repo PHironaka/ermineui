@@ -187,16 +187,17 @@ function add() {
     margin: 0;
     color: var(--er-muted-foreground);
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .er-product-detail-title {
     margin: 0;
+    font-family: var(--er-font-display);
     font-size: 1.625rem;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-weight: var(--er-weight-heading);
+    letter-spacing: calc(-0.01em * var(--er-tracking-heading));
     line-height: 2rem;
     text-wrap: balance;
   }
@@ -232,6 +233,7 @@ function add() {
   .er-product-detail-description {
     margin: 0;
     color: var(--er-muted-foreground);
+    font-family: var(--er-font-prose);
     font-size: 0.9375rem;
     line-height: 1.6;
   }
@@ -244,7 +246,7 @@ function add() {
   .er-product-detail-label {
     margin: 0;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-product-detail-label span {
@@ -266,11 +268,11 @@ function add() {
 
   .er-product-detail-buy .er-quantity-stepper,
   .er-product-detail-buy .er-wishlist-button {
-    height: 2.5rem;
+    height: var(--er-control-lg);
   }
 
   .er-product-detail-buy .er-wishlist-button {
-    width: 2.5rem;
+    width: var(--er-control-lg);
   }
 
   .er-product-detail-missing {
@@ -300,8 +302,9 @@ function add() {
 
   .er-product-detail-section-title {
     margin: 0;
+    font-family: var(--er-font-display);
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.75rem;
   }
 

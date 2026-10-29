@@ -209,7 +209,7 @@ function runAction(toast: ToastItem) {
   }
 
   .er-toast-title {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-toast-description {
@@ -228,7 +228,7 @@ function runAction(toast: ToastItem) {
     color: var(--er-primary-foreground);
     font: inherit;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
   }
 

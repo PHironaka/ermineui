@@ -92,7 +92,7 @@ const html = computed(() => (props.render ? props.render(props.source) : renderM
 
   .er-markdown th {
     background: var(--er-muted);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-markdown [data-align='center'] {

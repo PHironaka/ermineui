@@ -43,7 +43,7 @@ provideSegmentedControl({
     gap: 0.125rem;
     max-width: 100%;
     padding: 0.1875rem;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-muted);
   }
 
@@ -68,10 +68,10 @@ provideSegmentedControl({
     min-width: 0;
     height: 1.875rem;
     padding: 0 0.75rem;
-    border-radius: var(--er-radius-sm);
+    border-radius: calc(var(--er-radius-control) - 2px);
     color: var(--er-muted-foreground);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;

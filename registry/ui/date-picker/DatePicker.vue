@@ -137,10 +137,10 @@ useLayer(content, open, {
     align-items: center;
     gap: 0.5rem;
     width: 100%;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-foreground);
     font-family: inherit;

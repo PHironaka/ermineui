@@ -216,7 +216,7 @@ function saveNotifications() {
 
   .er-settings-switch-label {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-settings-switches p {

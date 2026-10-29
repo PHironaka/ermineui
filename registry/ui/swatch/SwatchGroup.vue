@@ -43,14 +43,14 @@ provideSwatchGroup({
     display: inline-grid;
     place-items: center;
     min-width: 2.5rem;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-foreground);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1;
     cursor: pointer;
     user-select: none;

@@ -34,7 +34,7 @@ registry/styles/ermine.css   theme tokens (CSS variables), base styles, shared f
 registry/lib/*.ts            behavior helpers, copied into user projects (primitive, floating, layer, collection, scroll-lock, context)
 registry/ui/<name>/          one folder per component, with an index.ts
 registry/blocks/<name>/      page sections built from components; import them as ../../ui/<name>
-registry/themes/base|accent/ colour themes, each a :root block of --er-* variables (packed into registry.json as `themes`)
+registry/themes/style|base|accent/ styles and colour themes, each a :root block of --er-* variables (packed into registry.json as `themes`)
 cli/bin/ermine.mjs           the CLI (no dependencies); reads only cli/registry.json. `ermine mcp` is a hand-written MCP stdio server in the same file
 scripts/build-registry.mjs   packs registry/ into cli/registry.json
 playground/                  Vite app rendering every component, which the e2e tests drive
@@ -54,7 +54,7 @@ The description `ermine list` shows comes from the first `/** ... */` comment in
 
 **The CLI's commands return text instead of printing it** (`setUp`, `install`, `catalog`), because the MCP server's stdout carries protocol messages. Keep new command logic free of `console.log` so the MCP tools can reuse it.
 
-**Colour themes:** a base sets the grey tokens plus primary/ring; an accent sets only `primary`, `primary-foreground` and `ring`, so it must come after the base. `ermine theme` writes each into the project stylesheet between `/* ermine theme <kind>: <name>` and `/* end ermine theme <kind> */` markers and replaces only that block. `tests/unit/themes.test.ts` checks every base × accent pairing for contrast (4.5:1 text, 3:1 ring) in light and dark, that colours are within sRGB, and that `neutral` equals the defaults in `ermine.css`, so a change to a default grey needs the same change in `themes/base/neutral.css`. The playground's top bar and the site's /themes/ page load the same files.
+**Themes:** a style sets type, weights, shape and control-height tokens (never colours, never `--er-duration`, which would undo reduced motion) and may start with `@import` lines for its fonts, which `ermine theme` moves into a `/* ermine theme fonts */` block at the top of the stylesheet. A base sets the grey tokens plus primary/ring; an accent sets only `primary`, `primary-foreground` and `ring`, so it must come after the base. Components read sizes and weights through these tokens (`--er-control-*`, `--er-radius-control`, `--er-weight-*`, `--er-font-display`/`-prose`), so new components should too. `ermine theme` writes each kind into the project stylesheet between `/* ermine theme <kind>: <name>` and `/* end ermine theme <kind> */` markers and replaces only that block. `tests/unit/themes.test.ts` checks every base × accent pairing for contrast (4.5:1 text, 3:1 ring) in light and dark, that colours are within sRGB, and that `neutral` equals the defaults in `ermine.css`, so a change to a default grey needs the same change in `themes/base/neutral.css`. The playground's top bar and the site's /themes/ page load the same files.
 
 **Adding a component:** create `registry/ui/<name>/` with the `.vue` files and an `index.ts` (starting with the description comment), run `npm run registry`, then add a demo to the playground (`playground/src/App.vue`, or the files in `playground/src/demos/`).
 

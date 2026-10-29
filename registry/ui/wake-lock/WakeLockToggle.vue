@@ -69,15 +69,15 @@ onBeforeUnmount(() => {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-muted-foreground);
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     box-shadow: var(--er-shadow-xs);
     cursor: pointer;
     transition:

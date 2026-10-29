@@ -130,7 +130,7 @@ function onPaste(index: number, event: ClipboardEvent) {
     color: var(--er-foreground);
     font-family: inherit;
     font-size: 1.125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
     text-align: center;
     box-shadow: var(--er-shadow-xs);

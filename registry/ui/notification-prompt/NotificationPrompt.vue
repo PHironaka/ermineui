@@ -104,7 +104,7 @@ function dismiss() {
 
   .er-notification-prompt-title {
     margin: 0;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-notification-prompt-description,

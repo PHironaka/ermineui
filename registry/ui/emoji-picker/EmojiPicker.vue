@@ -240,7 +240,7 @@ function jump(name: string) {
     background: var(--er-popover);
     color: var(--er-muted-foreground);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1rem;
   }
 

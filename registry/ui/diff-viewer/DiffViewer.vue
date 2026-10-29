@@ -147,7 +147,7 @@ function splitRows(hunk: readonly DiffLine[]): SplitRow[] {
     display: flex;
     flex-shrink: 0;
     gap: 0.5rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
 

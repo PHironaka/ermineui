@@ -139,7 +139,7 @@ const groups = computed(() => {
     z-index: 1;
     min-width: 9rem;
     background: var(--er-background);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-align: left;
   }
 
@@ -151,14 +151,14 @@ const groups = computed(() => {
     background: var(--er-muted);
     color: var(--er-muted-foreground);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .er-comparison-table-title {
     display: block;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-comparison-table-subtitle {

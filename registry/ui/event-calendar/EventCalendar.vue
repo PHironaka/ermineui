@@ -141,7 +141,7 @@ const color = (event: CalendarEvent) => `var(--er-chart-${Math.max(1, Math.min(e
     flex: 1;
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-event-calendar-button {
@@ -154,7 +154,7 @@ const color = (event: CalendarEvent) => `var(--er-chart-${Math.max(1, Math.min(e
     background: var(--er-input-background);
     color: var(--er-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
     transition: background-color var(--er-duration);
   }
@@ -191,7 +191,7 @@ const color = (event: CalendarEvent) => `var(--er-chart-${Math.max(1, Math.min(e
     border-bottom: 1px solid var(--er-border);
     color: var(--er-muted-foreground);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-event-calendar td {
@@ -241,7 +241,7 @@ const color = (event: CalendarEvent) => `var(--er-chart-${Math.max(1, Math.min(e
   .er-event-calendar td[data-today] .er-event-calendar-day {
     background: var(--er-primary);
     color: var(--er-primary-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-event-calendar ul {

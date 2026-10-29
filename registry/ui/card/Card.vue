@@ -25,7 +25,7 @@
   .er-card-title {
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.25;
   }
 

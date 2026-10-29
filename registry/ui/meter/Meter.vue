@@ -89,7 +89,7 @@ const tone = computed(() => {
   }
 
   .er-meter-label {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-meter-value {

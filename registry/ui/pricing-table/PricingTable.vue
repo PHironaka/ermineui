@@ -107,7 +107,7 @@ const money = (value: number) => formatMoney(value, props.currency, props.locale
     background: color-mix(in oklab, var(--er-success) 15%, transparent);
     color: var(--er-foreground);
     font-size: 0.6875rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   /* As many plans in a row as fit; the table measures itself, not the screen. */
@@ -149,7 +149,7 @@ const money = (value: number) => formatMoney(value, props.currency, props.locale
   .er-pricing-table-name {
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.5rem;
   }
 
@@ -173,7 +173,7 @@ const money = (value: number) => formatMoney(value, props.currency, props.locale
   .er-pricing-table-price strong {
     color: var(--er-foreground);
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
     line-height: 2.25rem;

@@ -194,10 +194,10 @@ useLayer(content, open, {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem 0 0.5rem;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-foreground);
     font-family: var(--er-font-mono);

@@ -148,7 +148,7 @@ const stateWords = { done: 'Done', current: 'Now', upcoming: 'To come' }
 
   .er-order-tracker-label {
     color: var(--er-muted-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     overflow-wrap: anywhere;
   }
 

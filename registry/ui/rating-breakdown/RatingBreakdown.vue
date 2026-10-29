@@ -76,7 +76,7 @@ const whole = new Intl.NumberFormat('en-US')
 
   .er-rating-breakdown-score strong {
     font-size: 2.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
     line-height: 1;
     letter-spacing: -0.02em;
@@ -126,7 +126,7 @@ const whole = new Intl.NumberFormat('en-US')
   }
 
   button.er-rating-breakdown-row[aria-pressed='true'] {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   button.er-rating-breakdown-row:focus-visible {

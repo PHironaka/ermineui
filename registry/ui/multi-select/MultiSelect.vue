@@ -191,7 +191,7 @@ useLayer(list, open, {
     align-items: center;
     gap: 0.25rem;
     width: 100%;
-    min-height: 2.25rem;
+    min-height: var(--er-control-md);
     padding: 0.25rem 0.375rem;
     border: 1px solid var(--er-input);
     border-radius: var(--er-radius-md);
@@ -253,7 +253,7 @@ useLayer(list, open, {
     background: var(--er-secondary);
     color: var(--er-secondary-foreground);
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
   }
 

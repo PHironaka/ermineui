@@ -130,7 +130,7 @@ function clear() {
     background: var(--er-secondary);
     color: var(--er-secondary-foreground);
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 

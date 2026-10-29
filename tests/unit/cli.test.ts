@@ -236,10 +236,34 @@ test('theme writes a base and an accent into the stylesheet, swaps them, and rem
     assert.ok(ermine(dir, 'theme').split('\n').find((line) => /\srose\s/.test(line))!.includes('✓'))
 
     assert.match(fails(dir, 'theme', 'blue', 'rose'), /Pick one accent theme/)
-    assert.match(fails(dir, 'theme', 'purple'), /Unknown theme: purple\. Bases: .*slate.*Accents: .*blue/)
+    assert.match(fails(dir, 'theme', 'purple'), /Unknown theme: purple\. Styles: .*editorial.*Bases: .*slate.*Accents: .*blue/)
 
     ermine(dir, 'theme', '--reset')
     assert.equal(readFileSync(stylesheet, 'utf8'), original, 'reset gives back the file as it was')
+  })
+})
+
+test('theme writes a style before the colours, with its fonts at the top of the file, and swaps them together', () => {
+  project((dir) => {
+    ermine(dir, 'init', '-y')
+    const stylesheet = join(dir, 'src/styles/ermine.css')
+    const original = readFileSync(stylesheet, 'utf8')
+
+    ermine(dir, 'theme', 'slate', 'blue')
+    assert.match(ermine(dir, 'theme', 'editorial'), /style editorial, base slate, accent blue/, 'picking a style keeps the colours')
+    let css = readFileSync(stylesheet, 'utf8')
+    assert.ok(css.indexOf('ermine theme style: editorial') < css.indexOf('ermine theme base: slate'), 'the style is put before the colours')
+    assert.ok(css.startsWith('/* ermine theme fonts */\n@import url('), '@import is only allowed at the top')
+    assert.ok(css.includes('Hanken+Grotesk') && !/^@import/m.test(css.slice(css.indexOf('/* end ermine theme fonts */'))), 'no @import is left lower down')
+
+    ermine(dir, 'theme', 'catalogue')
+    css = readFileSync(stylesheet, 'utf8')
+    assert.equal(css.match(/@import/g)?.length, 1, "the old style's fonts go with it")
+    assert.ok(css.includes('Newsreader') && !css.includes('Hanken+Grotesk'))
+    assert.equal(css.match(/ermine theme style:/g)?.length, 1)
+
+    ermine(dir, 'theme', '--reset')
+    assert.equal(readFileSync(stylesheet, 'utf8'), original, 'reset takes the fonts away too')
   })
 })
 

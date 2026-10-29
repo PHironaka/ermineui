@@ -93,7 +93,7 @@ watch(
     border-radius: var(--er-radius-sm);
     background: var(--er-secondary);
     color: var(--er-secondary-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-promo-code-applied svg {

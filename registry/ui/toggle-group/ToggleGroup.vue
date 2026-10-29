@@ -89,7 +89,7 @@ function onKeydown(event: KeyboardEvent) {
     color: inherit;
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
     cursor: pointer;
     transition:

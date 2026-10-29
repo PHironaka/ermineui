@@ -189,7 +189,7 @@ function onKeydown(event: KeyboardEvent) {
   .er-tree-item[aria-selected='true'] {
     background: var(--er-accent);
     color: var(--er-accent-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-tree-item:focus-visible {

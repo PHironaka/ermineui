@@ -142,7 +142,7 @@ const items = computed(() =>
     border: 1px solid var(--er-input);
     border-radius: 50%;
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
     transition:
       background-color var(--er-duration),
@@ -176,7 +176,7 @@ const items = computed(() =>
   }
 
   .er-stepper-label {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
   }
 

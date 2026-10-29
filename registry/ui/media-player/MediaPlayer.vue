@@ -298,7 +298,7 @@ defineExpose({ media, toggle, seek })
     margin: 0;
     padding: 0.75rem 1rem 0;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 
@@ -367,7 +367,7 @@ defineExpose({ media, toggle, seek })
     color: inherit;
     font: inherit;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     transition: background-color var(--er-duration);

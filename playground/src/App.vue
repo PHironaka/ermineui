@@ -105,6 +105,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanels } from '../../registry
 import { vReveal } from '../../registry/ui/reveal'
 import { ScrollArea } from '../../registry/ui/scroll-area'
 import { ScrollProgress } from '../../registry/ui/scroll-progress'
+import { SegmentedControl, SegmentedControlItem } from '../../registry/ui/segmented-control'
 import { Select, SelectContent, SelectItem, SelectLabel, SelectSeparator, SelectTrigger } from '../../registry/ui/select'
 import { Separator } from '../../registry/ui/separator'
 import { ShareButton } from '../../registry/ui/share-button'
@@ -172,27 +173,32 @@ function toggleTheme(event?: MouseEvent) {
   }, event && event.clientX ? event : undefined)
 }
 
-// Colour themes: the same files "ermine theme" writes into a project, laid over the stylesheet in one <style> element.
+// Themes: the same files "ermine theme" writes into a project, laid over the stylesheet in one <style> element.
+// The style goes first, because its font @import has to come before any rule.
 const themeFiles = import.meta.glob('../../registry/themes/*/*.css', { query: '?raw', import: 'default', eager: true }) as Record<string, string>
-const colourThemes = Object.entries(themeFiles).map(([path, css]) => {
-  const [, kind = '', name = ''] = path.match(/themes\/(base|accent)\/([\w-]+)\.css$/)!
-  // A dot for each: the accent's primary colour, or the base's grey text, which shows its tint best.
-  const dot = css.match(new RegExp(`--er-${kind === 'accent' ? 'primary' : 'muted-foreground'}: ([^;]+);`))![1]!
+const allThemes = Object.entries(themeFiles).map(([path, css]) => {
+  const [, kind = '', name = ''] = path.match(/themes\/(style|base|accent)\/([\w-]+)\.css$/)!
+  // A dot for each colour theme: the accent's primary colour, or the base's grey text, which shows its tint best.
+  const dot = kind === 'style' ? '' : css.match(new RegExp(`--er-${kind === 'accent' ? 'primary' : 'muted-foreground'}: ([^;]+);`))![1]!
   return { kind, name, css, dot, title: name.charAt(0).toUpperCase() + name.slice(1) }
 })
-const baseThemes = colourThemes.filter((item) => item.kind === 'base')
-const accentThemes = colourThemes.filter((item) => item.kind === 'accent')
+const styleThemes = allThemes.filter((item) => item.kind === 'style')
+const baseThemes = allThemes.filter((item) => item.kind === 'base')
+const accentThemes = allThemes.filter((item) => item.kind === 'accent')
+const styleTheme = ref('default')
 const baseTheme = ref('neutral')
 const accentTheme = ref('mono')
-const themeCommand = computed(() => `npx ermineui theme ${baseTheme.value}${accentTheme.value === 'mono' ? '' : ` ${accentTheme.value}`}`)
+const themeCommand = computed(() =>
+  ['npx ermineui theme', styleTheme.value === 'default' ? '' : styleTheme.value, baseTheme.value, accentTheme.value === 'mono' ? '' : accentTheme.value].filter(Boolean).join(' '),
+)
 onMounted(() => {
   const style = document.createElement('style')
   style.dataset.colourTheme = ''
   document.head.append(style)
   watch(
-    [baseTheme, accentTheme],
-    ([base, accent]) => {
-      style.textContent = colourThemes.filter((item) => item.name === base || item.name === accent).map((item) => item.css).join('\n')
+    [styleTheme, baseTheme, accentTheme],
+    (names) => {
+      style.textContent = names.flatMap((name) => allThemes.filter((item) => item.name === name).map((item) => item.css)).join('\n')
     },
     { immediate: true },
   )
@@ -840,7 +846,7 @@ function undoable() {
         <Badge variant="outline">v0.5.0</Badge>
         <Popover>
           <PopoverTrigger as-child>
-            <Button variant="outline" size="icon" aria-label="Colour theme">
+            <Button variant="outline" size="icon" aria-label="Theme">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2.1a1.9 1.9 0 0 0-1.4 3.2A1.7 1.7 0 0 1 12 22Z" />
                 <circle cx="7.5" cy="10.5" r="1" /><circle cx="12" cy="7.5" r="1" /><circle cx="16.5" cy="10.5" r="1" />
@@ -848,7 +854,12 @@ function undoable() {
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" class="colour-theme">
-            <p class="popover-title">Colour theme</p>
+            <p class="popover-title">Theme</p>
+            <p class="hint">Style</p>
+            <SegmentedControl v-model="styleTheme" label="Style" size="sm" block>
+              <SegmentedControlItem value="default">Default</SegmentedControlItem>
+              <SegmentedControlItem v-for="item in styleThemes" :key="item.name" :value="item.name">{{ item.title }}</SegmentedControlItem>
+            </SegmentedControl>
             <p class="hint">Base</p>
             <SwatchGroup v-model="baseTheme" label="Base colours">
               <Swatch v-for="item in baseThemes" :key="item.name" :value="item.name" :color="item.dot" :label="item.title" />

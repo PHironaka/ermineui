@@ -60,7 +60,7 @@ defineOptions({ inheritAttrs: false })
     height: 2.5rem;
     padding-block: 0;
     color: var(--er-muted-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
   }
 
@@ -78,7 +78,7 @@ defineOptions({ inheritAttrs: false })
   .er-table-footer {
     border-top: 1px solid var(--er-border);
     background: color-mix(in oklab, var(--er-muted) 50%, transparent);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-table-footer .er-table-row {

@@ -307,34 +307,47 @@ function catalog(cwd, config, registry) {
   return lines.join('\n')
 }
 
-// ---------- colour themes ----------
+// ---------- themes ----------
 // A theme is a :root block of variables written at the end of the project's stylesheet, between two marker
-// comments, so a later "ermine theme" can find it and swap it for another. One base block and one accent block
-// at most; the base comes first, because it sets a primary colour that the accent replaces.
+// comments, so a later "ermine theme" can find it and swap it for another. One block of each kind at most, in the
+// order of THEME_KINDS: the base comes before the accent, because it sets a primary colour that the accent replaces.
+// A style can also load web fonts. Its @import lines go in a block of their own at the top of the file, the only
+// place CSS allows them.
 
-const THEME_KINDS = { base: 'surfaces, text and lines', accent: 'primary colour and focus ring' }
+const THEME_KINDS = { style: 'type, weights, shape and control sizes', base: 'surfaces, text and lines', accent: 'primary colour and focus ring' }
+const KIND_TITLES = { style: 'Styles', base: 'Bases', accent: 'Accents' }
 const themeBlockPattern = (kind) => new RegExp(`/\\* ermine theme ${kind}: [\\s\\S]*?/\\* end ermine theme ${kind} \\*/\\n?`)
+const fontsBlockPattern = /\/\* ermine theme fonts \*\/[\s\S]*?\/\* end ermine theme fonts \*\/\n*/
+const importPattern = /^@import [^;]+;\n?/gm
 
-/** The base and accent themes the stylesheet currently has blocks for. */
+/** The theme of each kind that the stylesheet currently has a block for. */
 function currentThemes(css) {
   return Object.fromEntries(Object.keys(THEME_KINDS).map((kind) => [kind, css.match(new RegExp(`/\\* ermine theme ${kind}: ([\\w-]+)`))?.[1]]))
 }
 
 function themeBlock(name, theme) {
-  const variables = theme.content.replace(/^\/\*\*[\s\S]*?\*\/\s*/, '').trim()
+  const variables = theme.content.replace(/^\/\*\*[\s\S]*?\*\/\s*/, '').replace(importPattern, '').trim()
   return (
     `/* ermine theme ${theme.kind}: ${name}. "ermine theme" replaces this block when you pick another ${theme.kind}.\n` +
-    `   To fine-tune a colour, set it again in a rule after this block. */\n${variables}\n/* end ermine theme ${theme.kind} */\n`
+    `   To fine-tune a value, set it again in a rule after this block. */\n${variables}\n/* end ermine theme ${theme.kind} */\n`
   )
 }
 
-/** Writes the chosen themes into the project's stylesheet, keeping the other kind's choice unless `reset`. */
+/** The fonts the chosen themes load, as a block for the top of the stylesheet, or '' when they load none. */
+function fontsBlock(chosen, themes) {
+  const imports = Object.values(chosen).flatMap((name) => (name ? (themes[name].content.match(importPattern) ?? []) : []))
+  if (imports.length === 0) return ''
+  return `/* ermine theme fonts */\n${imports.map((line) => line.trim()).join('\n')}\n/* end ermine theme fonts */\n\n`
+}
+
+/** Writes the chosen themes into the project's stylesheet, keeping the other kinds' choices unless `reset`. */
 function applyThemes(cwd, config, registry, names, { reset }) {
   const themes = registry.themes ?? {}
   const byKind = (kind) => Object.keys(themes).filter((name) => themes[name].kind === kind)
   const unknown = names.filter((name) => !themes[name])
   if (unknown.length > 0) {
-    throw new UserError(`Unknown theme: ${unknown.join(', ')}. Bases: ${byKind('base').join(', ')}. Accents: ${byKind('accent').join(', ')}.`)
+    const known = Object.keys(THEME_KINDS).map((kind) => `${KIND_TITLES[kind]}: ${byKind(kind).join(', ')}.`)
+    throw new UserError(`Unknown theme: ${unknown.join(', ')}. ${known.join(' ')}`)
   }
   const picked = {}
   for (const name of names) {
@@ -347,17 +360,22 @@ function applyThemes(cwd, config, registry, names, { reset }) {
   if (!existsSync(path)) throw new UserError(`${config.styles} not found. Run "ermine init" to create it.`)
   let css = readFileSync(path, 'utf8')
   const chosen = reset ? {} : { ...currentThemes(css), ...picked }
-  for (const kind of Object.keys(THEME_KINDS)) {
+  const kinds = Object.keys(THEME_KINDS)
+  for (const [index, kind] of kinds.entries()) {
     const pattern = themeBlockPattern(kind)
     const name = chosen[kind]
+    const later = kinds.slice(index + 1).map(themeBlockPattern).find((next) => next.test(css))
     if (!name) css = css.replace(pattern, '')
     else if (pattern.test(css)) css = css.replace(pattern, themeBlock(name, themes[name]))
-    else if (kind === 'base' && themeBlockPattern('accent').test(css)) css = css.replace(themeBlockPattern('accent'), (accent) => `${themeBlock(name, themes[name])}\n${accent}`)
+    else if (later) css = css.replace(later, (block) => `${themeBlock(name, themes[name])}\n${block}`)
     else css = `${css.replace(/\n*$/, '\n')}\n${themeBlock(name, themes[name])}`
   }
+  css = css.replace(fontsBlockPattern, '')
+  const charset = css.match(/^@charset [^;]+;\n*/)?.[0] ?? ''
+  css = charset + fontsBlock(chosen, themes) + css.slice(charset.length)
   writeFileSync(path, css.replace(/\n{3,}/g, '\n\n').replace(/\n*$/, '\n'))
 
-  if (reset) return `${yellow('~')} ${config.styles}: themes removed; the stylesheet's own colours apply again.`
+  if (reset) return `${yellow('~')} ${config.styles}: themes removed; the stylesheet's own look applies again.`
   const now = Object.entries(chosen)
     .filter(([, name]) => name)
     .map(([kind, name]) => `${kind} ${bold(name)}`)
@@ -372,14 +390,14 @@ function themeCatalog(cwd, config, registry) {
   const width = Math.max(...Object.keys(themes).map((name) => name.length))
   const lines = []
   for (const [kind, what] of Object.entries(THEME_KINDS)) {
-    lines.push(`${lines.length > 0 ? '\n' : ''}${bold(kind === 'base' ? 'Bases' : 'Accents')} ${dim(`· ${what}`)}`)
+    lines.push(`${lines.length > 0 ? '\n' : ''}${bold(KIND_TITLES[kind])} ${dim(`· ${what}`)}`)
     for (const [name, theme] of Object.entries(themes)) {
       if (theme.kind !== kind) continue
       const summary = theme.description.replace(/^.+? — /, '').replace(/^./, (first) => first.toUpperCase())
       lines.push(`  ${current[kind] === name ? green('✓') : ' '} ${bold(name.padEnd(width))}  ${dim(summary)}`)
     }
   }
-  lines.push(dim('\n  Pick one of each, e.g. "ermine theme slate blue". "ermine theme --reset" removes them.'))
+  lines.push(dim('\n  Pick one of each, e.g. "ermine theme editorial slate blue". "ermine theme --reset" removes them.'))
   return lines.join('\n')
 }
 
@@ -478,12 +496,12 @@ const TOOLS = [
   {
     name: 'set_theme',
     description:
-      "Apply colour themes to the project's stylesheet: one base (tints surfaces, text and lines) and/or one accent (primary colour and focus ring). Picking one kind keeps the other. With no names, lists the themes and which are in use.",
+      "Apply themes to the project's stylesheet: one style (type, weights, shape and control sizes), one base (tints surfaces, text and lines) and one accent (primary colour and focus ring), any of them. Picking one kind keeps the others. With no names, lists the themes and which are in use.",
     inputSchema: {
       type: 'object',
       properties: {
-        names: { type: 'array', items: { type: 'string' }, description: 'e.g. ["slate", "blue"]. Bases and accents are listed by calling this with no names.' },
-        reset: { type: 'boolean', description: "Remove both themes, back to the stylesheet's own colours." },
+        names: { type: 'array', items: { type: 'string' }, description: 'e.g. ["editorial", "slate", "blue"]. Styles, bases and accents are listed by calling this with no names.' },
+        reset: { type: 'boolean', description: "Remove all themes, back to the stylesheet's own look." },
         cwd: projectFolder,
       },
     },
@@ -493,7 +511,7 @@ const TOOLS = [
 const INSTRUCTIONS = `Ermine UI is a set of Vue 3 components that are copied into the project as source, not installed from npm.
 Use get_component before writing code with a component, so you use its real props and parts. Import from the folder ermine.json names for components (by default "@/components/ui/<name>"; blocks in "@/components/blocks/<name>").
 Styling: theme with the --er-* CSS variables in the theme stylesheet; component styles sit in @layer components, so plain CSS overrides them. Variants are props that become data-variant / data-size attributes.
-If the project has no ermine.json, call init_project first. To change the colours, use set_theme rather than editing the variables by hand.`
+If the project has no ermine.json, call init_project first. To change the colours or the overall style, use set_theme rather than editing the variables by hand.`
 
 /** A fence longer than any run of backticks inside, so source that contains ``` does not end the block early. */
 function fenced(code, language = '') {
@@ -596,15 +614,15 @@ ${bold('Usage')}
   ermine add <name...>        Copy components or blocks (and what they depend on) into your project
   ermine add --all            Copy every component
   ermine list                 Show available components and blocks
-  ermine theme <name...>      Apply a base and/or accent colour theme, e.g. "ermine theme slate blue"
-  ermine theme                Show the colour themes
+  ermine theme <name...>      Apply a style, base and/or accent theme, e.g. "ermine theme editorial slate blue"
+  ermine theme                Show the themes
   ermine mcp                  Run as an MCP server, so AI coding tools can look components up and add them
 
 ${bold('Options')}
   -y, --yes                  Accept the suggested folders without asking
   -o, --overwrite            Replace files that already exist
-      --theme <base,accent>  With init: apply themes straight away, e.g. --theme slate,blue
-      --reset                With theme: remove the themes, back to the stylesheet's own colours
+      --theme <names>        With init: apply themes straight away, e.g. --theme editorial,slate,blue
+      --reset                With theme: remove the themes, back to the stylesheet's own look
       --cwd <dir>            Run as if started in <dir>
       --registry <url|path>  Use a different registry.json (your own fork, for example)
 `

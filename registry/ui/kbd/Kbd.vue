@@ -18,7 +18,7 @@
     color: var(--er-muted-foreground);
     font-family: var(--er-font-sans);
     font-size: 0.6875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1;
     white-space: nowrap;
     vertical-align: middle;

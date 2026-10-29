@@ -70,9 +70,9 @@ function onCountry(event: Event) {
   .er-phone-input {
     display: flex;
     width: 100%;
-    height: 2.25rem;
+    height: var(--er-control-md);
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     box-shadow: var(--er-shadow-xs);
     transition:
@@ -102,7 +102,7 @@ function onCountry(event: Event) {
     gap: 0.25rem;
     padding: 0 0.5rem 0 0.75rem;
     border-right: 1px solid var(--er-input);
-    border-radius: calc(var(--er-radius-md) - 1px) 0 0 calc(var(--er-radius-md) - 1px);
+    border-radius: calc(var(--er-radius-control) - 1px) 0 0 calc(var(--er-radius-control) - 1px);
     color: var(--er-foreground);
     font-size: 0.875rem;
     font-variant-numeric: tabular-nums;

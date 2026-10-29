@@ -143,7 +143,7 @@ const linkTo = (href: string) => (props.linkAs === 'a' ? { href } : { to: href }
     gap: 0.625rem;
     height: 2.25rem;
     padding: 0 0.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     white-space: nowrap;
     overflow: hidden;
   }
@@ -186,7 +186,7 @@ const linkTo = (href: string) => (props.linkAs === 'a' ? { href } : { to: href }
     min-width: 0;
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.5rem;
     overflow: hidden;
     text-overflow: ellipsis;

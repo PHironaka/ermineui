@@ -128,12 +128,12 @@ test.describe('update prompt', () => {
   })
 })
 
-test.describe('colour theme picker', () => {
+test.describe('theme picker', () => {
   test('lays a base and an accent over the page, and shows the command that does the same in a project', async ({ page }) => {
     const variable = (name: string) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), name)
     const neutralPrimary = await variable('--er-primary')
 
-    await page.getByRole('button', { name: 'Colour theme' }).click()
+    await page.getByRole('button', { name: 'Theme', exact: true }).click()
     const accent = page.getByRole('radiogroup', { name: 'Accent colour' })
     await expect(accent.getByRole('radio', { name: 'Mono (no accent)' })).toBeChecked()
     await accent.getByRole('radio', { name: 'Blue' }).check()
@@ -146,6 +146,25 @@ test.describe('colour theme picker', () => {
     await accent.getByRole('radio', { name: 'Mono (no accent)' }).check()
     await page.getByRole('radiogroup', { name: 'Base colours' }).getByRole('radio', { name: 'Neutral' }).check()
     expect(await variable('--er-primary')).toBe(neutralPrimary)
+    await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme neutral')
+  })
+
+  test('lays a style over the page, alongside the colours', async ({ page }) => {
+    const variable = (name: string) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), name)
+    const button = page.getByRole('button', { name: 'Theme', exact: true })
+    const height = async () => (await button.boundingBox())!.height
+
+    expect(await height()).toBe(36)
+    await page.getByRole('button', { name: 'Theme', exact: true }).click()
+    const style = page.getByRole('radiogroup', { name: 'Style' })
+    await expect(style.getByRole('radio', { name: 'Default' })).toBeChecked()
+    await style.getByRole('radio', { name: 'Soft' }).check()
+    expect(await variable('--er-radius-control')).toBe('999px')
+    expect(await height()).toBe(30)
+    await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme soft neutral')
+
+    await style.getByRole('radio', { name: 'Default' }).check()
+    expect(await height()).toBe(36)
     await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme neutral')
   })
 })

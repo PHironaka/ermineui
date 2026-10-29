@@ -47,7 +47,7 @@ withDefaults(
     color: var(--er-muted-foreground);
     font: inherit;
     font-size: 0.6875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1rem;
     text-decoration: none;
     cursor: pointer;

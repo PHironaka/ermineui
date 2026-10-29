@@ -43,11 +43,11 @@ function toggle() {
   .er-sound-toggle {
     display: inline-grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: var(--er-control-md);
+    height: var(--er-control-md);
     padding: 0;
     border: 1px solid var(--er-input);
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: var(--er-input-background);
     color: var(--er-foreground);
     box-shadow: var(--er-shadow-xs);

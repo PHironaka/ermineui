@@ -199,7 +199,7 @@ function remove(file: File) {
 
   .er-file-upload-text strong {
     color: var(--er-foreground);
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-file-upload-hint {
@@ -261,7 +261,7 @@ function remove(file: File) {
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-overflow: ellipsis;
     white-space: nowrap;
   }

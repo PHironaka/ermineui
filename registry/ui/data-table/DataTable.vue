@@ -318,7 +318,7 @@ const summary = computed(() => {
   }
 
   .er-data-table-search .er-input-group {
-    height: 2rem;
+    height: var(--er-control-sm);
   }
 
   /* Pushed to the far end, whatever else is in the toolbar. */
@@ -336,7 +336,7 @@ const summary = computed(() => {
 
   .er-data-table-bulk > span:first-child {
     margin-right: auto;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
   }
 

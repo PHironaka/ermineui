@@ -118,7 +118,7 @@ const subtotal = computed(() => props.order.items.reduce((sum, item) => sum + it
   .er-order-confirmation-title {
     margin: 0;
     font-size: 1.5rem;
-    font-weight: 650;
+    font-weight: var(--er-weight-heading);
     letter-spacing: -0.01em;
     line-height: 2rem;
     text-wrap: balance;
@@ -134,7 +134,7 @@ const subtotal = computed(() => props.order.items.reduce((sum, item) => sum + it
 
   .er-order-confirmation-lead strong {
     color: var(--er-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     overflow-wrap: anywhere;
   }
 

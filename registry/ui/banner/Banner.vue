@@ -72,7 +72,7 @@ const open = defineModel<boolean>('open', { default: true })
   .er-banner-text a,
   .er-banner-action a {
     color: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-underline-offset: 3px;
   }
 

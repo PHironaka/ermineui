@@ -64,7 +64,7 @@ withDefaults(
 
   .er-alert-title {
     grid-column: -2;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 

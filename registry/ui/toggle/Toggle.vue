@@ -23,16 +23,16 @@ const pressed = defineModel<boolean>({ default: false })
     align-items: center;
     justify-content: center;
     gap: 0.375rem;
-    min-width: 2.25rem;
-    height: 2.25rem;
+    min-width: var(--er-control-md);
+    height: var(--er-control-md);
     padding: 0 0.625rem;
     border: 1px solid transparent;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: transparent;
     color: var(--er-muted-foreground);
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     white-space: nowrap;
     cursor: pointer;
     transition:
@@ -42,8 +42,8 @@ const pressed = defineModel<boolean>({ default: false })
   }
 
   .er-toggle[data-size='sm'] {
-    min-width: 2rem;
-    height: 2rem;
+    min-width: var(--er-control-sm);
+    height: var(--er-control-sm);
     padding: 0 0.5rem;
     font-size: 0.8125rem;
   }

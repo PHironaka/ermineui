@@ -92,6 +92,22 @@ test('every base with every accent keeps text readable and the focus ring visibl
   assert.deepEqual(failures, [])
 })
 
+test('styles set the same variables as each other, all of them defined in ermine.css and none of them colours', () => {
+  const names = (css: string) => [...css.matchAll(/^\s*--er-([\w-]+):/gm)].map((match) => match[1]!).sort()
+  const stylesheet = names(readFileSync(join(registry, 'styles', 'ermine.css'), 'utf8'))
+  const styles = Object.fromEntries(readdirSync(join(registry, 'themes', 'style')).map((file) => [file, names(readFileSync(join(registry, 'themes', 'style', file), 'utf8'))]))
+  const [first, ...rest] = Object.entries(styles)
+  for (const [file, variables] of rest) assert.deepEqual(variables, first![1], `${file} and ${first![0]}`)
+  for (const [file, variables] of Object.entries(styles)) {
+    for (const name of variables) {
+      assert.ok(stylesheet.includes(name), `${file}: --er-${name} is not in ermine.css, so "ermine add" would not back-fill it`)
+      assert.ok(!(name in defaults) && !name.startsWith('chart-'), `${file}: --er-${name} is a colour, which belongs in a base or accent`)
+    }
+    // ermine.css sets the duration to 0 for reduced motion; a style block comes later and would undo that.
+    assert.ok(!variables.includes('duration'), `${file} must not set --er-duration`)
+  }
+})
+
 test('every theme colour can be shown on an ordinary (sRGB) screen', () => {
   for (const [name, theme] of Object.entries({ ...bases, ...accents })) {
     for (const [token, { light, dark }] of Object.entries(theme)) {

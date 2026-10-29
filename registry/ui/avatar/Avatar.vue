@@ -58,7 +58,7 @@ onMounted(() => {
     background: var(--er-muted);
     color: var(--er-foreground);
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1;
     overflow: hidden;
     user-select: none;

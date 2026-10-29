@@ -23,7 +23,7 @@ withDefaults(
     /* Lines stay a comfortable length to read however wide the page is. */
     max-inline-size: 65ch;
     color: var(--er-foreground);
-    font-family: var(--er-font-sans);
+    font-family: var(--er-font-prose);
     line-height: 1.65;
     overflow-wrap: break-word;
   }
@@ -38,27 +38,29 @@ withDefaults(
   }
 
   .er-prose :is(h1, h2, h3, h4, h5, h6) {
-    font-weight: 650;
+    font-family: var(--er-font-display);
+    font-weight: var(--er-weight-heading);
     text-wrap: balance;
   }
 
   .er-prose h1 {
     --er-step: 5;
-    font-weight: 700;
+    font-weight: var(--er-weight-display);
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: calc(-0.03em * var(--er-tracking-heading));
+    text-transform: var(--er-display-case);
   }
 
   .er-prose h2 {
     --er-step: 3;
     line-height: 1.2;
-    letter-spacing: -0.02em;
+    letter-spacing: calc(-0.02em * var(--er-tracking-heading));
   }
 
   .er-prose h3 {
     --er-step: 2;
     line-height: 1.3;
-    letter-spacing: -0.01em;
+    letter-spacing: calc(-0.01em * var(--er-tracking-heading));
   }
 
   .er-prose :is(h4, h5, h6) {
@@ -82,7 +84,7 @@ withDefaults(
 
   .er-prose a {
     color: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
   }

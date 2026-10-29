@@ -95,7 +95,7 @@ onBeforeUnmount(() => clearTimeout(timer))
   .er-countdown-parts b {
     margin-right: 0.0625rem;
     color: var(--er-foreground);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 }
 </style>

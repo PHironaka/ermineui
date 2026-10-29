@@ -265,7 +265,7 @@ function cancelLink() {
     background: transparent;
     color: var(--er-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
   }
 
@@ -324,7 +324,7 @@ function cancelLink() {
 
   .er-rich-text-editor-content :is(h2, h3) {
     font-size: 1.25em;
-    font-weight: 650;
+    font-weight: var(--er-weight-heading);
     line-height: 1.3;
   }
 

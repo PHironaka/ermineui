@@ -72,7 +72,7 @@ defineProps<{
 
   .er-option-card-title {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25rem;
   }
 
@@ -85,7 +85,7 @@ defineProps<{
   .er-option-card-end {
     flex-shrink: 0;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
     line-height: 1.25rem;
   }

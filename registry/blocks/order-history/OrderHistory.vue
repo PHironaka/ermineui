@@ -126,7 +126,7 @@ const pieces = (order: PastOrder) => order.items.reduce((sum, item) => sum + ite
   .er-order-history-title {
     margin: 0;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.75rem;
   }
 
@@ -159,7 +159,7 @@ const pieces = (order: PastOrder) => order.items.reduce((sum, item) => sum + ite
   .er-order-history-number {
     margin: 0;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.375rem;
   }
 

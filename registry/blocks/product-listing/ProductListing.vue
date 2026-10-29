@@ -150,7 +150,7 @@ async function goTo(next: number) {
   .er-product-listing-title {
     margin: 0;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.75rem;
     outline: none;
     /* Clear of a bar stuck to the top of the page when the list is scrolled back to. */

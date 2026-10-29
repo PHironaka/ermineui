@@ -92,15 +92,15 @@ onBeforeUnmount(cancelClose)
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    height: 2.25rem;
+    height: var(--er-control-md);
     padding: 0 0.75rem;
     border: 0;
-    border-radius: var(--er-radius-md);
+    border-radius: var(--er-radius-control);
     background: transparent;
     color: var(--er-foreground);
     font-family: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
@@ -115,7 +115,7 @@ onBeforeUnmount(cancelClose)
   }
 
   .er-navigation-menu-link[aria-current='page'] {
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 
   .er-navigation-menu-trigger:focus-visible,
@@ -171,7 +171,7 @@ onBeforeUnmount(cancelClose)
     border-radius: var(--er-radius-md);
     color: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration: none;
   }
 

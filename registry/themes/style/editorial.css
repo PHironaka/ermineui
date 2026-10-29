@@ -1,0 +1,29 @@
+/** Editorial — quiet and image-led, for portfolios: one grotesk at one weight, square corners, no shadows, the biggest headings in spaced capitals. Font: Hanken Grotesk. */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300..700&display=swap');
+:root {
+  /* Type */
+  --er-font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --er-font-display: var(--er-font-sans);
+  --er-font-prose: var(--er-font-sans);
+  --er-weight-medium: 400;
+  --er-weight-semibold: 400;
+  --er-weight-heading: 400;
+  --er-weight-display: 400;
+  --er-tracking-ui: 0em;
+  --er-tracking-heading: -0.6;
+  --er-display-case: uppercase;
+
+  /* Shape and size */
+  --er-radius: 0rem;
+  --er-radius-xl: 0rem; /* it would otherwise be 4px more than the radius */
+  --er-radius-control: 0rem;
+  --er-radius-pill: 0rem;
+  --er-control-sm: 2rem;
+  --er-control-md: 2.5rem;
+  --er-control-lg: 3rem;
+  --er-shadow-xs: none;
+  --er-shadow-sm: none;
+
+  /* Motion */
+  --er-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}

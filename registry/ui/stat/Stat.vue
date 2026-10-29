@@ -79,7 +79,7 @@ const tone = computed(() => {
 
   .er-stat-value {
     font-size: 1.75rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     line-height: 1.15;
     letter-spacing: -0.01em;
   }
@@ -99,7 +99,7 @@ const tone = computed(() => {
 
   .er-stat-delta strong {
     margin-right: 0.125rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
   }
 

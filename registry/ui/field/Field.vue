@@ -50,7 +50,7 @@ const control = computed(() => ({
   .er-field-label {
     color: var(--er-foreground);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     line-height: 1.25;
   }
 

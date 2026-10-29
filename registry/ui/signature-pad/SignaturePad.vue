@@ -199,7 +199,7 @@ defineExpose({ clear, toDataURL })
     background: transparent;
     color: var(--er-foreground);
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;

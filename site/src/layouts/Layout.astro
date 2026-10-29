@@ -21,8 +21,9 @@ const links = [
 ]
 
 // Every colour theme, keyed to an attribute on <html> so the menu in the top bar can switch them, bases before
-// accents so an accent's primary colour wins over the base's.
+// accents so an accent's primary colour wins over the base's. Styles are not offered on the site yet.
 const themeCss = [...themes]
+  .filter((theme) => theme.kind !== 'style')
   .sort((a, b) => (a.kind === b.kind ? 0 : a.kind === 'base' ? -1 : 1))
   .map((theme) => theme.css.replace(':root', `:root[data-${theme.kind}='${theme.name}']`))
   .join('\n')

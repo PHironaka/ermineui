@@ -87,7 +87,7 @@
   }
 
   .er-timeline-title {
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-timeline-time {

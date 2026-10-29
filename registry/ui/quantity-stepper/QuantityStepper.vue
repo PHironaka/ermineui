@@ -58,9 +58,9 @@ function nudge(direction: 1 | -1) {
   .er-quantity-stepper {
     display: inline-flex;
     align-items: center;
-    height: 2.25rem;
+    height: var(--er-control-md);
     border: 1px solid var(--er-input);
-    border-radius: 999px;
+    border-radius: var(--er-radius-pill);
     background: var(--er-input-background);
   }
 
@@ -75,11 +75,11 @@ function nudge(direction: 1 | -1) {
   .er-quantity-stepper button {
     display: grid;
     place-items: center;
-    width: 2.25rem;
+    width: var(--er-control-md);
     height: 100%;
     padding: 0;
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--er-radius-pill);
     background: transparent;
     color: var(--er-muted-foreground);
     cursor: pointer;
@@ -115,7 +115,7 @@ function nudge(direction: 1 | -1) {
   .er-quantity-stepper-value {
     min-width: 1.75rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     font-variant-numeric: tabular-nums;
     text-align: center;
   }

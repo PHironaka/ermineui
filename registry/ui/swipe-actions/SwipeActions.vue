@@ -120,7 +120,7 @@ function onFocusOut(event: FocusEvent) {
     color: var(--er-secondary-foreground);
     font: inherit;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
     cursor: pointer;
   }
 

@@ -113,16 +113,17 @@ const id = useId()
     margin: 0;
     color: var(--er-muted-foreground);
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .er-media-text-title {
     margin: 0;
+    font-family: var(--er-font-display);
     font-size: clamp(1.5rem, 5cqi, 2.25rem);
-    font-weight: 650;
-    letter-spacing: -0.02em;
+    font-weight: var(--er-weight-heading);
+    letter-spacing: calc(-0.02em * var(--er-tracking-heading));
     line-height: 1.15;
     text-wrap: balance;
   }
@@ -131,6 +132,7 @@ const id = useId()
     display: grid;
     gap: 0.75rem;
     color: var(--er-muted-foreground);
+    font-family: var(--er-font-prose);
     font-size: 1rem;
     line-height: 1.6;
     text-wrap: pretty;
@@ -166,7 +168,7 @@ const id = useId()
   .er-media-text-note {
     margin: 0;
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: var(--er-weight-medium);
   }
 
   .er-media-text-actions {

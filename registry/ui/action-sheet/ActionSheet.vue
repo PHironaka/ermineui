@@ -123,7 +123,7 @@ const open = defineModel<boolean>('open', { default: false })
     justify-content: center;
     border: 1px solid var(--er-border);
     border-radius: var(--er-radius-lg);
-    font-weight: 600;
+    font-weight: var(--er-weight-semibold);
   }
 }
 </style>
