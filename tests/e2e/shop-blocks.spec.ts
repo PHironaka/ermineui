@@ -205,3 +205,38 @@ test.describe('media and text block', () => {
     await expect(columns.getByRole('link', { name: 'Check a balance' })).toBeVisible()
   })
 })
+
+test.describe('hero block', () => {
+  test('each layout keeps its heading and actions, links on the rule and buttons elsewhere', async ({ page }) => {
+    const card = demo(page, 'hero')
+    const hero = card.getByRole('region', { name: 'Field Studio' })
+    await expect(hero).toHaveAttribute('data-layout', 'rule')
+    await expect(hero.getByRole('heading', { name: 'Field Studio', level: 3 })).toBeVisible()
+    await expect(hero.getByRole('link', { name: 'Schedule a conversation' })).toHaveClass(/er-hero-link/)
+    await expect(hero.getByRole('navigation', { name: 'Field Studio' }).getByRole('link')).toHaveCount(4)
+
+    await card.getByRole('radio', { name: 'Centre' }).check()
+    const centred = card.getByRole('region', { name: 'Rooms that hold the light' })
+    await expect(centred).toHaveAttribute('data-layout', 'center')
+    await expect(centred.getByRole('link', { name: 'Schedule a conversation' })).toHaveClass(/er-button/)
+    await expect(centred.getByRole('link', { name: 'See the work' })).toHaveAttribute('href', '#product-listing')
+  })
+
+  test('a background video waits for the button when motion is reduced, and the button pauses it again', async ({ page }) => {
+    const card = demo(page, 'hero')
+    await expect(card.locator('video')).toHaveCount(0)
+    await card.getByRole('radio', { name: 'Video' }).check()
+    const video = card.locator('video')
+    await expect(video).toHaveAttribute('aria-hidden', 'true')
+    // Firefox has no playsInline property, so the attribute is what is checked.
+    await expect(video).toHaveAttribute('playsinline', '')
+    expect(await video.evaluate((v: HTMLVideoElement) => v.muted && v.loop && v.paused)).toBe(true)
+
+    // The tests run with reduced motion, so the video is still until asked.
+    await card.getByRole('button', { name: 'Play background video' }).click()
+    const pause = card.getByRole('button', { name: 'Pause background video' })
+    await expect(pause).toBeVisible()
+    await pause.click()
+    await expect(card.getByRole('button', { name: 'Play background video' })).toBeVisible()
+  })
+})

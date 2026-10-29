@@ -60,6 +60,7 @@
   --er-input-background: light-dark(transparent, oklch(1 0 0 / 4%));
   --er-ring: light-dark(oklch(0.45 0 0), oklch(0.75 0 0));
   --er-overlay: oklch(0 0 0 / 55%);
+  --er-scrim: oklch(0 0 0); /* darkens pictures under text, at whatever strength the component asks for */
 
   /* Shape */
   --er-radius: 0.625rem;

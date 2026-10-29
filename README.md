@@ -151,6 +151,7 @@ A block is a section of a page, or a whole page, already put together from the c
 | `forgot-password` | Asks for an email to send a reset link to, then says to check the inbox |
 | `not-found` | The page for a wrong address or an error: what happened, a search box and the way home |
 | `media-text` | A headline, body copy and a picture: side by side (either way round), stacked, or in three columns with the call to action on its own |
+| `hero` | The first section of a page over a full-bleed picture or looping video: small type on a hairline across the middle, a centred headline, or one along the bottom |
 
 ## Try it
 
@@ -1182,6 +1183,22 @@ A pull cannot be done with a keyboard or a mouse, so keep a button that calls `r
 ```
 
 Set `sent` whether or not the address has an account, so the form does not tell a stranger who is a customer. `NotFound` takes a `code`, `title` and `description`, so the same block serves a 500 or an offline page; `retry` adds a "Try again" button.
+
+**Hero**
+
+```vue
+<Hero title="Field Studio" description="Architecture and interiors" :image="{ src: '/house.jpg' }" :primary-action="{ label: 'Get in touch', href: '/contact' }">
+  <template #header><SiteNav /></template>
+</Hero>
+
+<Hero
+  layout="bottom"
+  title="Houses for the way you live"
+  :video="{ src: [{ src: '/hero.webm', type: 'video/webm' }, { src: '/hero.mp4', type: 'video/mp4' }], poster: '/hero.jpg' }"
+/>
+```
+
+`layout` is `rule` (the default: small type on a thin line across the middle, with the actions as quiet links), `center` or `bottom` (large headlines with buttons). The text over the picture is always light, whatever the page theme, and `overlay` (0 to 1) sets how much the picture is darkened under it. The video is muted, loops, has a pause button, and is hidden from screen readers since the words carry the meaning. It only starts for readers who have not asked for less motion; they see the poster, which falls back to `image`. `height` is `screen` (the default), `large` or `auto`, or set `--er-hero-height`. With `wash-on-scroll` (on by default), the picture fades towards the page colour as the hero scrolls away, in browsers with scroll-driven animations (Chrome, Edge and Safari 26); elsewhere it simply scrolls. The fade follows the nearest scrolling box, so a wrapper with `overflow: hidden` (to round its corners, say) stops it; use `overflow: clip` there instead.
 
 **Media and text**
 

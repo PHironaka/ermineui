@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ForgotPassword } from '../../../registry/blocks/forgot-password'
+import { Hero, sampleHeroImage } from '../../../registry/blocks/hero'
 import { MediaText } from '../../../registry/blocks/media-text'
 import { NotFound } from '../../../registry/blocks/not-found'
 import { OrderConfirmation } from '../../../registry/blocks/order-confirmation'
@@ -8,7 +9,14 @@ import { OrderHistory } from '../../../registry/blocks/order-history'
 import { ProductDetail, type ProductSelection } from '../../../registry/blocks/product-detail'
 import { ProductListing } from '../../../registry/blocks/product-listing'
 import { SignUp } from '../../../registry/blocks/sign-up'
+import { SegmentedControl, SegmentedControlItem } from '../../../registry/ui/segmented-control'
 import Demo from '../Demo.vue'
+import heroVideo from '../assets/hero-sample.webm'
+
+// Hero
+const heroLayout = ref<'rule' | 'center' | 'bottom'>('rule')
+const heroBackground = ref<'image' | 'video'>('image')
+const heroTitles = { rule: 'Field Studio', center: 'Rooms that hold the light', bottom: 'Houses for the way you live' }
 
 // Product detail
 const detailLoading = ref(false)
@@ -60,6 +68,44 @@ const searched = ref('nothing searched')
 </script>
 
 <template>
+  <Demo name="hero" title="Block: Hero" description="The first section of a page over a full-bleed picture or a looping video: small type on a hairline, a centred headline, or one along the bottom. The picture fades as it scrolls away. The video has a pause button and stays still for readers who ask for less motion." wide>
+    <div class="stack" style="max-width: 72rem">
+      <div class="row">
+        <SegmentedControl v-model="heroLayout" label="Hero layout" size="sm">
+          <SegmentedControlItem value="rule">Rule</SegmentedControlItem>
+          <SegmentedControlItem value="center">Centre</SegmentedControlItem>
+          <SegmentedControlItem value="bottom">Bottom</SegmentedControlItem>
+        </SegmentedControl>
+        <SegmentedControl v-model="heroBackground" label="Hero background" size="sm">
+          <SegmentedControlItem value="image">Image</SegmentedControlItem>
+          <SegmentedControlItem value="video">Video</SegmentedControlItem>
+        </SegmentedControl>
+      </div>
+      <div class="block-frame">
+        <Hero
+          :layout="heroLayout"
+          :title="heroTitles[heroLayout]"
+          :eyebrow="heroLayout === 'rule' ? '' : 'Field Studio · Los Angeles'"
+          :description="heroLayout === 'rule' ? 'Architecture and interiors' : 'Architecture and interiors for houses, studios and the gardens between them.'"
+          :video="heroBackground === 'video' ? { src: [{ src: heroVideo, type: 'video/webm' }], poster: sampleHeroImage.src } : null"
+          :primary-action="{ label: 'Schedule a conversation', href: '#sign-up' }"
+          :secondary-action="heroLayout === 'rule' ? null : { label: 'See the work', href: '#product-listing' }"
+          title-as="h3"
+          style="--er-hero-height: 38rem"
+        >
+          <template #header>
+            <nav class="hero-nav" aria-label="Field Studio">
+              <a href="#hero">Projects</a>
+              <a href="#hero">Journal</a>
+              <a href="#hero">About</a>
+              <a href="#hero">Contact</a>
+            </nav>
+          </template>
+        </Hero>
+      </div>
+    </div>
+  </Demo>
+
   <Demo name="product-detail" title="Block: Product detail" description="A product's page: pictures, price, stock, options, quantity and “Add to cart”, then its details and reviews. Press a row of the rating summary to list only those reviews." wide>
     <div class="stack" style="max-width: 60rem">
       <ProductDetail v-model:saved="detailSaved" :loading="detailLoading" title-as="h3" @add-to-cart="addToCart" />

@@ -366,11 +366,29 @@ body {
 }
 
 /* A block is a whole page; the frame shows it at a size that fits the demo. */
+.hero-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.hero-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hero-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
 .block-frame {
   width: 100%;
   border: 1px solid var(--er-border);
   border-radius: var(--er-radius-lg);
-  overflow: hidden;
+  /* clip, not hidden: hidden makes a scroll container, which the hero's scroll fade would follow instead of the page. */
+  overflow: clip;
 }
 
 .shop-grid {
