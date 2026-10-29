@@ -3,13 +3,18 @@ import { nextTick, onMounted, ref } from 'vue'
 import { Cart, readCartLink, sampleCart, sampleProducts, type CartItem } from '@registry/blocks/cart'
 import { Checkout } from '@registry/blocks/checkout'
 import { Dashboard } from '@registry/blocks/dashboard'
+import { Hero, sampleHeroImage } from '@registry/blocks/hero'
+import { MediaText } from '@registry/blocks/media-text'
 import { ProductListing } from '@registry/blocks/product-listing'
 import { SignIn } from '@registry/blocks/sign-in'
 import { SegmentedControl, SegmentedControlItem } from '@registry/ui/segmented-control'
+// The same loop the playground plays, so the landing page shows a moving background without a second copy of the file.
+import heroVideo from '../../../playground/src/assets/hero-sample.webm'
 
 // The real blocks, as `ermine add` copies them, running on their sample data.
 const views = [
   { value: 'dashboard', label: 'Dashboard', address: 'app.example.com' },
+  { value: 'landing', label: 'Landing', address: 'studio.example.com' },
   { value: 'shop', label: 'Shop', address: 'shop.example.com/products' },
   { value: 'cart', label: 'Cart', address: 'shop.example.com/cart' },
   { value: 'checkout', label: 'Checkout', address: 'shop.example.com/checkout' },
@@ -48,6 +53,29 @@ onMounted(async () => {
       </div>
       <div class="window-body" :data-view="view">
         <Dashboard v-if="view === 'dashboard'" main-as="div" title-as="h2" style="--er-dashboard-height: 42rem" />
+        <template v-else-if="view === 'landing'">
+          <!-- The window clips its corners, so the hero's scroll fade, which needs the page as its scroller, is off here. -->
+          <Hero
+            :video="{ src: [{ src: heroVideo, type: 'video/webm' }], poster: sampleHeroImage.src }"
+            :secondary-action="null"
+            :wash-on-scroll="false"
+            :primary-action="{ label: 'Schedule a conversation', href: '#blocks' }"
+            title-as="h2"
+            style="--er-hero-height: 34rem"
+          >
+            <template #header>
+              <nav class="landing-nav" aria-label="Field Studio">
+                <a href="#blocks">Projects</a>
+                <a href="#blocks">Journal</a>
+                <a href="#blocks">About</a>
+                <a href="#blocks">Contact</a>
+              </nav>
+            </template>
+          </Hero>
+          <div class="landing-section">
+            <MediaText title-as="h3" :primary-action="{ label: 'See the work', href: '#blocks' }" :secondary-action="null" />
+          </div>
+        </template>
         <ProductListing v-else-if="view === 'shop'" v-model:saved="saved" title-as="h2" />
         <Cart v-else-if="view === 'cart'" v-model:items="cart" :title="shared ? 'Shared cart' : 'Your cart'" title-as="h2" :shipping="0" shareable share-url="/" shop-href="#blocks" />
         <Checkout v-else-if="view === 'checkout'" :tax="11.52" />
@@ -58,7 +86,24 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-/* One column no wider than the page: on a phone the five tabs scroll sideways instead of widening the window. */
+.landing-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  font-size: 0.875rem;
+}
+.landing-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+.landing-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.landing-section {
+  padding: clamp(1.5rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem);
+}
+/* One column no wider than the page: on a phone the six tabs scroll sideways instead of widening the window. */
 .showcase > .er-segmented-control {
   max-width: 100%;
   overflow-x: auto;
@@ -110,7 +155,7 @@ onMounted(async () => {
 .window-body {
   min-height: 42rem;
 }
-.window-body:not([data-view='dashboard']) {
+.window-body:not([data-view='dashboard'], [data-view='landing']) {
   padding: clamp(1rem, 3vw, 2.5rem);
 }
 .window-body[data-view='sign-in'] {

@@ -39,8 +39,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-a {
-  color: inherit;
+/* In the base layer, under the components', so a Button rendered as a link keeps its own colours. */
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 .wrap {

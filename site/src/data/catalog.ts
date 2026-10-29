@@ -70,7 +70,7 @@ const groups: Record<string, string[]> = {
   Conversation: ['chat', 'comment-thread', 'notification-center'],
   'Device and app': [
     'haptics', 'sound', 'view-transition', 'share-button', 'qr-code', 'offline-banner', 'wake-lock', 'fullscreen', 'notification-prompt',
-    'swipe-actions', 'pull-to-refresh', 'infinite-scroll', 'install-prompt', 'update-prompt',
+    'swipe-actions', 'pull-to-refresh', 'infinite-scroll', 'install-prompt', 'update-prompt', 'idle-screen',
   ],
 }
 const groupOf = new Map(Object.entries(groups).flatMap(([group, names]) => names.map((name) => [name, group] as const)))
