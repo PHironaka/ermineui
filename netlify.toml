@@ -7,3 +7,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# The remote MCP server (/mcp) is a function. It imports the command line and its registry from outside site/,
+# which esbuild bundles in.
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

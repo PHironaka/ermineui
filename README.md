@@ -204,6 +204,12 @@ args = ["-y", "ermineui", "mcp"]
 { "mcpServers": { "ermine": { "command": "npx", "args": ["-y", "ermineui", "mcp"] } } }
 ```
 
+**Remote, for claude.ai and other web clients.** The website also runs an MCP server at `https://ermineui.netlify.app/mcp` (Streamable HTTP, no sign-in). In claude.ai, add it under Settings → Connectors → Add custom connector. It cannot reach your project, so its four tools only look things up and hand back what to use: `list_components`, `get_component` (full source), `get_theme` (the CSS for a style, base and accent, or the whole stylesheet with them in it) and `install_instructions` (what `ermineui add` would copy, and the commands). It always serves the registry of the latest website deploy.
+
+```sh
+claude mcp add --transport http ermine-remote https://ermineui.netlify.app/mcp   # the same server from Claude Code
+```
+
 The website also serves `/llms.txt`, an index of every component for tools that read the web, and a Markdown page per component (`/components/button.md`) with its source.
 
 ### Vue + Vite
@@ -1367,7 +1373,7 @@ The browser tests need the browsers once: `npx playwright install chromium firef
 
 ## What has been checked
 
-- The suite above passes: 103 unit tests and 813 browser tests (292 in Chromium, 256 in Firefox, 257 in WebKit, 8 on the phone profile). Firefox and WebKit skip the axe scans and the simulated screen reader tests, which read the page's structure and so do not differ by browser, and two tests that need clipboard access only Chromium grants.
+- The suite above passes: 107 unit tests and 813 browser tests (292 in Chromium, 256 in Firefox, 257 in WebKit, 8 on the phone profile). Firefox and WebKit skip the axe scans and the simulated screen reader tests, which read the page's structure and so do not differ by browser, and two tests that need clipboard access only Chromium grants.
 - On 6 October 2026 the CLI was run in three fresh projects with the 72 components that existed then (the 14 added since have been through the per-component registry check, not this run): `init`, `add --all`, `list`, then the project's own type-check and production build, with a page that renders every component.
   - Vue 3.5 + Vite 8 + TypeScript 6 (`npm create vite`, `vue-ts` template): `vue-tsc -b` and build pass; the built page runs with no console errors.
   - Nuxt 4.6: `nuxt typecheck` and `nuxt build` pass, with the `components` auto-import setting shown above. The page renders on the server and hydrates with no hydration warnings in development mode, and components used by auto-import alone (no import statements) work.

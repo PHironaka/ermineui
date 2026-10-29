@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Ermine UI command line: copies component source into your project. No dependencies.
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs'
 import { dirname, join, posix, relative, resolve, sep } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 import { fileURLToPath } from 'node:url'
@@ -340,8 +340,8 @@ function fontsBlock(chosen, themes) {
   return `/* ermine theme fonts */\n${imports.map((line) => line.trim()).join('\n')}\n/* end ermine theme fonts */\n\n`
 }
 
-/** Writes the chosen themes into the project's stylesheet, keeping the other kinds' choices unless `reset`. */
-function applyThemes(cwd, config, registry, names, { reset }) {
+/** The named themes by kind, or a UserError naming the unknown ones or two of the same kind. */
+function pickThemes(registry, names) {
   const themes = registry.themes ?? {}
   const byKind = (kind) => Object.keys(themes).filter((name) => themes[name].kind === kind)
   const unknown = names.filter((name) => !themes[name])
@@ -355,11 +355,27 @@ function applyThemes(cwd, config, registry, names, { reset }) {
     if (picked[kind]) throw new UserError(`Pick one ${kind} theme, not both ${picked[kind]} and ${name}.`)
     picked[kind] = name
   }
+  return picked
+}
 
+/** Writes the chosen themes into the project's stylesheet, keeping the other kinds' choices unless `reset`. */
+function applyThemes(cwd, config, registry, names, { reset }) {
+  const picked = pickThemes(registry, names)
   const path = join(cwd, config.styles)
   if (!existsSync(path)) throw new UserError(`${config.styles} not found. Run "ermine init" to create it.`)
-  let css = readFileSync(path, 'utf8')
-  const chosen = reset ? {} : { ...currentThemes(css), ...picked }
+  const current = readFileSync(path, 'utf8')
+  const chosen = reset ? {} : { ...currentThemes(current), ...picked }
+  writeFileSync(path, withThemes(current, chosen, registry.themes ?? {}))
+
+  if (reset) return `${yellow('~')} ${config.styles}: themes removed; the stylesheet's own look applies again.`
+  const now = Object.entries(chosen)
+    .filter(([, name]) => name)
+    .map(([kind, name]) => `${kind} ${bold(name)}`)
+  return `${yellow('~')} ${config.styles}: ${now.join(', ')}. Nothing else in the file was changed.`
+}
+
+/** The stylesheet with exactly the chosen theme blocks ({ kind: name }) and the fonts they load. */
+function withThemes(css, chosen, themes) {
   const kinds = Object.keys(THEME_KINDS)
   for (const [index, kind] of kinds.entries()) {
     const pattern = themeBlockPattern(kind)
@@ -373,13 +389,7 @@ function applyThemes(cwd, config, registry, names, { reset }) {
   css = css.replace(fontsBlockPattern, '')
   const charset = css.match(/^@charset [^;]+;\n*/)?.[0] ?? ''
   css = charset + fontsBlock(chosen, themes) + css.slice(charset.length)
-  writeFileSync(path, css.replace(/\n{3,}/g, '\n\n').replace(/\n*$/, '\n'))
-
-  if (reset) return `${yellow('~')} ${config.styles}: themes removed; the stylesheet's own look applies again.`
-  const now = Object.entries(chosen)
-    .filter(([, name]) => name)
-    .map(([kind, name]) => `${kind} ${bold(name)}`)
-  return `${yellow('~')} ${config.styles}: ${now.join(', ')}. Nothing else in the file was changed.`
+  return css.replace(/\n{3,}/g, '\n\n').replace(/\n*$/, '\n')
 }
 
 /** Every theme with its summary, ticked where the project's stylesheet uses it. */
@@ -567,30 +577,39 @@ const toolHandlers = {
   },
 }
 
-async function respond({ method, params = {} }, source) {
-  if (method === 'initialize') {
-    const protocolVersion = MCP_VERSIONS.includes(params.protocolVersion) ? params.protocolVersion : MCP_VERSIONS[0]
-    const version = JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version
-    return { result: { protocolVersion, capabilities: { tools: {} }, serverInfo: { name: 'ermineui', version }, instructions: INSTRUCTIONS } }
-  }
-  if (method === 'ping') return { result: {} }
-  if (method === 'tools/list') return { result: { tools: TOOLS } }
-  if (method === 'tools/call') {
-    const handler = toolHandlers[params.name]
-    if (!handler) return { error: { code: -32602, message: `Unknown tool: ${params.name}` } }
-    const args = params.arguments ?? {}
-    try {
-      const text = await handler({ ...args, cwd: resolve(args.cwd ?? process.cwd()) }, source)
-      return { result: { content: [{ type: 'text', text }] } }
-    } catch (error) {
-      // A failed tool call is reported to the model as a result, so it can read the message and try again.
-      return { result: { content: [{ type: 'text', text: error.message }], isError: true } }
+/**
+ * Answers MCP requests with the given tools: { tools, handlers, instructions, version }, where each handler takes the
+ * call's arguments and returns text. Shared by "ermine mcp" here and the website's remote server, which have
+ * different tools but speak the same protocol.
+ */
+function mcpResponder({ tools, handlers, instructions, version }) {
+  return async function respond({ method, params = {} }) {
+    if (method === 'initialize') {
+      const protocolVersion = MCP_VERSIONS.includes(params.protocolVersion) ? params.protocolVersion : MCP_VERSIONS[0]
+      return { result: { protocolVersion, capabilities: { tools: {} }, serverInfo: { name: 'ermineui', version }, instructions } }
     }
+    if (method === 'ping') return { result: {} }
+    if (method === 'tools/list') return { result: { tools } }
+    if (method === 'tools/call') {
+      if (!Object.hasOwn(handlers, params.name)) return { error: { code: -32602, message: `Unknown tool: ${params.name}` } }
+      try {
+        const text = await handlers[params.name](params.arguments ?? {})
+        return { result: { content: [{ type: 'text', text }] } }
+      } catch (error) {
+        // A failed tool call is reported to the model as a result, so it can read the message and try again.
+        return { result: { content: [{ type: 'text', text: error.message }], isError: true } }
+      }
+    }
+    return { error: { code: -32601, message: `Method not found: ${method}` } }
   }
-  return { error: { code: -32601, message: `Method not found: ${method}` } }
 }
 
 async function serve({ flags }) {
+  const handlers = Object.fromEntries(
+    Object.entries(toolHandlers).map(([name, handler]) => [name, (args) => handler({ ...args, cwd: resolve(args.cwd ?? process.cwd()) }, flags.registry)]),
+  )
+  const version = JSON.parse(readFileSync(BUNDLED_REGISTRY, 'utf8')).version
+  const respond = mcpResponder({ tools: TOOLS, handlers, instructions: INSTRUCTIONS, version })
   const send = (message) => process.stdout.write(`${JSON.stringify({ jsonrpc: '2.0', ...message })}\n`)
   for await (const line of createInterface({ input: process.stdin, crlfDelay: Infinity })) {
     if (!line.trim()) continue
@@ -603,7 +622,7 @@ async function serve({ flags }) {
     }
     // Notifications (no id) need no answer; "notifications/initialized" is the only one clients send here.
     if (message.id === undefined || message.id === null) continue
-    send({ id: message.id, ...(await respond(message, flags.registry)) })
+    send({ id: message.id, ...(await respond(message)) })
   }
 }
 
@@ -645,10 +664,23 @@ async function main() {
   throw new UserError(`Unknown command "${command}". Run "ermine help" to see what is available.`)
 }
 
-main().catch((error) => {
-  if (error instanceof UserError) {
-    console.error(`${red('Error:')} ${error.message}`)
-    process.exit(1)
+// Run only when started as a command. The website's remote MCP server imports the pieces below instead.
+// argv[1] may not be a real file (a serverless runtime, node -e), which is never this file either.
+const startedDirectly = (() => {
+  try {
+    return realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)
+  } catch {
+    return false
   }
-  throw error
-})
+})()
+if (startedDirectly) {
+  main().catch((error) => {
+    if (error instanceof UserError) {
+      console.error(`${red('Error:')} ${error.message}`)
+      process.exit(1)
+    }
+    throw error
+  })
+}
+
+export { THEME_KINDS, UserError, catalog, componentDetails, fenced, mcpResponder, pickThemes, resolveDependencies, themeCatalog, withThemes }
