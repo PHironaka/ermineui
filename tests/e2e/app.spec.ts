@@ -159,12 +159,13 @@ test.describe('theme picker', () => {
     const style = page.getByRole('radiogroup', { name: 'Style' })
     await expect(style.getByRole('radio', { name: 'Default' })).toBeChecked()
     await style.getByRole('radio', { name: 'Soft' }).check()
-    expect(await variable('--er-radius-control')).toBe('999px')
+    // Firefox holds the style back until its fonts' @import has loaded, so wait for it.
+    await expect.poll(() => variable('--er-radius-control')).toBe('999px')
     expect(await height()).toBe(30)
     await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme soft neutral')
 
     await style.getByRole('radio', { name: 'Default' }).check()
-    expect(await height()).toBe(36)
+    await expect.poll(height).toBe(36)
     await expect(page.locator('.colour-theme-command')).toHaveText('npx ermineui theme neutral')
   })
 })
